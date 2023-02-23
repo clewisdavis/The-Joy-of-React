@@ -20,7 +20,7 @@ import React from 'react';
 import { createRoot } from 'react-dom/client';
 ```
 
-- Iport the core React library from the `react` dependency and the `createRoot` function from the `react-dom`
+- Import the core React library from the `react` dependency and the `createRoot` function from the `react-dom`
 - React is platform agnostic, you have the core `react` package, and then you have platform-specific renders:
   - `react-dom` for the web
   - `react-native` for mobile (iOS / Android) or desktop (Windows / MacOS) apps
@@ -57,3 +57,81 @@ const element = React.createElement(
 - React elements form a hierarchy just like the DOM elements do.
 
 3. Render the application
+
+- The code to mount and render the application
+
+```JAVASCRIPT
+const container = document.querySelector('#root');
+const root = createRoot(container);
+root.render(element);
+```
+
+- The `document.querySelector` is a reference point of the exsiting DOM element.
+- In your `inded.html` file, you include the `id="root"` element to the DOM element you want to mount the app. `<div id="root"></div>`
+
+- This element wil be the apps container.
+- This element will be the root of our app.
+
+- And the render the application with `root.render(element)`.
+- The `render` function converts Rect elements into DOM nodes.
+- In this case, react describes a paragraph tag, an dID and some text.
+- `render` will turn that description into the following DOM element.
+
+```HTML
+<p id="hello">
+  Hello World!
+</p>
+```
+
+- With taht DOM element craeted, it adds it to the page at the specified root.
+- **It takes a JS based description of some HTML, and uses it to produce real-world DOM nodes.**
+
+- But, the real magic happens when things change.
+- NOTE: React 17, used an different API syntax from the example above.
+
+## Build your own React
+
+- Build your own `render` funtion that takes React elements and produces the equivlent DOM struture.
+
+- Write a `render` function that accepts a Rect element and a reference to a DOM contianer element that will hold our app.
+
+- Acceptance criteria:
+  - A link should be shown in the "result" pane, linking to a wikipedia.org, adn with the text "Read more on Wikipedia"
+  - It should work with any element type (eg anchors, paragraphs, button...)
+  - It shoud lhandle all HTML attributes (eg. href, id, disabled...)
+  - The element should contain the text specidied uner `children`. `children` will always be a stiring.
+
+```JAVASCRIPT
+// SOLUTION
+function render(reactElement, containerDOMElement) {
+  // 1. create a DOM element
+  const domElement = document.createElement(reactElement.type);
+
+  // 2. update properties
+  domElement.innerText = reactElement.children;
+  for (const key in reactElement.props) {
+    const value = reactElement.props[key];
+    domElement.setAttribute(key, value);
+  }
+
+  // 3. put it in the container
+  containerDOMElement.appendChild(domElement);
+}
+```
+
+- Boils down to, React takes an JS object, and describes how to build the DOM elements.
+- React takes those descriptions, and creates the real DOM.  
+- React-DOM, is the translator, takes the descriptions we product in JS, and builds, produces the real version of them.
+
+- Remember, it's a JS framework, and fundamentally uses the same things you would use, if building in JS.
+
+### Productive failure
+
+- A learning method used from academic.
+- n Productive Failure, the conventional instruction process is reversed so that learners attempt to solve challenging problems ahead of receiving explicit instruction. While students often fail to produce satisfactory solutions (hence “Failure”), these attempts help learners encode key features and learn better from subsequent instruction (hence “Productive”).
+- Much more likely to remember things, if you fail first, not given all the instructions ahead of time.
+- Struggling means you are learning, and growing.
+
+- The growth mindset, we become smarter through practice, and failure is the fastest way to learn.
+
+## Understanding JSX
