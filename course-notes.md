@@ -135,3 +135,242 @@ function render(reactElement, containerDOMElement) {
 - The growth mindset, we become smarter through practice, and failure is the fastest way to learn.
 
 ## Understanding JSX
+
+- In the previous example, we used everyday JS.
+- In reality, most engineers use a syntax called JSX
+- For example:
+
+```JAVASCRIPT
+// // Old way:
+// const element = React.createElement(
+//   'p',
+//   {
+//     id: 'hello',
+//   },
+//   'Hello World!'
+// );
+
+// New way:
+const element = (
+  <p id="hello">
+    Hello World!
+  </p>
+);
+```
+
+- Instead of writing `Rect.createElement`, we use an HTML like syntax to create React elements.
+
+- Why use JSX? As your codebase grows, it becomes easier to read with JSX.
+- React elemetns can form a tree structure, just like HTML. This happens when we set the "children" parameter of a React element to another React element.
+
+- Written out, we wind up with a really long tree structures that are hard to read using plain JS:
+
+```JAVASCRIPT
+// Plain JS:
+const element = React.createElement(
+  'nav',
+  { id: 'main-nav' },
+  React.createElement(
+    'ul',
+    null,
+    React.createElement(
+      'li',
+      null,
+      React.createElement(
+        'a',
+        { href: '/' },
+        'Home',
+      ),
+    ),
+    React.createElement(
+      'li',
+      null,
+      React.createElement(
+        'a',
+        { href: '/archives' },
+        'Archives',
+      ),
+    ),
+  ),
+);
+```
+
+- Now compare that same markup in JSX, much easier to read.
+
+```HTML
+// In JSX:
+const element = (
+  <nav id="main-nav">
+    <ul>
+      <li>
+        <a href="/">
+          Home
+        </a>
+      </li>
+      <li>
+        <a href="/archives">
+          Archives
+        </a>
+      </li>
+    </ul>
+  </nav>
+);
+```
+
+- ℹ️ Why the parenthesis around the JSX? This is for formatting purposes. Allows us to push the JSX onto hte next line. Even outside of JSX/React, Parentheses can be used to improve formatting.
+
+### Compiling JSX into JS
+
+- If you try and run the JSX code int he browser, you will get an error.
+- JS engines don't understand JSX, they only under stand JS.
+- We need to compile our code into plain JS.
+
+- This is done in a build step, tools like Babel.
+
+- ℹ️ The JSX we write gets converted into `React.createElement`. By the time our code is running int he user's browser, al the JSX has been zapped out, and we are left wtih a JS file, full of nested `React.createElement` calls.
+
+- React import? Best practive to always import React, `import React from 'react';`
+- In JSX, it's obfuscated, meaning it's not used by JSX, only after JSX becomes compiled into `React.createElement`
+
+### Expression Slots
+
+- When you want to see the result of an expression, you have to wrap it in a `{}`
+- But what is actaully going on here?
+
+```JAVASCRIPT
+import { render } from 'react-dom';
+
+const shoppingList = ['apple', 'banana', 'carrot'];
+
+const element = (
+  <div>
+      Items left to purchase: shoppingList.length
+  </div>
+);
+
+const root = document.querySelector('#root');
+
+render(element, root);
+```
+
+- In this example, shoppingList.length is unprocessed, just renders as a string.
+- You can fix this by wrapping it in a `{}`, and it processed it as JS, instead fo a static sting.
+- What are the rules for this?
+  - React is doing very little here, it's the rules on the JS side you have to pay attention to.
+
+- The pure JS version of this is.
+
+```JAVASCRIPT
+const compiledElement = React.createElement(
+  'div',
+  {},
+  'Items left to purchase: shoppingList.length',
+);
+```
+
+- When you add the `{}`, you create an EXPRESSION SLOT
+- This is a slot we can put any JS expression in, and it will be forwarded along by React.
+
+```JAVASCRIPT
+const element = (
+  <div>
+      Items left to purchase:
+    {shoppingList.length}
+  </div>
+);
+
+const compiledElement = React.createElement(
+  'div',
+  {},
+  'Items left to purchase: ',
+  shoppingList.length,
+);
+```
+
+- All React is doing, whatever is in the `{}` gets forwarded along, and when React compiles the JSX into pure JS.
+- This means we are subject to all the rules of JS.
+
+- Have to understand the difference between statements vs. expressions.
+- For example, you cannot just put an `if()` statement.
+- Only allowed to use expressions within our JSX.
+- You can put any valid expression in the `{}`, for example; `{Math.random()}`
+
+- You must use `expressions`, because you cannot use `statements` in the middle of a function call.
+
+### Comments in JSX
+
+- To add a comment in JSX, we use experssoin slot:
+
+```JAVASCRIPT
+const element = (
+    <div>
+     {/* some comment */}
+    <div>
+);
+```
+
+- Single line syntax comments everythign out, including the `{}` for the expression slot.
+
+### Attribute expressoin slots
+
+- We can use the same trick for dynamic attritbute values.
+
+```JAVASCRIPT
+const someIdentifier = 'some-unique-identifier';
+
+const element = (
+  <div id={someIdentifier}>
+      Hello World
+  </div>
+);
+```
+
+- This allos su to craete expression slots for the valeu of the `id` attribute.
+- How it compiles.
+
+```JAVASCRIPT
+const element = React.createElement(
+  'div',
+  {
+    id: someIdentifier,
+  },
+  'Hello World',
+);
+```
+
+- Only two ways to use expression slots, to dynamically calculate children, or attributes.
+
+### Type coercion
+
+- React wil automaticaly convert types as required when supplying attributes in JSX.
+- These are identical.
+
+```JAVASCRIPT
+// This works:
+<input required="true" />
+
+// And so does this
+<input required={true} />
+```
+
+- In the first example, we set the requried attribute as a string `"true"`, second example, it's set as a boolean attribute `true`. Either way, the input will wind up being required.
+
+- You can also pass numbers or strings for numberic attribute:
+
+```JAVASCRIPT
+// ✅ Valid
+<input type="range" min="1" max="20" />
+// ✅ Valid
+<input type="range" min={1} max={20} />
+```
+
+- ℹ️ Boolean attributes:
+- In HTML, it's possibel to set attributes to `true` just by specifying only the key.
+- `<input required>`
+- In JSX, these are equivilant:
+- `<input requried />` and `<input required={true} />`
+- Prefer to spell it out.
+
+### Differences from HTML
+
+-
