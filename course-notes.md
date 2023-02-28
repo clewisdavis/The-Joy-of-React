@@ -373,4 +373,274 @@ const element = React.createElement(
 
 ### Differences from HTML
 
--
+- JSX looks like HTML, but are soem fundamental differences.
+
+- **Reserved Words**
+- In JS, has a couple of reserved words, keywords with built in functionality and we cannot use them as variable names.
+
+- For example, `const while = 10;`, if we run this code, we get a syntax error, `while` is reserved for "while loops".
+
+- Becuse JSX gets transformed into JS, cannot use reserved word inour JSX. This can be a problem, sometimes, HTML attrubutes sometimes overlap with oru JS reserved words.
+
+- Example; `for` and `class`
+- React uses a slight variation on these two terms: `htmlForm` and `className`
+
+```JAVASCRIPT
+const element = (
+  <div>
+    <label htmlFor="name">
+      Name:
+    </label>
+    <input
+      id="name"
+      className="fun-input"
+    />
+  </div>
+);
+```
+
+### Self closing Tags
+
+- HTML is a pretty forgiving language when it comes to closing tags. For example, this is valid HTML
+
+```HTML
+<div>
+  <p>This paragraph is opened… but never closed.
+  <p>We're omitting the closing tags!
+</div>
+```
+
+- The browser is smart enough to know, to close the paragraph tag.
+- But for JSX, we need to close every tag we open.
+
+```JAVASCRIPT
+const element = (
+  <div>
+    <p>This is a paragraph</p>
+  </div>
+);
+```
+
+- In HTML5, some elements don't ahve closing tags, the `img` tag for example.
+
+```HTML
+<img alt="A friendly dog" src="/img/dog.jpg">
+```
+
+- JSX won't like this, need to close with a "self closing" tag.
+
+```JAVASCRIPT
+const element = (
+  <img
+    alt="A friendly kitten"
+    src="/images/kitten.jpg"
+  />
+);
+```
+
+### Case sensitive tags
+
+- HTML is a case insensitive langauge. Many years ago, it was common to write HTML in all uppercase.
+
+```HTML
+<MAIN>
+  <HEADER>
+    <H1>Hello World!</H1>
+  </HEADER>
+  <P>
+    This HTML is so loud!
+  </P>
+</MAIN>
+```
+
+- JSX, is case sensiteive, our gags must all be lowercase.
+
+```JAVASCRIPT
+const element = (
+  <main>
+    <header>
+      <h1>Hello World!</h1>
+    </header>
+    <p>
+      This HTML is so loud!
+    </p>
+  </main>
+);
+```
+
+- Good reason for this, JSX compiler uses the tag's case to tell whether it's a primitive part of the DOM or a custom component.
+
+### Case Sensitive attributes
+
+- In JSX, our attributes need to be "camelCase"
+- For example, this is valid HTML
+
+```HTML
+<video
+  src="/videos/cat-skateboarding.mp4"
+  autoplay={true}
+>
+```
+
+- In JSX, we need to capitalize the 'p' in 'autoplay'.
+
+```JAVASCRIPT
+const element = (
+  <video
+    src="/videos/cat-skateboarding.mp4"
+    autoPlay
+  />
+);
+```
+
+- Other properteis that need to be 'camelCased' include:
+
+- `onclick` to `onClick`
+- `tabindex` to `tabIndex`
+- `stroke-dasharray` to `strokeDasharray` (specific to SVG)
+
+- ℹ️ Data and ARIA attributes keep their dashes.
+- Two exceptions to the 'camelCasing' of attributes: data attributes and ARIA attributes.
+- For example, this is valid JSX
+
+```JAVASCRIPT
+const element = (
+  <button
+    data-test-id="close-dialog-button"
+    aria-label="Close dialog"
+  >
+    <img alt="" src="/icons/x.svg" />
+  </button>
+);
+```
+
+### Inline Styles
+
+- In HTML, teh style attribtue allows ut o apply some styles inline, to an element.
+
+```HTML
+<h1 style="font-size: 2rem;">
+  Hello World!
+</h1>
+```
+
+- In JSX, the `style` instead takes an object:
+
+```JAVASCRIPT
+const element = (
+  <h1 style={{ fontSize: '2rem' }}>
+    Hello World!
+  </h1>
+);
+```
+
+- ℹ️ Why the two squiggly brackets?
+- 1. The outer set is for the "expression slot" in the JSX, to hold the JS expression.
+- 2. The inner set creates a JS object.
+
+- All CS properties are written in camelCase, every sash is replaced by capitalizing the subsequent word:
+
+- `background-position` becomes `backgroundPosition`
+- `border-bottom-color` becomes `borderBottomColor`
+- `-webkit-font-smoothing` becomes `WebkitFontSmoothing`
+
+- And, React wil automatically apply the `px` suffix for certian properties.
+
+```JAVASCRIPT
+<div
+  style={{
+    width: 200, // Equivalent to `width: 200px`
+    paddingTop: 8, // Equivalent to `padding-top: 8px`
+  }}
+>
+```
+
+- Watch out for unitless properties like `flex` or `lineHeight`
+- In Rect, you can go ahead and use the unit if you prefer.
+
+```JAVASCRIPT
+<p
+  style={{
+    width: '200px',
+    paddingTop: '8px',
+  }}
+>
+```
+
+### Exercise: Fix the Converter
+
+- Fun and games, a quiz to spot the errors.
+- Cool online HTML to JSX converter. <https://transform.tools/html-to-jsx>
+
+### The Whitespace Gotcha
+
+- One of the most common "gotchas" with JSX.
+
+```JAVASCRIPT
+import { createRoot } from 'react-dom/client';
+
+const daysUntilSantaReturns = 123;
+
+const element = (
+  <div>
+    <strong>
+      Days until Santa returns:
+    </strong>
+    {daysUntilSantaReturns}
+  </div>
+);
+
+const container = document.querySelector('#root');
+const root = createRoot(container);
+root.render(element);
+```
+
+- In this example, no space between the bodl text and the number. It renders `returns:123`.
+- Why, consider how this compiles to JS.
+
+```JAVASCRIPT
+const element = React.createElement(
+  'div',
+  {},
+  React.createElement(
+    'strong',
+    {},
+    'Days until Santa returns:',
+  ),
+  daysUntilSantaReturns,
+);
+```
+
+- Our div has two children, the `<strong>` tag and the `daysUntilSantaReturns` variable.
+- JSX doesn't compile to HTML, it compiles to JS. And when that JS is executed, it's only going to create and append two HTML nodes.
+
+  - A `<strong>` tag wtih some text
+  - A text node, for the number `123`
+
+- So how do we fix it? The most common solution is to add a single whitespace character in curly braces:
+
+```JAVASCRIPT
+<div>
+  <strong>Days until Santa returns:</strong>
+  {' '}
+  {daysUntilSantaReturns}
+</div>;
+```
+
+- And it compiles like this:
+
+```JAVASCRIPT
+const element = React.createElement(
+  'div',
+  {},
+  React.createElement(
+    'strong',
+    {},
+    'Days until Santa returns:',
+  ),
+  ' ', // explicit space character
+  daysUntilSantaReturns,
+);
+```
+
+- This is a feature in React, to tell React, this is meant to be a space character `{' '}`
