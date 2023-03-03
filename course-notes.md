@@ -644,3 +644,76 @@ const element = React.createElement(
 ```
 
 - This is a feature in React, to tell React, this is meant to be a space character `{' '}`
+- ℹ️ Tools of the Trade: Prettier is used to automatically format oru code. It knows about the white space issue and will automatically add the `{' '}` character when necessary. <https://courses.joshwcomeau.com/joy-of-react/11-tools-of-the-trade/04-prettier>
+
+### Exercises
+
+**Build a Search Form**
+
+- In this exercise, we will build an online search form, inline search form.
+- All style are provided, you just need to add three elements inside the `<form>` tag:
+
+1. A label
+2. A text input
+3. A button, with teh class `submit-btn`
+
+- Acceptance Criteria:
+  - The UI should match the screenshot above
+  - The label should be attached to the input; clickign the label text should focus the input
+  - The button should have the appropriate styles, applied with the class `submit-btn`
+
+```JAVASCRIPT
+// index.js
+import React from 'react';
+import { createRoot } from 'react-dom/client';
+
+const element = (
+  <form>
+    <label htmlFor="search-input">Search:</label>
+    <input id="search-input" type="text" />
+    <button className="submit-btn" type="button" aria-label="Search">Submit</button>
+    {/* Stuff here */}
+  </form>
+);
+
+const container = document.querySelector('#root');
+const root = createRoot(container);
+root.render(element);
+```
+
+- Need to write JSX, `for` and `class` are reserved JS, to convert those to JSX, `htmlFor` and `className`
+
+🚀 Check out Josh W's custom reset. <https://www.joshwcomeau.com/css/custom-css-reset/>
+
+**Critter**
+
+- Build a Twitter/Animal hybrid, a social media app for animals.
+
+- Already given two things:
+  - A `message` object that contains all the data you need to populate the UI
+  - All the styles, so we don't have to worry about any of the CSS, need to follow the semantic markup.
+
+- Acceptance Criteria:
+
+  - The UI should match the mockup, using the data from the `message` object
+  - The user's avatar shoudl have helpful descriptive alt text
+  - The user's name should be a link, and it should link to `/users/[username]`. With this data, it should be `/users/benjamintorn`. No actaul profile page, so link will not do anything
+  - The footer should include the word "Posted" before the published date.
+
+- HINT: You might want to start with the message content and footer, saving the header for last.
+
+- ℹ️ Use string interpolation for the url, `${}` is how you do string interpolation. So for the url, you can do.
+
+```JAVASCRIPT
+<a href={`/users/${message.author.handle}`}>
+  {message.author.name}
+</a>;
+```
+
+- To make this easier to read, you can just put it into a variable.
+
+```JAVASCRIPT
+const profileUrl = `/users/${message.author.handle}`;
+```
+
+- Then you can just use that variable.
