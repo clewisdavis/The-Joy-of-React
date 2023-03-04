@@ -704,6 +704,52 @@ root.render(element);
 
 - ℹ️ Use string interpolation for the url, `${}` is how you do string interpolation. So for the url, you can do.
 
+- Solution Code:
+
+```JAVASCRIPT
+import React from 'react';
+import { createRoot } from 'react-dom/client';
+
+const message = {
+  content:
+    'Just ate at “Les Corbeaux En Colère”. Wonderful little venue!',
+  published: 'January 21st at 9:45pm',
+  author: {
+    avatarSrc: 'https://sandpack-bundler.vercel.app/img/avatars/009.png',
+    avatarDescription: 'Cartoon bear',
+    name: 'Ben Thorn',
+    handle: 'benjaminthorn',
+  },
+};
+
+const profileUrl = `/users/${message.author.handle}`;
+const imageAlt = `${message.author.avatarDescription} (user profile photo)`;
+
+const element = (
+  <article>
+    <header>
+      <img
+        alt={imageAlt}
+        src={message.author.avatarSrc}
+      />
+      <a href={profileUrl}>{message.author.name}</a>
+    </header>
+    <p>{message.content}</p>
+    <footer>
+Posted
+      {' '}
+      {message.published}
+    </footer>
+  </article>
+);
+
+const container = document.querySelector('#root');
+const root = createRoot(container);
+root.render(element);
+```
+
+- String interpolation:
+
 ```JAVASCRIPT
 <a href={`/users/${message.author.handle}`}>
   {message.author.name}
@@ -716,4 +762,72 @@ root.render(element);
 const profileUrl = `/users/${message.author.handle}`;
 ```
 
-- Then you can just use that variable.
+- Then you can just use that variable. Check out the lesson on string interpolation with template strings.
+- <https://courses.joshwcomeau.com/joy-of-react/10-javascript-primer/03-string-interpolation>
+
+- Modern JS, allows ust o embed variabels and other expressions right inside strings:
+
+```JAVASCRIPT
+const dynamicString = `hello ${userName}!`;
+```
+
+- In orde rto use strin ginterpolation, we need to use the backticks (`).
+- Strings created with backtics are known as "template strings". With one super-power, can embed dynamic segments.
+
+- We create a dynamic segemtn withinour string, by writing `${}`.
+- Anything placed between that squiggly bracket wil be evaluated as a JS expression.
+
+- For example; we can do things like.
+
+```JAVASCRIPT
+const age = 7;
+const className = `Next year,  you'll be ${age + 1} years old.`;
+console.log(className);
+// Next year, you'll be 8 years old.
+```
+
+- Write that in the browser console, and you will see.
+
+### JSX vs. Templates
+
+- JSX compared to template languages like Handlebars or EJS or Pug.
+- Optional lesson for a deep dive.
+
+## Components
+
+- Components are a huge part of React, one thing to know, it's a component based framework.
+- What is a component exactly? **A component is a bundle of markup, styles, and logic that controls everything about a specific part of the user interfce.**
+- It's a different mental model when it comes to code organization. Instead of seperating our apps into markup (HTML), styles (CSS), and logic (JS), we organize our apps into components.
+- Good image reference: <https://twitter.com/areaweb>
+
+### Mechanisms of resuse
+
+- Traditional HTML doesn't really have a way to reuse amrkup. Some languages use `partials` to acheive this. A chunk of HTML inserted into another HTML document.
+
+- In CSS, the main way to reuse is a `class`. A `btn` style for example.
+
+```CSS
+.btn {
+  padding: 8px 32px;
+  background: blue;
+  border: none;
+  font-size: 1rem;
+}
+```
+
+- For JS, the mechanism to reuse is the `function`. For example, a function to process data in smoe way:
+
+```JAVASCRIPT
+function shout(sentence) {
+  return `${sentence.toUpperCase()}!!`;
+}
+
+shout('here we go');
+```
+
+- With React, compoennta re the main mechanisme of reuse.
+- Instead of partials for HTML, classes for CSS and funtions for JS, we create a compoent that bundles up all 3, and allows us to creat ea library of high-level UI elements.
+
+- ℹ️ MOdern React also features `hooks`, which offers a way to reuse React logic. In future lessons.
+
+### Thinking in Components
