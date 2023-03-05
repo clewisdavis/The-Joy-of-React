@@ -831,3 +831,60 @@ shout('here we go');
 - ℹ️ MOdern React also features `hooks`, which offers a way to reuse React logic. In future lessons.
 
 ### Thinking in Components
+
+- Go through the exercices and start thinking in terms of compoennts.
+- Annotate the screenshots, how would you organize them and break them down as components?
+- Where would you re-use? How would you break them down.
+- What can variants of the same component? One component with different instances?
+- Is the difference enough to create a seperate component? Button, vs Button Icons for example.
+- Think in terms of broad strokes, and the page routes / navigation.
+- Then start to break down the components within each route.
+
+### Basic Syntax
+
+- In React, components can be defined as JS funcitons.
+- Typically, React components return one or more React elements.
+- For example;
+
+```JAVASCRIPT
+import React from 'react';
+import { createRoot } from 'react-dom/client';
+
+function FriendlyGreeting() {
+  return (
+    <p
+      style={{
+        fontSize: '1.25rem',
+        textAlign: 'center',
+        color: 'sienna',
+      }}
+    >
+      Greetings, weary traveller!
+    </p>
+  );
+}
+
+const container = document.querySelector('#root');
+const root = createRoot(container);
+root.render(<FriendlyGreeting />);
+```
+
+- This example. `FriendlyGreeting` create a React element that descirbes a paragraph, with some built in styles.
+- We render a component just like hwo we render an HTML tag. Instead of rendering a `<div>` or a `<h1>`, we render a `<FriendlyGreeting>`.
+
+- **The big component rule**
+
+- One must rule to follow when creating components. React components need to start with a Capital Letter.
+- Has to do with the JSX to JS transformation.
+- If our component had a lower-case funciton name, React would rednder `<friendlygreeting>` HTML elsement, instead of processing it as a component.
+
+- **A React element is a description of a thing we want to create.**
+- In some cases we want to create a DOM node, like a `<p>`. In other cases, we want to create a component instance.
+
+### Props
+
+- So far, our `<FriendlyGreeting />` is kinda neat, but not that useful. It renders the same thing every time. Not that flexible.
+
+- Components use `props`. They are like arguments to a function: allow you to pass data to our components, so teh components can include customizations base on teh data.
+
+- How would you tweak our greeting component to take a person's name?
