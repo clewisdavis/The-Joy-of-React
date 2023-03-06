@@ -874,7 +874,7 @@ root.render(<FriendlyGreeting />);
 
 - **The big component rule**
 
-- One must rule to follow when creating components. React components need to start with a Capital Letter.
+- One must rule to follow when creating components. React components need to start with a **Capital Letter**.
 - Has to do with the JSX to JS transformation.
 - If our component had a lower-case funciton name, React would rednder `<friendlygreeting>` HTML elsement, instead of processing it as a component.
 
@@ -885,6 +885,73 @@ root.render(<FriendlyGreeting />);
 
 - So far, our `<FriendlyGreeting />` is kinda neat, but not that useful. It renders the same thing every time. Not that flexible.
 
-- Components use `props`. They are like arguments to a function: allow you to pass data to our components, so teh components can include customizations base on teh data.
+- Components use `props`. They are like arguments to a function: allow you to pass data to our components, so the components can include customizations base on teh data.
 
 - How would you tweak our greeting component to take a person's name?
+- How do you funnel data into a component. Similar to giving data to and HTML element `<div id="some-div">Hello</div>`, passing `some-div` to that HTML element.
+- You do the same thing, when it comes to React compoennts, `<FriendlyGreeting name="chris" />`
+- So what React does, as it's rendering, it collects all the data you specified, and calling the Component with that data.
+- It does this through the props, which becomes an object.
+
+```JAVASCRIPT
+// Props is an object { name: "Josh" }
+function FriendlyGreeting(props) {
+  return (
+    <p
+      style={{
+        fontSize: '1.25rem',
+        textAlign: 'center',
+        color: 'sienna',
+      }}
+    >
+      Greetings, {props.name}!
+    </p>
+  );
+}
+
+render(
+    <div>
+      <FriendlyGreeting name="Chris" />
+    </div>
+    document.querySelector('#root');
+);
+```
+
+- Now you can create the same component, but you can specify the data.
+- ℹ️ Desctucturing: To extract data directly from an object, direclty in the function decloration, or anywhere else.
+
+```JAVASCRIPT
+// Destruction the props object, { name }
+function FriendlyGreeting({ name }) {
+  return (
+    <p
+      style={{
+        fontSize: '1.25rem',
+        textAlign: 'center',
+        color: 'sienna',
+      }}
+    >
+      Greetings, {name}!
+    </p>
+  );
+}
+
+render(
+    <div>
+      <FriendlyGreeting name="Chris" />
+    </div>
+    document.querySelector('#root');
+);
+```
+
+- Helpful, because you can see all the different data in the function, don't have to go hunting. When you have a lot of data types. Example;
+
+```JAVASCRIPT
+function FriendlyGreeting({ name, age, location, className }) {
+    return (
+        // stuff here
+    )
+}
+```
+
+- For more info on [Object Destructuring](https://courses.joshwcomeau.com/joy-of-react/10-javascript-primer/05-object-destructuring).
