@@ -938,7 +938,9 @@ function FriendlyGreeting({ name }) {
 
 render(
     <div>
+      <FriendlyGreeting name="Oatie" />
       <FriendlyGreeting name="Chris" />
+      <FriendlyGreeting name="Gibby" />
     </div>
     document.querySelector('#root');
 );
@@ -955,3 +957,158 @@ function FriendlyGreeting({ name, age, location, className }) {
 ```
 
 - For more info on [Object Destructuring](https://courses.joshwcomeau.com/joy-of-react/10-javascript-primer/05-object-destructuring).
+
+### Default values
+
+- Let's suppose we are wroking on our `FriendlyGreeting` component. But we don't know everyone's name.
+
+- For example, you can render a fallback value. I you know their name: `Hey Chris!`, If not, `Hey There!`
+
+- We can do this with the `||` operator, like.
+
+```JAVASCRIPT
+funciton FriendlyGreeting({ name }) {
+    return (
+        <p>
+          Hey {name || 'there'}!
+        </p>
+    );
+}
+```
+
+- If `name` is provided, it will be used. Otherwise, we fall back to use "there".
+- This works, but a better way to do it. Specify default values for each prop:
+
+```JAVASCRIPT
+function FriendlyGreeting({ name = 'there' }) {
+  return (
+    <p>
+          Hey
+      {' '}
+      {name}
+    </p>
+  );
+}
+```
+
+- Benefits, if you have multiple props with default values, we can see all the defaults int he same place.
+- Occasionally the `||` operator will surprise us by using the default value even if we supplied a value.
+
+- It's become a well-established convention to specify the default values within the prop object.
+
+- Another example, we have a decorative "Horizonal Rule" compoennt, essentially a way to draw a line between sections. Has a default width of 100px, btu we can override that value.
+
+```JAVASCRIPT
+function HorizontalRule({ width = 100 }) {
+  return (
+    <div style={{ width }}>
+      {/* stuff here*/}
+    </div>
+  );
+}
+
+<HorizontalRule width={250} /> // 250px
+<HorizontalRule />
+```
+
+- ℹ️ `defaultProps` property, is used by older versions of react. Don't use this property, the recommended approach is to use desctructuring assignment.
+
+### The Children Props
+
+- Imagine you are buidling a custom button component. It should look and act just like a regular HTML button, but have red background and white text.
+
+```JAVASCRIPT
+function RedButton({ contents }) {
+  return (
+    <button
+      style={{
+        color: 'white',
+        backgroundColor: 'red',
+      }}
+    >
+      { contents }
+    </button>
+  );
+}
+```
+
+- And we could use it like this:
+
+```JAVASCRIPT
+root.render(
+  <RedButton contents="Click Me!" />,
+);
+```
+
+- It works but not quite right, how we use a typical HTML button. When the content goes in-between the open and close tags.
+
+```HTML
+<button>
+    Click Me!
+</button>
+```
+
+- React allos us to do the same thing with oru custom components:
+
+```JAVASCRIPT
+root.render(
+  <RedButton>
+     Click Me!
+  </RedButton>,
+);
+```
+
+- When we do this, we can access the children through the `children` prop:
+
+```JAVASCRIPT
+function RedButton({ children }) {
+  return (
+    <button
+      style={{
+        color: 'white',
+        backgroundColor: 'red',
+      }}
+    >
+      {children}
+    </button>
+  );
+}
+```
+
+- React does this for us, when we pass soemthing between the open and close tags, react will automatically supply that value to use under `children`
+
+- For example, if you console.log this element, you will see `children` under `props`
+
+```JAVASCRIPT
+import React from 'react';
+
+const element = (
+  <div>
+     Hello World
+  </div>
+);
+
+console.log(element);
+```
+
+- The result would be:
+
+```JAVASCRIPT
+{
+  "type": "div",
+  "key": null,
+  "ref": null,
+  "props": {
+    "children": "Hello World"
+  },
+  "_owner": null,
+  "_store": {}
+}
+```
+
+- `children` is a special value, a "reserved word" when it comes to `props`
+- However, it's not different from other props. It's the same.
+
+### Exercises, Components
+
+- Practice making some components, take the JSX and refactor the code so that it uses a component.
