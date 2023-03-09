@@ -1112,3 +1112,184 @@ console.log(element);
 ### Exercises, Components
 
 - Practice making some components, take the JSX and refactor the code so that it uses a component.
+
+#### Building a CRM
+
+- Written markup to display the contact info for 3 contacts, but way to much repetition involved. Create a new component `ContactCard` and use that for each of the 3 contacts.
+
+```JAVASCRIPT
+function App() {
+  return (
+    <ul>
+      <li className="contact-card">
+        <h2>Sunita Kumar</h2>
+        <dl>
+          <dt>Job</dt>
+          <dd>Electrical Engineer</dd>
+          <dt>Email</dt>
+          <dd>sunita.kumar@acme.co</dd>
+        </dl>
+      </li>
+      <li className="contact-card">
+        <h2>Henderson G. Sterling II</h2>
+        <dl>
+          <dt>Job</dt>
+          <dd>Receptionist</dd>
+          <dt>Email</dt>
+          <dd>henderson-the-second@acme.co</dd>
+        </dl>
+      </li>
+      <li className="contact-card">
+        <h2>Aoi Kobayashi</h2>
+        <dl>
+          <dt>Job</dt>
+          <dd>President</dd>
+          <dt>Email</dt>
+          <dd>kobayashi.aoi@acme.co</dd>
+        </dl>
+      </li>
+    </ul>
+  );
+}
+
+export default App;
+```
+
+- My results
+
+```JAVASCRIPT
+function ContactCard(props) {
+  return (
+    <li className="contact-card">
+      <h2>{props.name}</h2>
+      <dl>
+        <dt>Job</dt>
+        <dd>{props.job}</dd>
+        <dt>Email</dt>
+        <dd>{props.email}</dd>
+      </dl>
+    </li>
+  );
+}
+
+function App() {
+  return (
+    <ul>
+      <ContactCard
+        name="Chris Davis"
+        job="UX Designer"
+        email="chris.smith@acme.co"
+      />
+      <ContactCard
+        name="Sunita Kumar"
+        job="Electrical Engineer"
+        email="sunita.kumar@acme.co"
+      />
+      <ContactCard
+        name="Henderson G. Sterling II"
+        job="Receptionist"
+        email="henderson-the-second@acme.co"
+      />
+      <ContactCard
+        name="Aoi Kobayashi"
+        job="President"
+        email="kobayashi.aoi@acme.co"
+      />
+    </ul>
+  );
+}
+```
+
+- To use destructuring to pass in the props, much cleaner.
+
+```JAVASCRIPT
+function ContactCard({ name, job, email }) {
+  return (
+    <li className="contact-card">
+      <h2>{name}</h2>
+      <dl>
+        <dt>Job</dt>
+        <dd>{job}</dd>
+        <dt>Email</dt>
+        <dd>{email}</dd>
+      </dl>
+    </li>
+  );
+}
+
+function App() {
+  return (
+    <ul>
+      <ContactCard
+        name="Chris Davis"
+        job="UX Designer"
+        email="chris.smith@acme.co"
+      />
+      <ContactCard
+        name="Sunita Kumar"
+        job="Electrical Engineer"
+        email="sunita.kumar@acme.co"
+      />
+      <ContactCard
+        name="Henderson G. Sterling II"
+        job="Receptionist"
+        email="henderson-the-second@acme.co"
+      />
+      <ContactCard
+        name="Aoi Kobayashi"
+        job="President"
+        email="kobayashi.aoi@acme.co"
+      />
+    </ul>
+  );
+}
+
+export default App;
+```
+
+#### Creating a "Button" component
+
+- With the two `<button>` elements, Create a `Button` compoennt and use it to render both buttons.
+
+- Starter code:
+
+```JAVASCRIPT
+import { createRoot } from 'react-dom/client';
+
+const root = createRoot(
+  document.querySelector('#root'),
+);
+
+root.render(
+  <div>
+    <button
+      style={{
+        border: '2px solid',
+        color: 'red',
+        borderColor: 'red',
+        background: 'white',
+        borderRadius: 4,
+        padding: 16,
+        margin: 8,
+      }}
+    >
+      Cancel
+    </button>
+    <button
+      style={{
+        border: '2px solid',
+        color: 'green',
+        borderColor: 'green',
+        background: 'white',
+        borderRadius: 4,
+        padding: 16,
+        margin: 8,
+      }}
+    >
+      Confirm
+    </button>
+  </div>,
+);
+```
+
+- Your solution:
