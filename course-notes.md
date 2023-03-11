@@ -1293,3 +1293,128 @@ root.render(
 ```
 
 - Your solution:
+
+```JAVASCRIPT
+import { createRoot } from 'react-dom/client';
+
+function Button({ color, borderColor, children }) {
+  return (
+    <button
+      style={{
+        border: '2px solid',
+        color,
+        borderColor,
+        background: 'white',
+        borderRadius: 4,
+        padding: 16,
+        margin: 8,
+      }}
+    >
+      {children}
+    </button>
+  );
+}
+
+const root = createRoot(
+  document.querySelector('#root'),
+);
+
+root.render(
+  <div>
+    <Button
+      color="red"
+      borderColor="red"
+    >
+      Cancel
+    </Button>
+    <Button
+      color="green"
+      borderColor="green"
+    >
+      Confirm
+    </Button>
+  </div>,
+);
+```
+
+- More advanced solutions
+- Start to think about Component Design, not the UI, but how can we create this component, to be as friendly to developers and be able to reuse.
+- What is the optimal API, for the props, to create the best experience.
+- The first way, find the things that are different, and make them props, `color`, `borderColor`. And then just pass the props in.
+- Other ways
+- Do you really need two props for this?
+- Since the colors are used multiple time, you could create a `themeColor` prop.
+
+```JAVASCRIPT
+import { createRoot } from 'react-dom/client';
+
+function Button({ themeColor, children }) {
+  return (
+    <button
+      style={{
+        border: '2px solid',
+        color: themeColor,
+        borderColor: themeColor,
+        background: 'white',
+        borderRadius: 4,
+        padding: 16,
+        margin: 8,
+      }}
+    >
+      {children}
+    </button>
+  );
+}
+
+const root = createRoot(
+  document.querySelector('#root'),
+);
+
+root.render(
+  <div>
+    <Button
+      themeColor="red"
+    >
+      Cancel
+    </Button>
+    <Button
+      themeColor="green"
+    >
+      Confirm
+    </Button>
+  </div>,
+);
+```
+
+- The color signifies a meaning, green a confirmation, and red error.
+- What is we had a status prop, cancel or confirm.
+- And we use this status to determint the color.
+
+```JAVASCRIPT
+let themeColor;
+
+if (status === 'cancel') {
+  themeColor = 'red';
+} else if (status === 'confirm') {
+  themeColor = 'green';
+} else {
+  throw new Error('Unrecognied value');
+}
+
+root.render(
+  <div>
+    <Button
+      status="cancel"
+    >
+      Cancel
+    </Button>
+    <Button
+      status="confirm"
+    >
+      Confirm
+    </Button>
+  </div>,
+);
+```
+
+- This way, we created some seperation between the semantic meaning of this button and the particlar color. So if you want to change things in the future, you can do it in one place.
