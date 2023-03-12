@@ -1294,6 +1294,8 @@ root.render(
 
 - Your solution:
 
+- **Solution 1: Each dynamic attribute becomes a prop**
+
 ```JAVASCRIPT
 import { createRoot } from 'react-dom/client';
 
@@ -1345,6 +1347,8 @@ root.render(
 - Do you really need two props for this?
 - Since the colors are used multiple time, you could create a `themeColor` prop.
 
+- **Solution 2: Synchronizing text and border colors**
+
 ```JAVASCRIPT
 import { createRoot } from 'react-dom/client';
 
@@ -1390,15 +1394,36 @@ root.render(
 - What is we had a status prop, cancel or confirm.
 - And we use this status to determint the color.
 
-```JAVASCRIPT
-let themeColor;
+- **Solution 3: Symantic "status" prop**
 
-if (status === 'cancel') {
-  themeColor = 'red';
-} else if (status === 'confirm') {
-  themeColor = 'green';
-} else {
-  throw new Error('Unrecognied value');
+```JAVASCRIPT
+// status: 'cancel' | 'confirm'
+function Button({ status, children }) {
+  let themeColor;
+
+  if (status === 'cancel') {
+    themeColor = 'red';
+  } else if (status === 'confirm') {
+    themeColor = 'green';
+  } else {
+    throw new Error('Unrecognized value');
+  }
+
+  return (
+    <button
+      style={{
+        border: '2px solid',
+        color: themeColor,
+        borderColor: themeColor,
+        background: 'white',
+        borderRadius: 4,
+        padding: 16,
+        margin: 8,
+      }}
+    >
+      {children}
+    </button>
+  );
 }
 
 root.render(
@@ -1418,3 +1443,38 @@ root.render(
 ```
 
 - This way, we created some seperation between the semantic meaning of this button and the particlar color. So if you want to change things in the future, you can do it in one place.
+
+### Application Structure
+
+- Most React apps will share a common structure.
+
+- An `index.js`, `App.js` and a `Header.js`
+- See the [code sandbox](https://codesandbox.io/s/cehrev?file=/index.js&utm_medium=sandpack)
+
+#### Index.js
+
+- The root `index.js` file is the first bit of code to be executed. Responsible for rendering our React app, turning the elements we write into live DOM nodes.
+- Ther ewill only be 1 spot int he entire codebase that calls the `createRoot` and `render` methods form react-dom.
+- Common to do setup tasks in this file as well. Projects created with `create-react-app` include some performace, also you can include CSS files.
+- Typically don't want to render a bunch of JSX, or include things like headers and buttons etc.
+- General rule, just renders the single elment: `<App />`
+
+#### App
+
+- Common fo rour projects to have a component called `App`
+- This is the home base, React component in our project.
+- Could manage core layout stuff, like headers and footers.
+- If you are using a routing solution like react Router, top level routes are often included in this file.
+
+#### Modules
+
+- Generally use ES module system to split our apps into multiple files.
+- For a refresher on JS modules
+
+#### Going forward
+
+- To keep things focused on the course, not showing `index.js`.
+
+### Fragments
+
+-
