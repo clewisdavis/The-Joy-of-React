@@ -1623,4 +1623,154 @@ return (
 
 ### Iteration
 
--
+- From a previous example; Building a CRM, we extracted a `ContactCard` compoennt and used it for our 3 contacts:
+
+```JAVASCRIPT
+<ul>
+  <ContactCard
+    name="Sunita Kumar"
+    job="Electrical Engineer"
+    email="sunita.kumar@acme.co"
+  />
+  <ContactCard
+    name="Henderson G. Sterling II"
+    job="Receptionist"
+    email="henderson-the-second@acme.co"
+  />
+  <ContactCard
+    name="Aoi Kobayashi"
+    job="President"
+    email="kobayashi.aoi@acme.co"
+  />
+</ul>;
+```
+
+- This solution works, but we don't always have the data when we write the code.
+- If we are building a CRM software, this data will be dynamic. Every user will have a seperate set of contacts, and change ove rtime. We can't hardcode.
+
+- In React, we solve this by using iteration. We dynamically create these React elements by using raw JS.
+
+#### Mapping Over Data
+
+- Let's suppose the data from our CRM is held in an array.
+
+```JAVASCRIPT
+import ContactCard from './ContactCard';
+
+const data = [
+  {
+    id: 'sunita-abc123',
+    name: 'Sunita Kumar',
+    job: 'Electrical Engineer',
+    email: 'sunita.kumar@acme.co',
+  },
+  {
+    id: 'henderson-def456',
+    name: 'Henderson G. Sterling II',
+    job: 'Receptionist',
+    email: 'henderson-the-second@acme.co',
+  },
+  {
+    id: 'aio-ghi789',
+    name: 'Aoi Kobayashi',
+    job: 'President',
+    email: 'kobayashi.aoi@acme.co',
+  },
+];
+
+function App() {
+  return (
+    <ul>
+      <ContactCard
+        name="Name goes here"
+        job="Job goes here"
+        email="Email goes here"
+      />
+    </ul>
+  );
+}
+
+export default App;
+```
+
+- We want to create a `<ContactCard>` element for each of the contacts in the `data` array, passing in their name/job/email.
+
+- In React, we use pure JS, there is no "React syntax" for doing this iteration.
+- 🤔 HINT: You can render an array inside the JSX, React will unpack it for you. For a refresher, you can look at "[Aray Iteration Methods](https://courses.joshwcomeau.com/joy-of-react/10-javascript-primer/08-array-iteration-methods)" lesson.
+
+- You can use the `map.()` method to interate over the data
+
+```JAVASCRIPT
+const elements = data.map(contact => (
+  console.log(contact.email)
+));
+```
+
+- You can use, just vanilla JS, inside of React.
+- Now, all you have to do is put in your component.
+- Then use an expression slot `{elements}`, to render it in your `App()`
+
+```JAVASCRIPT
+import ContactCard from './ContactCard';
+
+const data = [
+  {
+    id: 'sunita-abc123',
+    name: 'Sunita Kumar',
+    job: 'Electrical Engineer',
+    email: 'sunita.kumar@acme.co',
+  },
+  {
+    id: 'henderson-def456',
+    name: 'Henderson G. Sterling II',
+    job: 'Receptionist',
+    email: 'henderson-the-second@acme.co',
+  },
+  {
+    id: 'aio-ghi789',
+    name: 'Aoi Kobayashi',
+    job: 'President',
+    email: 'kobayashi.aoi@acme.co',
+  },
+];
+
+function App() {
+  const elements = data.map(contact => (
+    <ContactCard
+      name={contact.name}
+      job={contact.job}
+      email={contact.email}
+    />
+  ));
+  return (
+    <ul>
+      {elements}
+    </ul>
+  );
+}
+
+export default App;
+```
+
+- If you console.log(elements), you will see that you are creating an array of React elements, and inserting them.
+
+- It is more common to put the JSX inline, so everything happens inline and easier to determine what is happening.
+- We are going to `map()` over the data, and render a contact card for every contact we have.
+
+```JAVASCRIPT
+function App() {
+  return (
+    <ul>
+      {data.map(contact => (
+        <ContactCard
+          name={contact.name}
+          job={contact.job}
+          email={contact.email}
+        />
+      ))}
+    </ul>
+  );
+}
+```
+
+- You can do anything you can do in JS. Can use the JS you already know.
