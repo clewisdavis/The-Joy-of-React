@@ -1774,3 +1774,151 @@ function App() {
 ```
 
 - You can do anything you can do in JS. Can use the JS you already know.
+
+- 🎁 Bonus material: JS primer bonus
+- [Arrow Functions](https://courses.joshwcomeau.com/joy-of-react/01-fundamentals/06.01-mapping?peek=%2Fjoy-of-react%2F10-javascript-primer%2F04-arrow-functions)
+- [Array Iteration Methods](https://courses.joshwcomeau.com/joy-of-react/01-fundamentals/06.01-mapping?peek=%2Fjoy-of-react%2F10-javascript-primer%2F08-array-iteration-methods)
+
+#### JSX inside JS inside JSX
+
+- When interating with React, it is not uncommon to wind up with a structure like this:
+
+```JAVASCRIPT
+<ul>
+  {items.map(item => (
+    <li>{item}</li>
+  ))}
+</ul>;
+```
+
+- On the second line, we use curly brackets to add some "vanilla JS", to our JSX. But then we are using JSX inside those curly brackets!
+- The JSX compiler is able to resolve the "nested" JSX calls. The end result is something like this:
+
+```JAVASCRIPT
+React.createElement(
+  'ul',
+  {},
+  items.map(item => (
+    React.createElement(
+      'li',
+      {},
+      item,
+    )
+  )),
+);
+```
+
+#### Keys
+
+- The good ole keys console warning.
+- `Warning: Each child in a list should have a unique "key" prop.`
+
+- When we give React an array of elements, we also need to help react otu b uniquely identifying each element.
+- In our CRM application, we can fix this by using the `id` as the key prop.
+
+```JAVASCRIPT
+const data = [
+  {
+    id: 'sunita-abc123',
+    name: 'Sunita Kumar',
+    job: 'Electrical Engineer',
+    email: 'sunita.kumar@acme.co',
+  },
+  // ✂️ Other contacts trimmed
+];
+function App() {
+  return (
+    <ul>
+      {data.map(contact => (
+        <ContactCard
+          key={contact.id}
+          name={contact.name}
+          job={contact.job}
+          email={contact.email}
+        />
+      ))}
+    </ul>
+  );
+}
+```
+
+- Our contacts data array has a unique identifier, `id`.
+- We pass that string onto the `key` property, to resolve the error.
+
+#### Why are keys neceessary?
+
+- Why can't React figure this out on it's own?
+- You need keys, to help react understand exaclty how the data shifts over time.
+- When updating the DOM, there are multiple ways to get from one UI to another. And if you give React unique identifiers, we can see how those things change 🤔
+- [Video explanation](https://courses.joshwcomeau.com/joy-of-react/01-fundamentals/06.02-keys)
+
+#### Using the array index as the key?
+
+- What if you are not given a unique id for each contact, like the example above.
+- A common approachc is to use the array index. The index is provided when we call the `.map()` method.
+
+```JAVASCRIPT
+const todos = [
+  'buy milk',
+  'feed goldfish',
+  'return library book',
+];
+
+function TodoList() {
+  return (
+    <ul>
+      {todos.map((todo, index) => (
+        <li key={index}>{todo}</li>
+      ))}
+    </ul>
+  );
+}
+```
+
+- As we iterate through teh array, we are grabbing each items index, and applying it as a key. The output in React is like:
+
+```JAVASCRIPT
+<li key={0}>buy milk</li>
+<li key={1}>feed goldfish</li>
+<li key={2}>return library book</li>
+```
+
+- This can be a bit risky, React keys are meant to be uniquely identiry a bit of content.
+- In the re-order case, you could end up with something like this.
+
+```JAVASCRIPT
+<li key={0}>feed goldfish</li>
+<li key={1}>buy milk</li>
+<li key={2}>return library book</li>
+```
+
+- This could cause some bugs in your app.
+- A good rule, is to not use `key` with array index if the items can be reordered.
+
+#### Key Rules
+
+- Some ruels that govern how keys should be used.
+
+##### Top level element
+
+- the `key` prop needs to be applied ot hte very top-level element within the `.map()` call.
+- This example is incorrect.
+
+```JAVASCRIPT
+function NavigationLinks({ links }) {
+  return (
+    <ul>
+      {links.map(item => (
+        <li>
+          <a
+            key={item.id} // incorrect element
+            href={item.href}
+          >
+            {item.text}
+          </a>
+        </li>
+      ))}
+    </ul>
+  );
+}
+```
