@@ -1968,7 +1968,7 @@ function Thing({ data }) {
 - Update the multiple avatars.
 - AC's
   - Create an array that holds the data needed for all the avatars.
-  - The array should be iterated over, creating an `<Avatar />` element for each item in teh array.
+  - The array should be iterated over, creating an `<Avatar />` element for each item in the array.
   - Should be no key warnings in the console.
 
 ```JAVASCRIPT
@@ -2001,8 +2001,7 @@ function App() {
 export default App;
 ```
 
-- AC 1
-- Create an array that holds the data needed for all the avatars.
+- AC 1. Create an array that holds the data needed for all the avatars.
 - Note: since the src url is the same, good practice to just specify the name of the image as an `id`.
 
 ```JAVASCRIPT
@@ -2026,4 +2025,73 @@ const data = [
 ];
 ```
 
--
+- AC 2. The array should be iterated over, creating an `<Avatar />` element for each item in the array.
+- Note: Use string interpolation with template strings for the image url.
+- Use an arrow function on the map method. `(data) => (return stuff)`, don't forget about the rules of an arrow function.
+- In the function return, you can just call the expression, with slot.
+
+```JAVASCRIPT
+function App() {
+  // interate over
+  const element = data.map(avatar => (
+    // console.log(data);
+    <Avatar
+      src={`https://sandpack-bundler.vercel.app/img/avatars/${avatar.id}.png`}
+      alt={avatar.alt}
+    />
+  ));
+
+  return (
+    <div className="avatar-set">
+      {element}
+    </div>
+  );
+}
+```
+
+- Note, Josh's solution, you can put the code inline within the return. Not make a seperate variable.
+
+```JAVASCRIPT
+function App() {
+  return (
+    <div className="avatar-set">
+      {data.map(avatar => (
+        // console.log(data);
+        <Avatar
+          src={`https://sandpack-bundler.vercel.app/img/avatars/${avatar.id}.png`}
+          alt={avatar.alt}
+        />
+      ))}
+    </div>
+  );
+}
+```
+
+- AC 3. No Key warnings.
+
+```JAVASCRIPT
+<Avatar
+  src={`https://sandpack-bundler.vercel.app/img/avatars/${avatar.id}.png`}
+  alt={avatar.alt}
+  key={avatar.id}
+/>;
+```
+
+- Getting fancy
+- Use desctructuring to simplify the return
+- Arrow function, implicit return
+
+```JAVASCRIPT
+function App() {
+  return (
+    <div className="avatar-set">
+      {data.map(({ id, alt }) => (
+        <Avatar
+          src={`https://sandpack-bundler.vercel.app/img/avatars/${id}.png`}
+          alt={alt}
+        />
+      ))}
+    </div>
+  );
+}
+```
