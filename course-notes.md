@@ -1922,3 +1922,108 @@ function NavigationLinks({ links }) {
   );
 }
 ```
+
+- From React's perspective, it has a group of `<li>` elements, does not dig any deeper at the child elements.
+- To fix it, just move the `key` up to the `<li>`.
+
+- When using fragments, it's sometimes requried to switch to the long form `react.Fragment`, so you can apply the key.
+
+```JAVASCRIPT
+// 🚫 Missing key: 
+function Thing({ data }) {
+  return (
+    data.map(item => (
+      <>
+        <p>{item.content}</p>
+        <button>Cancel</button>
+      </>
+    ))
+  );
+}
+
+// ✅ Fixed!
+function Thing({ data }) {
+  return (
+    data.map(item => (
+      <React.Fragment key={item.id}>
+        <p>{item.content}</p>
+        <button>Cancel</button>
+      </React.Fragment>
+    ))
+  );
+}
+```
+
+##### Not global
+
+- Keys only have to be unique within their array, the `key` prop does not have to be globally unique  across the entire application.
+- Each `.map()` cal produces a seperate arry, and so it's not a problem.
+
+#### Exercises, Iteration
+
+- Some exercises to get practice on what we went over.
+
+#### Avatar selection
+
+- Update the multiple avatars.
+- AC's
+  - Create an array that holds the data needed for all the avatars.
+  - The array should be iterated over, creating an `<Avatar />` element for each item in teh array.
+  - Should be no key warnings in the console.
+
+```JAVASCRIPT
+// start
+import Avatar from './Avatar';
+
+function App() {
+  return (
+    <div className="avatar-set">
+      <Avatar
+        src="https://sandpack-bundler.vercel.app/img/avatars/001.png"
+        alt="person with curly hair and a black T-shirt"
+      />
+      <Avatar
+        src="https://sandpack-bundler.vercel.app/img/avatars/002.png"
+        alt="person wearing a hijab and glasses"
+      />
+      <Avatar
+        src="https://sandpack-bundler.vercel.app/img/avatars/003.png"
+        alt="person with short hair wearing a blue hoodie"
+      />
+      <Avatar
+        src="https://sandpack-bundler.vercel.app/img/avatars/004.png"
+        alt="person with a pink mohawk and a raised eyebrow"
+      />
+    </div>
+  );
+}
+
+export default App;
+```
+
+- AC 1
+- Create an array that holds the data needed for all the avatars.
+- Note: since the src url is the same, good practice to just specify the name of the image as an `id`.
+
+```JAVASCRIPT
+const data = [
+  {
+    id: '001',
+    alt: 'person with curly hair and a black T-shirt',
+  },
+  {
+    id: '002',
+    alt: 'person wearing a hijab and glasses',
+  },
+  {
+    id: '003',
+    alt: 'person with short hair wearing a blue hoodie',
+  },
+  {
+    id: '004',
+    alt: 'person with a pink mohawk and a raised eyebrow',
+  },
+];
+```
+
+-
