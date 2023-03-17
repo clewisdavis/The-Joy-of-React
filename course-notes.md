@@ -2095,3 +2095,73 @@ function App() {
   );
 }
 ```
+
+#### Shopping Cart
+
+- Imagine building a shopping cart UI. You receive an array of items being held in teh card from the server.
+- If an item is otu of stock, they cannot purchase it. Should be displayed seperately.
+
+- Started on, but two problems remain:
+  - Need to show all the items in teh user's cart, not just the first one.
+  - Need to show two seperate tables. One for in-stock, and one for sold-out.
+
+- AC's
+  - Update the `CartTable` component to use iteration.
+  - Make sure no `key` warnings in the console.
+  - In `App`, we should be rendering two `CardTable` elements:
+    - One for the in-stock elements
+    - One for the out-stock elements below the "Sold Out" heading.
+
+- AC 1. Update the `CartTable` component to use iteration.
+- AC 2. Make sure no `key` warnings in console
+
+```JAVASCRIPT
+// CartTable.js
+function CartTable({ items }) {
+  // TODO: Map through “items”, creating 1 row
+  // per item.
+
+  const productRow = items.map(({
+    id, imageSrc, imageAlt, title, price,
+  }) => (
+    // console.log(imageSrc)
+    <tr className="cart-row" key={id}>
+      <td>
+        <img
+          className="product-thumb"
+          src={imageSrc}
+          alt={imageAlt}
+        />
+      </td>
+      <td>
+        {title}
+      </td>
+      <td>
+            $
+        {price}
+      </td>
+    </tr>
+  ));
+
+  return (
+    <table className="shopping-cart">
+      <thead>
+        <tr>
+          <th />
+          <th>Title</th>
+          <th>Price</th>
+        </tr>
+      </thead>
+      <tbody>
+        {productRow}
+      </tbody>
+    </table>
+  );
+}
+
+export default CartTable;
+```
+
+- AC 3. In `App`, we should be rendering two `CardTable` elements:
+  - One for the in-stock elements
+  - One for the out-stock elements below the "Sold Out" heading.
