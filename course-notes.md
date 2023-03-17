@@ -2165,3 +2165,36 @@ export default CartTable;
 - AC 3. In `App`, we should be rendering two `CardTable` elements:
   - One for the in-stock elements
   - One for the out-stock elements below the "Sold Out" heading.
+
+- 🤔 TIP: Use the `filter()` method on the list of items. Pass that into your `<CardTable>` component.
+
+- Pass that into your `<CardTable>` component.
+- 🤔 TIP: You can invert the condition so it will return falsy `!item.inStock`.
+
+```JAVASCRIPT
+function App() {
+  const inStockItems = items.filter(
+    item => item.inStock,
+  );
+  const outOfStockItems = items.filter(
+    item => !item.inStock,
+  );
+
+  return (
+    <>
+      <h2>Shopping cart</h2>
+      <CartTable items={inStockItems} />
+      <div className="actions">
+        <button>Continue checkout</button>
+      </div>
+
+      <h2>Sold out</h2>
+      <CartTable items={outOfStockItems} />
+    </>
+  );
+}
+
+export default App;
+```
+
+### Conditional Rendering
