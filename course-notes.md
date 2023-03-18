@@ -2172,6 +2172,19 @@ export default CartTable;
 - 🤔 TIP: You can invert the condition so it will return falsy `!item.inStock`.
 
 ```JAVASCRIPT
+
+const items = [
+  {
+    id: 'hk123',
+    imageSrc: 'https://sandpack-bundler.vercel.app/img/shopping-cart-coffee-machine.jpg',
+    imageAlt: 'A pink drip coffee machine with the “Hello Kitty” logo',
+    title: '“Hello Kitty” Coffee Machine',
+    price: '89.99',
+    inStock: true,
+  },
+  // other items here
+];
+
 function App() {
   const inStockItems = items.filter(
     item => item.inStock,
@@ -2198,3 +2211,135 @@ export default App;
 ```
 
 ### Conditional Rendering
+
+- Most of the time, we want to render something based on a condition.
+- For example, render a green dot next to an avatar if a user is online.
+
+#### With an If Statement
+
+- With the curly brackets, we can add JS expressions within our JSX
+- But, we CANNOT add JS statements.
+- For example; this is not allowed.
+
+```JAVASCRIPT
+function Friend({ name, isOnline }) {
+  return (
+    <li className="friend">
+      {if (isOnline) {
+        <div className="green-dot" />
+      }}
+
+      {name}
+    </li>
+  );
+}
+```
+
+- Why doesn't this work? Consider how this will compile to JS:
+
+```JAVASCRIPT
+function Friend({ name, isOnline }) {
+  return React.createElement(
+    'li',
+    { className: 'friend'},
+    if (isOnline) {
+      React.createElement('div', { className: 'green-dot' });
+    },
+    name
+  );
+}
+```
+
+- you can't put an `if` statement in teh middle of a function call liek this. Here is a more simple example:
+
+```JAVASCRIPT
+console.log(
+  if (isLoggedIn) {
+    "Logged in!"
+  } else {
+    "Not logged in"
+  }
+)
+```
+
+- 🤔 TIP: Want to know if a piece of JS is an expression or statement? Try to log it out!
+- If it runs, the code is an expression.
+- If you get an error, it's a statement, or possibly invalid JS syntax.
+
+```JAVASCRIPT
+console.log(/* Some chunk of JS here */);
+```
+
+- In React, we are allowd to put *expressions* in our JSX, but NOT *statements*.
+- Expression: JS code that produces a value. `5 * 10` produces `50`. `num > 100` produces either `true` or `false`
+- Statement: An instruction to the computer to do a thing. `let hi = 5;` or `if (hi > 10) { // stuff here }`
+
+- Good news; we can still use an `if` statement. But we have to pull it up so that it's not it in the middle of a `React.createElement` call:
+
+```JAVASCRIPT
+// component Friend.js
+function Friend({ name, isOnline }) {
+  let prefix;
+
+  if (isOnline) {
+    prefix = <div className="green-dot" />;
+  }
+
+  return (
+    <li className="friend">
+      {prefix}
+      {name}
+    </li>
+  );
+}
+
+export default Friend;
+```
+
+- No rule that says your JSX has to be part of the `return` statement.
+- We can assign chunks of JSX to a variable, anywhere within oru compoennt definition.
+
+- This JSX compiles to:
+
+```JAVASCRIPT
+function Friend({ name, isOnline }) {
+  let prefix;
+
+  if (isOnline) {
+    prefix = React.createElement(
+      'div',
+      { className: 'green-dot' },
+    );
+  }
+
+  return React.createElement(
+    'li',
+    { className: 'friend' },
+    prefix,
+    name,
+  );
+}
+```
+
+- In the example above, `prefix` will either be assigned a React element or it won't be defined at all.
+- **This works because React ignores children that don't produce a value.**
+
+- Another example;
+
+```JAVASCRIPT
+// Example 1:
+function SomeBoringComponent() {
+  let someClass;
+
+  return (
+    <div className={someClass}>
+      {undefined}
+    </div>
+  );
+}
+
+// Renders an empty div:
+// <div></div>
+```
+
+- 📣 React ignores falsy values, including `undefined`, `null`, `false`. Because of this, we can use conditional rendering to dynamically add/remove elements.
