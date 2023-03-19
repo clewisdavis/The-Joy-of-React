@@ -2343,3 +2343,108 @@ function SomeBoringComponent() {
 ```
 
 - 📣 React ignores falsy values, including `undefined`, `null`, `false`. Because of this, we can use conditional rendering to dynamically add/remove elements.
+
+#### With &&
+
+- The downside to useing an `if` statement is we have to pull that logic up, away from the rest of the markup.
+- Makes it harder to understand hwo a component is structured. Having to hop all over the place to understand what is being returned.
+
+- Good news, a way to embed the `if` logic right in our JSX, using the `&&` operator.
+
+```JAVASCRIPT
+function Friend({ name, isOnline }) {
+  return (
+    <li className="friend">
+      {isOnline && <div className="green-dot" />}
+      {name}
+    </li>
+  );
+}
+
+function App() {
+  return (
+    <ul className="friend-list">
+      <Friend name="Andrew" isOnline={false} />
+      <Friend name="Beatrice" isOnline />
+      <Friend name="Chen" isOnline />
+    </ul>
+  );
+}
+
+export default App;
+```
+
+- In JS, the `&&` is a control flow operator. It works like the if/else except it's an expression instead of a statement.
+- Here is the same logic as above, but in an if/else.
+
+```JAVASCRIPT
+function Friend({ name, isOnline }) {
+  let prefix;
+  if (isOnline) {
+    prefix = <div className="green-dot" />;
+  } else {
+    prefix = isOnline;
+  }
+
+  return (
+    <li>
+      {prefix}
+      {name}
+    </li>
+  );
+}
+```
+
+- The `&&` operator i sa "control flow" operator, like the if/else, it will always result in one of two paths taken.
+
+- If the left hand value of isOnline `{isOnline && <div className="green-dot" />}` is false, the expression short-circuits, evaluates `isOnline` to `false.
+
+- If the value it `true`, it evaluates tow hatever is on the right hand side of the operator `{isOnline && <div className="green-dot" />}`, which is the `<div>` element containing our green dot.
+
+- 🎁 You can check out Logical Operators for JS primer. or [MDN Loginal AND &&](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Logical_AND)
+
+##### Common gatcha: the number zero
+
+- The `&&` operator doesn't return `true` or `false`. It returns the left hand side or the right hand side.
+- React will render any number you give it, even zero.
+- React will ignore most falsy values, like `false` or `null`. But it won't ignore the number zero.
+
+- See how React renders the different falsy value:
+- React will actually render the zero.
+
+```CODE
+function App() {
+  return (
+    <ul>
+      <li>false: {false}</li>
+      <li>undefined: {undefined}</li>
+      <li>null: {null}</li>
+      <li>Empty string: {''}</li>
+      <li>Zero: {0}</li>
+      <li>NaN: {NaN}</li>
+    </ul>
+  );
+}
+
+export default App;
+```
+
+##### Solutions: Always use boolean values with the &&
+
+- To avoid having random `0` in your app.
+- Follow the golden rule: make sure the left-hand side of the `&&` always evaluates to a boolean value, either `true` or `false`
+
+```JAVASCRIPT
+function App() {
+  const shoppingList = ['avocado', 'banana', 'cinnamon'];
+  const numOfItems = shoppingList.length;
+
+  return (
+    <div>
+      {numOfItems > 0 && (
+        <ShoppingList items={shoppingList} />
+      )}
+    </div>
+  );
+}
+```
