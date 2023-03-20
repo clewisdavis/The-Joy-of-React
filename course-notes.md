@@ -2448,3 +2448,85 @@ function App() {
   );
 }
 ```
+
+- In this approach, we are specific with what the condition is: if we have 1 or more items int eh shopping list, we should render the `<ShoppingList>` element.
+- The greater than operator `>` wil always produce a boolean value, `true` or `false`
+
+- We can also convert any non-boolean value to a boolean value with `!!`
+
+```JAVASCRIPT
+function App() {
+  const shoppingList = ['avocado', 'banana', 'cinnamon'];
+  const numOfItems = shoppingList.length;
+
+  return (
+    <div>
+      {!!numOfItems && (
+        <ShoppingList items={shoppingList} />
+      )}
+    </div>
+  );
+}
+```
+
+- 👀 You can check out the JS primer on `!!`. Also on MDN, [Logical NOT operator](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Logical_NOT)
+- `!!` isn't actually a JS operator; we are repeating the NOT operator `!` twice.
+- We can use the `!` to flip the boolean value:
+
+```JAVASCRIPT
+!true; // false
+!!true; // true
+```
+
+- If we use the `!` with a non-boolean value, it will flip a truthy value to `false`, or a falsy value to `true`.
+
+```JAVASCRIPT
+4;
+
+// true
+!4; // false, since 4 is truthy
+
+0; // falsy
+!0; // true, since 0 is falsy
+```
+
+#### With Ternary
+
+- What if you wanted to reproduce an `if`/`else` in our JSX?
+
+- For example, building a use dashboard, if user is logged in, we want to render the charts. If not logged in, we want to render a short message asking them to log in.
+
+- You could use two `&&` like so,
+
+```JAVASCRIPT
+function App({ user }) {
+  const is LoggedIn = !!user;
+
+  return (
+    <>
+      {isLoggedIn && <AdminDashboard />}
+      {!isLoggedIn && <p>Please lonin first</p>}
+    </>
+  );
+}
+```
+
+- This works, btu it's a bit clunky. In this case, we can use the **ternary operator**.
+- 👀 MDN reference, [Conditional ternary operator](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Conditional_Operator)
+
+- Same code above, with ternary
+
+```JAVASCRIPT
+funtion App({ user }) {
+  const isLoggedIn = !!user;
+
+  return (
+    <>
+     {isLoggedIn
+       ? <AdminDashboard />
+       : <p>Please login first</p>
+     }
+    </>
+  )
+}
+```
