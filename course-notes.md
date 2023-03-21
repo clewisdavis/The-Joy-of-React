@@ -2530,3 +2530,58 @@ funtion App({ user }) {
   )
 }
 ```
+
+- Ternary operator has been part of JS since IE 3 in 1996!
+- It rose to prominence with React, because it allows us to embed the if/else logic wihtin out JSX. Because a ternary opertor is an opertor instead fo a statement, it can be used inside JS expressions.
+
+- It consists of three parts:
+
+```JAVASCRIPT
+condition ? firstExpression : secondExpression;
+```
+
+If `condition` si truthy, the first expression will get evaluated. It falsy, the second expression wil be evaluated instead.
+
+#### Showing and Hiding
+
+- So far, we have seen a way to add or remove a chunk of markup on the page.
+- Another way to solve this problem, toggle the visibility using CSS.
+
+- An example;
+
+```JAVASCRIPT
+function Friend({ name, isOnline }) {
+  const style = isOnline
+    ? undefined
+    : { display: 'none' };
+
+  return (
+    <li>
+      <div
+        className="green-dot"
+        style={style}
+      />
+      {name}
+    </li>
+  );
+}
+```
+
+- If the friend is online, `style` will be `undefined`, and wil have no effect. the green dot will be shown.
+
+- If the friend is offline, the green dot will have `display: none` applied, effectively removing it form the UI.
+
+- 📣 Inline styles? Using inline styles as an example; many ways to accomplish will explore later in the course.
+
+#### Comparing approaches, Conditional render vs. CSS show/hide
+
+- Interesting things on performance
+- DOM nodes consume memory just by existing, no matter what, visible or not visible.
+- In a large enough app, it can be beneficial to conditionally render to reduce the number of DOM nodes at any given time.
+- The down side, adding DOM nodes can be a much slower task than toggling a CSS property.
+
+- But in most cases the perforance differences are so small, does not matter.
+
+- Suggest: use conditional rendering by default, test on low end devices, is something seems laggy, try an alternative approach.
+
+#### Exercises
