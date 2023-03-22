@@ -2585,3 +2585,70 @@ function Friend({ name, isOnline }) {
 - Suggest: use conditional rendering by default, test on low end devices, is something seems laggy, try an alternative approach.
 
 #### Exercises
+
+- Supporting screen readers
+- So far, we have used JS operators to conditionally render a green circle next to online users' names, but what happens when someone visits our app using a screen reader?
+
+```JAVASCRIPT
+<ul className="friends-list">
+  <li className="friend">
+    Andrew
+  </li>
+  <li className="friend">
+    <div className="green-dot" />
+    Beatrice
+  </li>
+  <li className="friend">
+    <div className="green-dot" />
+    Chen
+  </li>
+</ul>;
+```
+
+- The trouble is that `<div class="green-dot">` is semantically meaningless, so screen readers ignore it.
+
+- How can we make this info available to folks who use a screen reader?
+- Recommend using some CSS to visually hide a chunk of text.
+- Using a custom `<VisuallyHidden>` component.
+
+```JAVASCRIPT
+<p>
+  This text is shown normally.
+  <VisuallyHidden>
+    This text isn't on the screen, but is announced by screen readers.
+  </VisuallyHidden>
+</p>;
+```
+
+- This exercise, use the `VisuallyHidden` component to add the suffix "(Online)" after the names of online users.
+
+- AC's
+  - Users who are online should have the text "(Online)" added after their names.
+  - The `VisuallyHidden` component should be used to make sure that this text isn't shown visually.
+  - Users who are offline should not be affected.
+
+```JAVASCRIPT
+// starter code
+import VisuallyHidden from './VisuallyHidden';
+
+function Friend({ name, isOnline }) {
+  return (
+    <li className="friend">
+      {isOnline && <div className="green-dot" />}
+      {name}
+    </li>
+  );
+}
+
+function App() {
+  return (
+    <ul className="friend-list">
+      <Friend name="Andrew" isOnline={false} />
+      <Friend name="Beatrice" isOnline />
+      <Friend name="Chen" isOnline />
+    </ul>
+  );
+}
+
+export default App;
+```
