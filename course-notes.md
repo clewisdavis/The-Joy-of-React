@@ -2586,7 +2586,8 @@ function Friend({ name, isOnline }) {
 
 #### Exercises
 
-- Supporting screen readers
+##### Supporting screen readers
+
 - So far, we have used JS operators to conditionally render a green circle next to online users' names, but what happens when someone visits our app using a screen reader?
 
 ```JAVASCRIPT
@@ -2621,6 +2622,7 @@ function Friend({ name, isOnline }) {
 ```
 
 - This exercise, use the `VisuallyHidden` component to add the suffix "(Online)" after the names of online users.
+- Check out [Josh's blog post Snippet](https://www.joshwcomeau.com/snippets/react-components/visually-hidden/)
 
 - AC's
   - Users who are online should have the text "(Online)" added after their names.
@@ -2652,3 +2654,159 @@ function App() {
 
 export default App;
 ```
+
+- My attempt
+
+```JAVASCRIPT
+// my attempt
+import VisuallyHidden from './VisuallyHidden';
+
+function Friend({ name, isOnline }) {
+  return (
+    <li className="friend">
+      {isOnline && <div className="green-dot" />}
+      {name}
+      {' '}
+      {isOnline && <VisuallyHidden>(Online)</VisuallyHidden>}
+    </li>
+  );
+}
+
+function App() {
+  return (
+    <ul className="friend-list">
+      <Friend name="Andrew" isOnline={false} />
+      <Friend name="Beatrice" isOnline />
+      <Friend name="Chen" isOnline />
+    </ul>
+  );
+}
+
+export default App;
+```
+
+- Added another expression slot after the name, with the logical `&&` operator, if `inOnline` is true, it will return the `VisuallyHidden` componennt.
+
+```JAVASCRIPT
+import VisuallyHidden from './VisuallyHidden';
+
+function Friend({ name, isOnline }) {
+  return (
+    <li className="friend">
+      {isOnline && <div className="green-dot" />}
+      {name}
+      {' '}
+      {isOnline && <VisuallyHidden>(Online)</VisuallyHidden>}
+    </li>
+  );
+}
+
+function App() {
+  return (
+    <ul className="friend-list">
+      <Friend name="Andrew" isOnline={false} />
+      <Friend name="Beatrice" isOnline />
+      <Friend name="Chen" isOnline />
+    </ul>
+  );
+}
+
+export default App;
+```
+
+- Here is the visually hidden component, css to hide visually but still read for screen readers.
+
+```JAVASCRIPT
+// Visually Hidden component
+// These styles will make sure the component
+// is not visible, but will still be announced
+// by screen readers.
+//
+// Adding “display: none” would hide the
+// element from ALL users, including those
+// using screen-readers.
+const hiddenStyles = {
+  display: 'inline-block',
+  position: 'absolute',
+  overflow: 'hidden',
+  clip: 'rect(0 0 0 0)',
+  height: 1,
+  width: 1,
+  margin: -1,
+  padding: 0,
+  border: 0,
+};
+
+const VisuallyHidden = ({ children }) => (
+  <span style={hiddenStyles}>
+    {children}
+  </span>
+);
+
+export default VisuallyHidden;
+```
+
+##### Exercises, User Profile with Badges
+
+- Most social sites have community badges, awards for people who acheive certain goals.
+- In this exercise, we want to update a set of user profiles to conditionally render some badges. For users who have no badges, the section will be omitted.
+
+- The markup for the badges, looks like:
+
+```HTML
+<ul class="badge-list">
+  <li>Badge 1</li>
+  <li>Badge 2</li>
+  <li>Badge 3</li>
+</ul>
+```
+
+- AC's
+- If the user has at least 1 badge, an unordered list with the class `badge-list` should be rendered, using the data from `profile.badges`.
+- Each badge should be its own list item, with the `badge.label` being rendered within.
+- There should be no "key" warnings in the browser console. You can trust that the badge slugs are unique.
+
+- Stretch goal:
+- If the user has 3 or more badges, a golden clor should be applied:
+- This can be done, by adding the `golden` class to the `<ul>`:
+
+```JAVASCRIPT
+// STARTER CODE
+// GOAL:
+// Render an unordered list with the class
+// “badge-list” when the user has at least
+// 1 badge.
+//
+// Each badge is an object with this shape:
+// { slug: string, label: string }
+//
+// STRETCH:
+// If the user has 3+ badges, the “golden”
+// class should be added to the unordered
+// list (in addition to “badge-list”).
+
+function ProfileCard({ profile }) {
+  return (
+    <article className="profile-card">
+      <header>
+        <img
+          alt={profile.imageAlt}
+          src={profile.imageSrc}
+        />
+
+        <h2>{profile.name}</h2>
+        <p className="joined">
+          Joined
+          {' '}
+          {profile.joinDate}
+        </p>
+      </header>
+
+    </article>
+  );
+}
+
+export default ProfileCard;
+```
+
+-
