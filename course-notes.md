@@ -2762,13 +2762,15 @@ export default VisuallyHidden;
 ```
 
 - AC's
-- If the user has at least 1 badge, an unordered list with the class `badge-list` should be rendered, using the data from `profile.badges`.
-- Each badge should be its own list item, with the `badge.label` being rendered within.
-- There should be no "key" warnings in the browser console. You can trust that the badge slugs are unique.
+
+1. If the user has at least 1 badge, an unordered list with the class `badge-list` should be rendered, using the data from `profile.badges`.
+2. Each badge should be its own list item, with the `badges.label` being rendered within.
+3. There should be no "key" warnings in the browser console. You can trust that the badge slugs are unique.
 
 - Stretch goal:
-- If the user has 3 or more badges, a golden clor should be applied:
-- This can be done, by adding the `golden` class to the `<ul>`:
+
+4. If the user has 3 or more badges, a golden color should be applied:
+5. This can be done, by adding the `golden` class to the `<ul>`:
 
 ```JAVASCRIPT
 // STARTER CODE
@@ -2809,4 +2811,62 @@ function ProfileCard({ profile }) {
 export default ProfileCard;
 ```
 
--
+- TIP: Use `map()` to iterate through the `<li>`
+
+```JAVASCRIPT
+{ profile.badges.map(({ slug, label }) => (
+  <li key={slug}>{label}</li>
+)); }
+```
+
+- Solution:
+
+```JAVASCRIPT
+// “badge-list” when the user has at least
+// 1 badge.
+//
+// Each badge is an object with this shape:
+// { slug: string, label: string }
+//
+// STRETCH:
+// If the user has 3+ badges, the “golden”
+// class should be added to the unordered
+// list (in addition to “badge-list”).
+
+function ProfileCard({ profile }) {
+  const badges = (
+    // TERNARY TO RENDER THE golden class
+    <ul className={profile.badges.length >= 3
+      ? 'badge-list golden'
+      : 'badge-list'
+      }
+    >
+      {profile.badges.map(({ slug, label }) => (
+        <li key={slug}>{label}</li>
+      ))}
+    </ul>
+  );
+
+  return (
+    <article className="profile-card">
+      <header>
+        <img
+          alt={profile.imageAlt}
+          src={profile.imageSrc}
+        />
+
+        <h2>{profile.name}</h2>
+        <p className="joined">
+          Joined
+          {' '}
+          {profile.joinDate}
+        </p>
+        {profile.badges.length > 0 && badges}
+      </header>
+
+    </article>
+  );
+}
+
+export default ProfileCard;
+```
