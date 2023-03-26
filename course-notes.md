@@ -2870,3 +2870,130 @@ function ProfileCard({ profile }) {
 
 export default ProfileCard;
 ```
+
+#### Range Utility
+
+- A common use case, you want to render a rating system with 5-stars. You want to render 0 to 5 little star icons, depending on the rating.
+
+- In JS, our go to is the `for` loop. But the `for` loop is a statement and we cannot use statements in our JSX.
+
+- Here is one solution, we can use a `for` loop above the JSX, to create our array of elements.
+- MDN `for` [refresher](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/for)
+
+```JAVASCRIPT
+function StarRating({ rating }) {
+  /*
+    Here's the markup for a single star:
+
+    <img
+      alt=""
+      className="gold-star"
+      src="https://sandpack-bundler.vercel.app/img/gold-star.svg"
+    />
+
+    Your job is to repeat this element
+    based on the `rating` prop.
+    If the rating is 4, we need 4 copies.
+  */
+
+  const stars = [];
+
+  for (let i = 0; i < rating; i++) {
+    stars.push(
+      <img
+        key={i}
+        alt=""
+        className="gold-star"
+        src="https://sandpack-bundler.vercel.app/img/gold-star.svg"
+      />,
+    );
+  }
+
+  return (
+    <div className="star-wrapper">
+      {stars}
+    </div>
+  );
+}
+
+export default StarRating;
+```
+
+- We create an array of image elements with a `for` loop, and then we render that array inside oru JSX.
+- Similar to the `.map`, React can unpack arrays for us, and render each of the elements inside, so long as we provide a unique `key` prop.
+
+##### A functional alternative
+
+- An alternative approach is the `range` funtion.
+- `range` is a utility function. It is not part of the JS language. but it is in utility libraries like [lodash](https://lodash.com/).
+
+- Examples to create an array
+
+```JAVASCRIPT
+// Create an array from 0 (inclusive) to 2 (exclusive):
+range(2);
+// Produces: [0, 1]
+
+// Create an array from 0 (inclusive) to 5 (exclusive):
+range(5);
+// Produces: [0, 1, 2, 3, 4]
+
+// Create an array from 2 (inclusive) to 6 (exclusive):
+range(2, 6);
+// Produces: [2, 3, 4, 5]
+
+// Create an array from 2 to 10, picking every 2nd number
+range(2, 10, 2);
+// Produces: [2, 4, 6, 8]
+```
+
+- It's basically an expression version of a `for` loop statement, like how `&&` can be an expression version of an `if` statement. So we can use it in our JSX.
+
+- How we use it for the star rating:
+
+```JAVASCRIPT
+function StarRating({ rating }) {
+  return (
+    <div className="star-wrapper">
+      {range(rating).map(num => (
+        <img
+          key={num}
+          alt=""
+          className="gold-star"
+          src="https://sandpack-bundler.vercel.app/img/gold-star.svg"
+        />
+      ))}
+    </div>
+  );
+}
+```
+
+- `range(rating)` will produce an array from 0 to `n`, where `n` is the supplied rating.
+- Then use the `.map` trick to iterate over that array, creating a copy of our star image for each one.
+- For the `key` prop, we use the number generated within teh array, since we know it's unique.
+
+##### Range funtion code
+
+- Code for the `range` function.
+- You can either inlude this in your `utils.js` or load from [lodash](https://lodash.com/docs/4.17.15#range).
+
+```JAVASCRIPT
+const range = (start, end, step = 1) => {
+  const output = [];
+
+  if (typeof end === 'undefined') {
+    end = start;
+    start = 0;
+  }
+
+  for (let i = start; i < end; i += step) {
+    output.push(i);
+  }
+
+  return output;
+};
+```
+
+#### Exercises, Range Utility
+
+-
