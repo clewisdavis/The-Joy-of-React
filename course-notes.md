@@ -2996,4 +2996,98 @@ const range = (start, end, step = 1) => {
 
 #### Exercises, Range Utility
 
--
+- Rendering a grid
+- Suppose we are building a Scrabble like word game, and we want to render a grid of HTML elements.
+- Here is the DOM structure for a 2.3 grid:
+
+```HTML
+<div class="grid">
+  <div class="row">
+    <div class="cell"></div>
+    <div class="cell"></div>
+    <div class="cell"></div>
+    <div class="cell"></div>
+  </div>
+  <div class="row">
+    <div class="cell"></div>
+    <div class="cell"></div>
+    <div class="cell"></div>
+    <div class="cell"></div>
+  </div>
+</div>
+```
+
+- Your mission should you choose it, it to replicate this structure, but for a variable number of rows and columns.
+
+- AC's
+- 1. Use the template for a `Grid` component, which will be provided with a `numRows` prop for the number of rows, and a `numCols` prop for the number of columns.
+- 2. There shold be X divs with a class of `row`, where X is equal to the `numRows` prop.
+- 3. Inside each `row`, there should be Y divs with a class of `cell`, where Y is equal to the `numCols` prop.
+- 4. You should use the provided `range` function to solge this proplem.
+- 5. There shouldn't be any key-related warnings in the console. Youc an assume that the grid is "static", with no plans to support reordering the rows or cells.
+
+- Starter code:
+
+```JAVASCRIPT
+// starter code
+import { range } from './utils';
+
+function Grid({ numRows, numCols }) {
+  return (
+    <div className="grid">
+      {/* TODO */}
+    </div>
+  );
+}
+
+export default Grid;
+```
+
+- My attempt:
+
+```JAVASCRIPT
+// my attempt
+import { range } from './utils';
+
+function Grid({ numRows, numCols }) {
+  return (
+    <div className="grid">
+      {
+        range(numRows).map(num => (
+          <div key={num} className="row">
+            {range(numCols).map(num => (
+              <div key={num} className="cell">👩‍🚀</div>
+            ))}
+          </div>
+        ))
+      }
+    </div>
+  );
+}
+
+export default Grid;
+```
+
+- 1. Use `range()` and `map()` to iterate over the rows. Passing in the `numRows`
+
+```JAVASCRIPT
+  return (
+    <div className="grid">
+      {
+        range(numRows).map(num => (
+          <div key={num} className="row">
+              <div class="cell"></div>
+          </div>
+        ))
+      }
+    </div>
+  );
+```
+
+- 2. Then do the same thing for the columns.
+
+```JAVASCRIPT
+            {range(numCols).map(num => (
+              <div key={num} className="cell">👩‍🚀</div>
+            ))}
+```
