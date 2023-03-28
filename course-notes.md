@@ -3023,7 +3023,7 @@ const range = (start, end, step = 1) => {
 - 1. Use the template for a `Grid` component, which will be provided with a `numRows` prop for the number of rows, and a `numCols` prop for the number of columns.
 - 2. There shold be X divs with a class of `row`, where X is equal to the `numRows` prop.
 - 3. Inside each `row`, there should be Y divs with a class of `cell`, where Y is equal to the `numCols` prop.
-- 4. You should use the provided `range` function to solge this proplem.
+- 4. You should use the provided `range` function to solve this problem.
 - 5. There shouldn't be any key-related warnings in the console. Youc an assume that the grid is "static", with no plans to support reordering the rows or cells.
 
 - Starter code:
@@ -3087,7 +3087,26 @@ export default Grid;
 - 2. Then do the same thing for the columns.
 
 ```JAVASCRIPT
-            {range(numCols).map(num => (
-              <div key={num} className="cell">👩‍🚀</div>
-            ))}
+  {range(numCols).map(num => (
+    <div key={num} className="cell">👩‍🚀</div>
+  ))}
 ```
+
+- 🤔 Keys, in this case the are nested keys, within the scope of each array.
+
+### Styling in React
+
+- React is unpoinionated when it comes to styling. As a results, dozens of options when it comes to using CSS with React.
+
+- Technically, you can do things the traditional way. Bunch of CSS files and incude them as a `<link>` in your `index.html`.
+
+- 🤔 Thinking in Components
+- The core idea with components is taht each compoent is a bundle of markup (in JSX)
+  - Logic in JS
+  - Styles in CSS
+  - Markup in HTML
+
+- For example, our `button` component should "own" all the the styles related to that component.
+- Working with CSS becomes much simpler.
+
+-
