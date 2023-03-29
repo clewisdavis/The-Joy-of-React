@@ -3109,4 +3109,94 @@ export default Grid;
 - For example, our `button` component should "own" all the the styles related to that component.
 - Working with CSS becomes much simpler.
 
--
+#### CSS Modules
+
+- Let' build a component, called "Sidenote", a callout to hold tangential information.
+- Here is a rough sketch of the markup
+
+```JAVASCRIPT
+function Sidenote({ title, children }) {
+  return (
+    <aside>
+      <h3>{title}</h3>
+      <p>{children}</p>
+    </aside>
+  )
+}
+```
+
+- And here is how to solve it with CSS modules:
+
+```JAVASCRIPT
+// sidenote.js
+import styles from './Sidenote.module.css';
+
+function Sidenote({ title, children }) {
+  return (
+    <aside className={styles.wrapper}>
+      <h3 className={styles.title}>{title}</h3>
+      <p>{children}</p>
+    </aside>
+  );
+}
+
+export default Sidenote;
+```
+
+```CSS
+/* Sidenote.module.css */
+.wrapper {
+  padding: 24px;
+  background-color: hsl(210deg 55% 92%);
+  border-left: 3px solid hsl(245deg 100% 60%);
+  border-radius: 3px 6px 6px 3px;
+}
+
+.title {
+  font-size: 1rem;
+  font-weight: bold;
+  margin-bottom: 4px;
+}
+```
+
+- It is strange that you can import a css file, from a JS file. This is being done with the power of tooling, webpack
+- Also, note how super short and generic, `.wrapper` for example is typically used througout an application. A top level element.
+- Surely you cannot just name things `.wrapper`, it will collide with other styles named `.wrapper`.
+- The power of CSS modules, in the example above, log out styles and see what you get.
+- What you get is an object where the keys, are the short names you defined in the `CSS` file.
+
+```JAVASCRIPT
+{
+  "wrapper": "_components_Sidenote_module__wrapper",
+  "title": "_components_Sidenote_module__title",
+  "button": "_components_Sidenote_module__button"
+}
+```
+
+- However, notice they have a prefix, of a bunch of stuff. Where is this coming from?
+- 🚀 This prefix, is what **gaurantees the uniqueness**.
+- If you inspect you element, you will see the final output, of the class names, are prefixed.
+
+```HTML
+<aside class="_components_Sidenote_module__wrapper">
+  <h3 class="_components_Sidenote_module__title">I'm a sidenote!</h3>
+  <p>I contain some text!</p>
+</aside>
+```
+
+- In `CSS` file, we write short names and the build process expands them out.
+- This is done with WebPack toolchain.
+- When we import, and write `.module.css`, this has a meaning in WebPack.
+- It tells Webpack to
+  - Create longer names for each style.
+  - Inject them into the `<head>` of our document.
+  - And producing the `styles` object, so we can use the styles in our compoennt `className={styles.wrapper}`
+
+- We get all the benefits of the naming convention BEM, without having to manually do it. All the hard stuff just happens.
+- How is the prefix defined? It is using the file path, and converting it into the prefix. `/components/Sidenote.module.css` gets converted to the prefix for each style. `_components_Sidenote_module__wrapper`
+- **You will never have a collision, because you can never have two files with the same name.**
+
+- Other tools do the same thing, like `styled compoennts` but has a learning curve.
+- The nice thing about CSS Modules, it's a lot like writing vanilla CSS.
+
+#### Exercises, CSS Modules
