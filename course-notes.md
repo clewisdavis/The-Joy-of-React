@@ -3200,3 +3200,85 @@ export default Sidenote;
 - The nice thing about CSS Modules, it's a lot like writing vanilla CSS.
 
 #### Exercises, CSS Modules
+
+##### Sidenote types
+
+- 4 different 'types' of sidenote components, depending on the status of things happening.
+- In this exercise, update the Sidenote component to support a new `type` prop. This prop will be used to apply a dynamic CS class.
+
+- This is the markup we want to end up with:
+
+```JAVASCRIPT
+<aside class="wrapper notice">
+  <h2>This is an informational sidenote.</h2>
+</aside>
+
+<aside class="wrapper success">
+  <h2>This is a success sidenote!</h2>
+</aside>
+```
+
+- The `wrapper` class contains a shared style. The `type` class like `notice`, `success` contains teh category specific styles.
+
+- In this exerciese, you will iimipelemnt this pattern using CSS modules. The task is to apply the correct class name base on the `type` prop.
+
+- AC's
+- All sidenotes should have the `wrapper` class applied.
+- They `type` property of the Sidenote should apply an additional class, which changes the color of the background and border.
+
+- 📣 Never rely on color alone, it is not enough. Use another visual indicator.
+
+```JAVASCRIPT
+// Sidenote.js
+import styles from './Sidenote.module.css';
+
+function Sidenote({ type, title, children }) {
+  return (
+    <aside>
+      <h3 className={styles.title}>{title}</h3>
+      <p>{children}</p>
+    </aside>
+  );
+}
+
+export default Sidenote;
+```
+
+```CSS
+/*
+  These are the "universal" styles which should
+  apply to all Sidenote instances.
+*/
+.wrapper {
+  padding: 24px;
+  border-left: 3px solid;
+  border-radius: 3px 6px 6px 3px;
+  margin-bottom: 32px;
+}
+
+/*
+  These styles are specific for the given category.
+*/
+.notice {
+  background-color: hsl(210deg 55% 92%);
+  border-color: hsl(245deg 100% 60%);
+}
+.warning {
+  background-color: hsl(38deg 100% 50% / 0.1);
+  border-color: hsl(30deg 100% 50%);
+}
+.error {
+  background-color: hsl(340deg 95% 43% / 0.1);
+  border-color: hsl(340deg 95% 60%);
+}
+.success {
+  background-color: hsl(160deg 100% 40% / 0.1);
+  border-color: hsl(160deg 100% 40%);
+}
+
+.title {
+  font-size: 1rem;
+  font-weight: bold;
+  margin-bottom: 4px;
+}
+```
