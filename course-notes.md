@@ -3282,3 +3282,24 @@ export default Sidenote;
   margin-bottom: 4px;
 }
 ```
+
+- To add multiple classes, use a template string literal to combine, concatanate.
+- The store that into a variable, and pass into your `className={sideNoteClasses}` with an expression slot.
+
+```JAVASCRIPT
+import styles from './Sidenote.module.css';
+
+function Sidenote({ type, title, children }) {
+  const sideNoteClasses = `${styles.wrapper} ${styles[type]}`;
+  return (
+    <aside className={sideNoteClasses}>
+      <h3 className={styles.title}>{title}</h3>
+      <p>{children}</p>
+    </aside>
+  );
+}
+
+export default Sidenote;
+```
+
+- How does that style get generated?
