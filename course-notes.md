@@ -3303,3 +3303,24 @@ export default Sidenote;
 ```
 
 - How does that style get generated?
+
+- ℹ️ When to use square brackets?
+- What is the difference between `styles[type]` and `styles.type`. When do we use dot and when do we use square brackets?
+- When we use square brackets, we create an "expression slot". We can put any JS expression we want in there, and it will resolve that expressoin to a key.
+
+- Dot notation has become the standard way of doing things if we know the exact name of they key we want to loook up.
+- But most times, it's tucked away in a variable:
+
+```JAVASCRIPT
+function getMessage(type) {
+  return messages[type];
+}
+```
+
+- We don't know the value of `type`. We need to resolve the variable, since `type` itself doesn't tell us anything.
+- **Square brackets allow us to resolve the variable.**
+
+##### Movie rating animation
+
+- For movies that are 9.0 and higher, we want to add an animation to the rating number.
+- Apply the class `glowingReview` to all the ratings that are 9 and above.
