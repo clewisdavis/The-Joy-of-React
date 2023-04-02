@@ -3324,3 +3324,133 @@ function getMessage(type) {
 
 - For movies that are 9.0 and higher, we want to add an animation to the rating number.
 - Apply the class `glowingReview` to all the ratings that are 9 and above.
+
+- Starter code:
+
+```JAVASCRIPT
+import React from 'react';
+
+import styles from './Movie.module.css';
+
+// Your mission:
+// Apply the 'glowingReview' CSS class to the
+// movie rating when it's 9 or higher.
+
+function Movie({ movie }) {
+  return (
+    <article className={styles.movie}>
+      <div className={styles.thumbnailWrapper}>
+        <img
+          alt="Movie poster"
+          src={movie.posterSrc}
+        />
+      </div>
+      <div className={styles.textWrapper}>
+        <h2>{movie.title}</h2>
+        <p className={styles.synopsis}>
+          {movie.synopsis}
+        </p>
+        <p>
+          <strong>Rating:</strong> {movie.rating}
+        </p>
+      </div>
+    </article>
+  );
+}
+
+export default Movie;
+```
+
+- My Attempt:
+- I used the Logical AND `&&` opertator on the rating to display the class. Then passed that into an expression slot.
+
+```JAVASCRIPT
+import React from 'react';
+
+import styles from './Movie.module.css';
+
+// Your mission:
+// Apply the 'glowingReview' CSS class to the
+// movie rating when it's 9 or higher.
+
+function Movie({ movie }) {
+// USED THE LOGICAL &&, PASSED IT TO THE SPAN BELOW
+  const review =
+    movie.rating > 9 && `${styles.glowingReview}`;
+
+  return (
+    <article className={styles.movie}>
+      <div className={styles.thumbnailWrapper}>
+        <img
+          alt="Movie poster"
+          src={movie.posterSrc}
+        />
+      </div>
+      <div className={styles.textWrapper}>
+        <h2>{movie.title}</h2>
+        <p className={styles.synopsis}>
+          {movie.synopsis}
+        </p>
+        <p>
+          <strong>Rating: </strong>
+          <span className={review}>
+          {' '}{movie.rating}
+          </span>
+        </p>
+      </div>
+    </article>
+  );
+}
+
+export default Movie;
+```
+
+- How does that work, if `movie.rating > 9` then it will render the `${styles.glowingReview}`l
+- If it is less than 9, it will resolve to false, and not render anything, and React is smart enough to not render anything. So you will see just a `<span>` with the rating.
+- React is smart enough, to not render anything for `false` or `null` or `undefined`, it will not render the `className` at all.  
+
+- However you do get a warning in the console. Warning: Received `false` for a non-boolean attribute `className`.
+
+- A better solution is to use a `ternary` expression instead.
+
+```JAVASCRIPT
+<span
+  className={movie.rating >= 9 ? styles.glowingReview : undefined}
+>
+  {movie.rating}
+</span>
+```
+
+- ℹ️ Class utilities: The `className` prop expects a string, this string can include multiple classes, seperated by spaces.
+- We can dynamically create this string using String Interpolation.
+
+```JAVASCRIPT
+<button
+  className={`
+    ${styles.btn}
+    ${type === 'primary' ? styles.primary : ''}
+    ${user ? styles.loggedIn : styles.notLoggedIn}
+  `}
+>
+```
+
+- This works but tricky. In cases like this, easier to use a class utility
+- [clxs package](https://www.npmjs.com/package/clsx)
+
+```JAVASCRIPT
+import clsx from 'clsx';
+
+<button
+  className={clsx(
+    styles.btn,
+    type === 'primary' && styles.primary,
+    user ? styles.loggedIn : styles.notLoggedIn
+  )}
+>
+```
+
+- The `clsx` function will take each of these arguments and produce a unified string that satisfies teh `className` prop requirements. And automatically remove falsy values like `false` or `null`.
+
+- That's a wrap for React Fundamentals.
+
+## Working with State
