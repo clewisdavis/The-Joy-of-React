@@ -3454,3 +3454,75 @@ import clsx from 'clsx';
 - That's a wrap for React Fundamentals.
 
 ## Working with State
+
+- In the early days of the web, websites were basically fancy documents, we would load one HTML file, read the content and then load another one.
+
+- The modern web is interactive. The app can respond to user actions in real time. Without the need to fetch the whole page.
+
+- In this module:
+  - How to respond to user acitons with event binding.
+  - How React manages the DOM for us, and what it means to re-render.
+  - The `useState` hook and how to use it to build interactive components.
+  - Understand the difference between props and state.
+  - Working with forms in React.
+  - Working with complex state, like objects and arrays.
+  - Avoiding common pitfalls, state mutation.
+  - How to share state across the application by lifting it up.
+
+- Going from static websites to dynamic alive apps!
+
+### Event Handlers
+
+- When a user interacts with the page, hundreds of events are fired off in response. The browser is tracking every little thing you do.
+
+- These events are important when building dynamic applications, we will listen for these events and use them to trigger state changes.
+- When the use clicks on "X" button, we dismiss teh prompt, when user submits the form, we show a loading spinner.
+
+- In order to respond to an event, we need to listent for it. JS already provides a built in way to do this, `addEventListener` method:
+
+```JAVASCRIPT
+cosnt button = document.querySelector('.btn');
+
+function doSomething() {
+  // stuff here
+}
+
+button.addEventListener('click', doSomething);
+```
+
+- In the code above, we are listening for a specific event `click` targeting a specific element `btn`. We have a function to handle this event `doSomething`.
+- When the user cicks on this particular button, your handler function will be invoked, allowing us to do something in response.
+
+- The web platform offers another way to do this. We can embed our hadler right in the HTML
+
+```HTML
+<button onclick="doSomething()">
+  Click me!
+</button>
+```
+
+- Rect piggybacks on this pattern, allowing us to pass an event handler right into the JSX:
+
+```JAVASCRIPT
+funtion App() {
+  function doSomething() {
+    // Stuff here
+  }
+
+  return (
+    <button onClick={doSomething}>
+      Click me!
+    </button>
+  )
+}
+```
+
+- As with the `addEventListener`, this code will do the same thing: when use clicks on the button, the `doSomething` function is called.
+
+- **This is the recommeded way to handle events in React.**
+- Try and use the "onX" props like `onClick` and `onChange` when possible.
+
+- Few reasons why:
+  - **Automatic cleanup:** When we use an event listener, we supposed to remove it when we are done, with `removeEventListener`. If we forget to do this, we introduce a memory leak. React automatically removes listners when we use 'on X' handler functions.
+  - **Improved performance:** React can optimize thigns for use, like batching multiple event listeners together to reduce the memory consumption.
+  - **No DOM interaction:** Avoid interacting with the DOM directly.
