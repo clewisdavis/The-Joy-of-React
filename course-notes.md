@@ -3526,3 +3526,71 @@ funtion App() {
   - **Automatic cleanup:** When we use an event listener, we supposed to remove it when we are done, with `removeEventListener`. If we forget to do this, we introduce a memory leak. React automatically removes listners when we use 'on X' handler functions.
   - **Improved performance:** React can optimize thigns for use, like batching multiple event listeners together to reduce the memory consumption.
   - **No DOM interaction:** Avoid interacting with the DOM directly.
+
+- ℹ️ One of the core ideas behind React, is that is does the DOM manipulation for you. Stay within React's abstraction rather than trying to compete with it to manage the DOM.
+
+#### Differences from HTML, Events
+
+- Looking at the `onChange` prop, it looks very similar tot he in HTML method of adding event handlers.
+
+##### Camel Casing
+
+- In JSX, you have to write `camelCased` attribute names in JSX.
+- Be careful to write `onClick` instead of `onclick`. Other examples, `onChange`, `onKeyDown`, `onTransitionEnd` etc.
+- If you forget, React will let you know.
+
+##### Passing a function reference
+
+- When working wiht event handlers in React, we need to pass a reference to the function. We don't call the function like we do in HTML:
+
+```HTML
+// ✅ We want to do this:
+<button onClick={doSomething} />
+
+// 🚫 Not this:
+<button onClick={doSomething()} />
+```
+
+- When we include the parentheses, we invoke th function right away, the moment the React app is rendered. We want to give React a reference to the function, so React can call it at a later time, when the user clicks on the buton.
+
+#### Specifying Arguments
+
+- Here is the thing, what if we want to specify an arguemnt to a function?
+
+- For example, if you wanted to make a function called `setTheme`, and we use it to change the user's color theme from Light Mode, to Dark Mode.
+
+- To do this, we need to supplyt he name of the theme we are switching to, like this:
+
+```JAVASCRIPT
+// Switch to light mode:
+setTheme('light');
+
+// Switch to dark mode:
+setTheme('dark');
+```
+
+- How can we do this? If we pass `setTheme` as a reference to the `onClick`, we can't supply arguments:
+
+```JAVASCRIPT
+// 🚫 Invalid: calls the function without 'dark'
+<button onClick={setTheme}>
+  Toggle theme
+</button>
+```
+
+- In order to specify the argument, we need to wrap it in a parentheses, but it gets called right away:
+
+```JAVASCRIPT
+// 🚫 Invalid: calls the function right away
+<button onClick={setTheme('dark')}>
+  Toggle theme
+</button>
+```
+
+- We can solve this problem with a wrapper function
+
+```JAVASCRIPT
+<button onClick={() => setTheme('dark')}>
+  Toggle Theme
+</button>
+```
