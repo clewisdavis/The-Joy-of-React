@@ -3594,3 +3594,88 @@ setTheme('dark');
   Toggle Theme
 </button>
 ```
+
+- We are creating a new anonymous arrow function, `() => setTheme('dark')` and passing it to React, to be called when the user clicks the button.
+
+- When the button is clicked, the function is called and the code inside the function is executed: `setTheme('dark')`.
+
+- For a refresher, check out the [Arrow Function Primer](https://courses.joshwcomeau.com/joy-of-react/10-javascript-primer/04-arrow-functions) lesson 👀
+
+#### Exercises, Event Handlers
+
+- Click the ball, build a simple game
+- The goal of the game is to click the ball, to show an alert when the ball is clicked:
+
+- We can us the `window.aletr()` to show the message.
+- AC's
+  - When the user click on the ball, a winning message should be shown.
+  - You should handle 'click' events speficically, as this even is triggered on click, on tap, or even when a user focuses on teh elemetn with the keyboard and hits "Enter" Key
+    - If you don't use a pointer device, you can use the keyboard method to test your code.
+
+```JAVASCRIPT
+import React from 'react';
+
+import VisuallyHidden from './VisuallyHidden';
+
+function ClickBallGame() {
+  return (
+    <div className="wrapper">
+      <button
+        className="ball"
+      >
+        <VisuallyHidden>
+          Ball
+        </VisuallyHidden>
+      </button>
+    </div>
+  );
+}
+
+export default ClickBallGame;
+```
+
+- Solution:
+- ℹ️ You can write as a seperate function, especially is you have multiple expressions inside your function.
+
+```JAVASCRIPT
+import React from 'react';
+
+import VisuallyHidden from './VisuallyHidden';
+
+function ClickBallGame() {
+  function handleClick() {
+    window.alert('You win');
+  }
+  return (
+    <div className="wrapper">
+      <button
+        className="ball"
+        onClick={handleClick}
+      >
+        <VisuallyHidden>
+          Ball
+        </VisuallyHidden>
+      </button>
+    </div>
+  );
+}
+
+export default ClickBallGame;
+```
+
+- You can also do this inline function, to achieve the same result.
+
+```JAVASCRIPT
+  return (
+    <div className="wrapper">
+      <button
+        className="ball"
+        onClick={() => window.alert('You win')}
+      >
+        <VisuallyHidden>
+          Ball
+        </VisuallyHidden>
+      </button>
+    </div>
+  );
+```
