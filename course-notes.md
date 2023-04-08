@@ -3603,7 +3603,8 @@ setTheme('dark');
 
 #### Exercises, Event Handlers
 
-- Click the ball, build a simple game
+##### Click the ball, build a simple game
+
 - The goal of the game is to click the ball, to show an alert when the ball is clicked:
 
 - We can us the `window.aletr()` to show the message.
@@ -3679,3 +3680,89 @@ export default ClickBallGame;
     </div>
   );
 ```
+
+##### Click the ball v2
+
+- Now, in addition to the ball, it now has a bomb. If the bomb is clicked, we want to show a 'lose' message.
+- The problem with the started code, clicking on either the item, the ball or bomb, it shows the 'lose' message.
+
+- You mission, if you choose it, it to fix the code so that i thows the right message depending on which item is clicked.
+
+- AC's
+  - When the user clicks the ball, a winning message should be shown.
+  - When the user clicks the bomb, a losing message should be shown.
+  - The `handeClick` function should still be used, and you shouldn't have to change anything about the function itself.
+
+```JAVASCRIPT
+// STARTER CODE
+import React from 'react';
+
+import VisuallyHidden from './VisuallyHidden';
+
+function ClickBallGame() {
+  function handleClick(type) {
+    if (type === 'win') {
+      alert('You win!');
+    } else {
+      alert('You lose :(');
+    }
+  }
+  
+  return (
+    <div className="wrapper">
+      <button
+        className="ball"
+        onClick={handleClick}
+      >
+        <VisuallyHidden>
+          Ball
+        </VisuallyHidden>
+      </button>
+      <button
+        className="bomb"
+        onClick={handleClick}
+      >
+        <span
+          role="img"
+          aria-label="bomb"
+        >
+          💣
+        </span>
+      </button>
+    </div>
+  );
+}
+
+export default ClickBallGame;
+```
+
+- My solution:
+- Put a wrapper function on the `onClick` and pass in the `type` parameter into the `handleClick()` function.
+
+```JAVASCRIPT
+  return (
+    <div className="wrapper">
+      <button
+        className="ball"
+        onClick={() => handleClick('win')}
+      >
+        <VisuallyHidden>
+          Ball
+        </VisuallyHidden>
+      </button>
+      <button
+        className="bomb"
+        onClick={() => handleClick('lose')}
+      >
+        <span
+          role="img"
+          aria-label="bomb"
+        >
+          💣
+        </span>
+      </button>
+    </div>
+  );
+```
+
+### The useState Hook
