@@ -3766,3 +3766,71 @@ export default ClickBallGame;
 ```
 
 ### The useState Hook
+
+- Below is a common example of a minimal counter demo.
+- Click on the button and watch the count increase:
+
+```JAVASCRIPT
+import React from 'react';
+
+function Counter() {
+  const [count, setCount] = React.useState(0);
+
+  return (
+    <button onClick={() => setCount(count + 1)}>
+      Value: {count}
+    </button>
+  );
+}
+
+export default Counter;
+```
+
+- Break this down, what is going on here:
+- Our goal is to keep track of the number of times the user has clicked the button.
+- For dynamic values, we need to use React state.
+- State is used for values that change over time.
+
+- To create a state variable, we use the `useState` function.
+- This funtion takes a single argument: the initial value. In this case, that value is `0`. The value is chosen because when the page first loads, we clicked the button 0 times.
+
+- `useState` is a **hook**. A hook is a special type of function that allows us to 'hook into' React internals.
+
+- The `useState` hook returns an array containing two items:
+
+1. The current value of the state variable. We've decided to call it `count`, this can be whatever you want to name it.
+2. A function we can use to update the state variable. We named it `setCount`. It's best practice to pre-pend the `set` to the function.
+
+- ℹ️ Destructing Assignment, below is the same thing as the above `const [count, setCount]` we are descructuring `count` and `setCount`.
+
+```JAVASCRIPT
+const countArray = React.useState(0);
+
+const count = countArray[0];
+const setCount = countArray[1];
+```
+
+- 👀 Can check out the [Array Destructuring Primer Lesson](https://courses.joshwcomeau.com/joy-of-react/10-javascript-primer/06-array-destructuring)
+
+##### Naming Conventions
+
+- When we create a state variable, we can name it whatever we want.
+- However, it's best practice to follow the `x`, `setX` convention:
+
+```JAVASCRIPT
+const [user, setUser] = React.useState();
+const [errorMessage, setErrorMessage] = React.useState();
+const [flowerBouquet, setFlowerBouquet] = React.useState();
+```
+
+- `user` The first desctuctured variable si the name of the thing we are tracking.
+- `setUser` The second variable prefixes that name with the `set`, specifying it's a function that can be called to change the thing. This is sometimes referred to as a "setter function", since it sets the new value of teh state variable.
+
+- ℹ️ Importing the hook?
+  - Some tutorials write this code differently.
+  - Import at the top of the page. `import React, { useState } from 'react';`
+  - Instead of `React.useState`, you can import `useState` function at the top of the file and using it on it's own, `useState`.
+
+##### Initial Value
+
+- React state variables can be given an initial value:
