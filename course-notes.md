@@ -3834,3 +3834,71 @@ const [flowerBouquet, setFlowerBouquet] = React.useState();
 ##### Initial Value
 
 - React state variables can be given an initial value:
+
+```JAVASCRIPT
+const [count, setCount] = React.useState(1);
+console.log(count);
+```
+
+- We can also supply a function. React will cal lthis function on the very first render to valculate the initial value:
+
+```JAVASCRIPT
+const [count, setCount] = ReactuseState(() => {
+  return 1 + 1;
+});
+
+console.log(count); // 2
+```
+
+- Calling a function can be useful to do an expensive operation to calculate the initial value. For example, reading from localStorage:
+
+```JAVASCRIPT
+const [count, setCount] = React.useState(() => {
+  return window.localStorage.getItem('saved-count');
+});
+```
+
+- The benefit here is taht we are only doing the expensive work (redon from localStorage) once, on the intial render, rather than doing it on every single render.
+
+- In a later lesson, discuss localStorage
+
+- ℹ️ Hold up, What's the difference between those two?
+
+```JAVASCRIPT
+// Form 1:
+const [count, setCount] = React.useState(
+  window.localStorage.getItem('saved-count')
+);
+
+// Form 2:
+const [count, setCount] = React.useState(() => {
+  return window.localStorage.getItem('saved-count');
+});
+```
+
+- Helpful to forget about React for a moment and think in pure JS.
+
+- Consider this function:
+
+```JAVASCRIPT
+function run() {
+  console.log('Hello');
+}
+```
+
+- When we call the `run` function, we will log the word "Hello", if I call the function 5 times, I get 5 "Hello" in the console.
+
+- Tweak it:
+
+```JAVASCRIPT
+function run() {
+  const sayHi = () => {
+    console.log('Hello');
+  };
+}
+```
+
+- Now, when I call the `run` function, nothing is logged to the console. That's because the `console.log` is wrapped up in an inner function, `sayHi`.
+- Everytime we call the `run` function, we are creating a breand new `sayHi` function, but never calling it.
+
+#### Core React Loop
