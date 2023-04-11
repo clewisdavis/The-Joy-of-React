@@ -3902,3 +3902,123 @@ function run() {
 - Everytime we call the `run` function, we are creating a breand new `sayHi` function, but never calling it.
 
 #### Core React Loop
+
+- We have seen, when we update the state variable by calling the setter function `setCount` the UI gets updated. But how does this actually work?
+
+- This is the core of React, literally named for how it reacts to state changes.
+
+- Let's use the counter as an example:
+
+```JAVASCRIPT
+function Counter() {
+  const [count, setCount] = React.useState(0);
+
+  return (
+    <button onClick={() => setCount(count + 1)}>
+      Value: {count}
+    </button>
+  )
+}
+```
+
+- What is happening here exactly when the component is rendered for the first time?
+- Our `Counter` function returns a bunch of JSX, Let's look at it in pure JS, so see what's going on.
+
+```JAVASCRIPT
+function Counter() {
+  const [count, setCount] = React.useState(0);
+
+  return React.createElement(
+    'button',
+    { onClick: () => setCount(count + 1) },
+    'Value: ',
+    count
+  );
+}
+```
+
+- When this code runs, `React.createElement` produces a React element, which is a plain JS object like this:
+
+```JAVASCRIPT
+{
+  type: 'button',
+  key: null,
+  ref: null,
+  props: {
+    onClick: () => setCount(count + 1),
+  },
+  children: 'Value: 0',
+  _owner: null,
+  _store: { validated: false }
+}
+```
+
+- As we learned before, React elements are essentially descriptions of the UI we want. Here we are saying we want a button that contains the text "Value: 0".
+- We could visualize this JS object as the following HTML snippet:
+
+```HTML
+<button>
+  Value: 0
+</button>
+```
+
+- Our React element, that JS object, is describing teh DOM structure. React takes that description and turns it into a real thing.
+- It creates a `<button>` DOM node and put on the page.
+
+- I didn't show the `onClick` handler in this little sketch, but it's very much a part of this process. When react creates and injects the `<button>` DOM node, it attaches our handler function.
+
+- **Let's think about what happens when the button is clicked.**
+- The `setCount` function will be called and we will pass in a new value. `count` will be incremented from 0 to 1.
+
+- **Whenever a state variable is updated, it triggers a re-render.**
+- Once again, React will cal the `Counter` function.
+- This creates a brand-new React element, a new description of the UI we want.
+
+- The new react element describes this DOM structure:
+
+```HTML
+<button>
+  Value: 1
+</button>
+```
+
+- **Each render is like taking a snapshot.**
+- We generate a description that shows what the UI should look like, based on the components props/state. Like a photo that captures what things were like at a moment in time.
+- And React has two snapshots:
+
+```HTML
+<button>
+  Value: 0
+</button>
+```
+
+```HTML
+<button>
+  Value: 1
+</button>
+```
+
+- The user clicked a button and this second snapshot was generated.
+- React now has to figure out how to update the DOM, so that is matches this latest snapshot.
+- It's like those puzzle games, where you have to figure out the differences between two images.
+- React has to play this sort of game, looking for the changes between teh two snapshots.
+
+- **This process is known as reconciliation.**
+- React figures out what's changed and updates the UI.
+- Once React figures out the difference, it will need to **commit** these changes. With precision, it updates teh DOM, taking care only to tweak the things hat need to be tweaked.
+
+In our button case, the operation would be something like:
+
+```JAVASCRIPT
+button.innerText = "Value: 1";
+```
+
+- **This is the fundamental "flow" of React, the core loop.**
+- The sequence is like:
+
+- Mount
+  - Trigger > Render > Commit
+
+- Mount: When we render the component for the first time, there is no previous snapshot to compare it to. So, React will create al the necessary DOM nodes from scratch, and inject them into the page.
+
+##### Rendering vs. Painting
