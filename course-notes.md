@@ -4022,3 +4022,81 @@ button.innerText = "Value: 1";
 - Mount: When we render the component for the first time, there is no previous snapshot to compare it to. So, React will create al the necessary DOM nodes from scratch, and inject them into the page.
 
 ##### Rendering vs. Painting
+
+- Like 3D software, when you take raw data and turn it into an image, like a 3D model in Blender.
+- The term "render" generally refers to this sort of thing; we are taking some sort of unprocessed raw input, and generating a final ready to use output.
+
+- Even in web frameworks, the definition is pretty consistent.
+
+- In React, however the term "render" means somethign slighly different. I think so much of the confusion in React comes from this misunderstanding.
+
+- In this example:
+
+```JAVASCRIPT
+function AgeLimit({ age }) {
+  if (age < 18) {
+    return (
+      <p>You're not old enough!</p>
+    );
+  }
+
+  return (
+    <p>Hello, adult!</p>
+  );
+}
+```
+
+- Our `AgeLimit` component check an `age` prop and returns one of two paragraphs.
+- Now, let's suppose we re-render this compoennt, and wind up with the following before/after pair of snapshots:
+
+```JAVASCRIPT
+age: 16
+
+{
+  type: 'p',
+  key: null,
+  ref: null,
+  props: {},
+  children: "You're not old enough!",
+}
+```
+
+```JAVASCRIPT
+age: 17
+
+{
+  type: 'p',
+  key: null,
+  ref: null,
+  props: {},
+  children: "You're not old enough!",
+}
+```
+
+- In both cases, `age` is less than 18, and so we wind up with teh exact same UI.
+- As a result, *no DOM mutation* happens at all.
+
+- When we talk about 're-rendering', we are saying to check it anything's changed.
+- 💡 If we spot a difference between snapshots, React will need to update the DOM, but it will be a pricisely-targeted minimal change. 💡
+
+- When React deos cahnge a part of the DOM, teh browser will need to re-paint. A re-paint is when the pixels on the screen are re-drawn because a part of the DOM was mutated.
+
+- This is done natively by the browser when teh DOM is edited with JS, whether by React, Angular, jQuery, vanilla JS, etc.
+
+To Summerize: 🚀 React Re-Rendering
+
+- A **re-render** is a React process where we figure out what needs to change, AKA reconciliation, to spot the difference between snapshots.
+
+- If somethign has changed betweent eh two snapshots, React will "commit" those changes by deiting the DOM, so that it matches the latest snapshot.
+
+- Whenever a SOM node is edited, the browser will re-paint, re-drawing the relevant pixel so that the user sees the correct UI.
+
+- **No all re-renders require re-paints!** If nothing has changed between snapshots, React won't edit any DOM nodes, and nothing will be re-painted.
+
+- 👀 The critical thing to understand si taht when we talk about re-rendering, we are not sayign that we should throw away the current UI and re-biuld everythign from scratch.
+
+- React ties to keep the re-painting to a minimum, because re-painting is slow. Instead of generating a bunch of new DOM notes from scratch (lots of painting), it figures out what's changed between snapshots and make the requried tweaks with surgical precision.
+
+- For more in-depth; see react docs [Render and Commit](https://react.dev/learn/render-and-commit)
+
+#### Asynchronous Updates
