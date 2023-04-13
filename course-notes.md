@@ -4100,3 +4100,67 @@ To Summerize: 🚀 React Re-Rendering
 - For more in-depth; see react docs [Render and Commit](https://react.dev/learn/render-and-commit)
 
 #### Asynchronous Updates
+
+- Consider the following code: What value woud you expect to see in the developer console when the user clicks the button for the first time?
+
+```JAVASCRIPT
+function App() {
+  const [count, setCount] = React.useState(0);
+
+  return (
+    <>
+      <p>
+        You've clicked {count} times.
+      </p>
+      <button
+        onClick={() => {
+          setCount(count + 1);
+          console.log(count)
+        }}
+      >
+        Click me!
+      </button>
+    </>
+  );
+}
+```
+
+- The answer is 0, I guessed 1, what is going on here?
+
+- When we create our state variable, we initialize ti to `0`. Then, when we click the button, we increment it by 1, to `1`. So shouldn't it log `1` and not `0`?
+
+- Here is the catch: **state setters are not immediate.**
+
+- When we call `setCount` we tell Rect that we would like to request a change to a state variable.
+- React does not immediately drop everything; it watis until the current operation is completed (processing the click), and then updates the value and triggers a re-render.
+
+- For now, the thing to remember is that **updating a state variable is asynchronous**. It affects what the state will be for the **next render**. It's a scheduled update.
+
+- Here is how to fix the code, so that we have access to the new value right away:
+
+```JAVASCRIPT
+cuntion App() {
+  const [count, setCount] = React.useState(0);
+
+  return (
+    <>
+      <p>
+       You clicked {count} times.
+      </p>
+      <button
+        onClick={() => {
+          const nextCount = count + 1;
+          setCount(nextCount);
+          console.log(nextCount)
+        }}
+      >
+        Click me!
+      </button>
+    </>
+  )
+}
+```
+
+- We store the updated value in a variable, so that we can access that variable whenever we want to know what the new value is.
+
+- I like to use prefix `next`, since it conveys that we are talking about the 'future' value of the state, what it will be on the next render. But you can name whatever you want.
