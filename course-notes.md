@@ -4164,3 +4164,82 @@ cuntion App() {
 - We store the updated value in a variable, so that we can access that variable whenever we want to know what the new value is.
 
 - I like to use prefix `next`, since it conveys that we are talking about the 'future' value of the state, what it will be on the next render. But you can name whatever you want.
+- Try and fix the bug:
+
+#### Exercises, useState Hook, Role Playing Game
+
+- You are building an in-browser role playing game, but we have a bug. The wrong values are being shown to the user when the character levels up.
+
+```JAVASCRIPT
+import React from 'react';
+
+function Character() {
+  const [strength, setStrength] = React.useState(6);
+  const [dexterity, setDexterity] = React.useState(9);
+  const [intelligence, setIntelligence] = React.useState(15);
+
+  function triggerLevelUp() {
+    setStrength(strength + 1);
+    setDexterity(dexterity + 2);
+    setIntelligence(intelligence + 3);
+
+    window.alert(`
+      Congratulations! Your hero now has the following stats:
+      Str: ${strength}
+      Dex: ${dexterity}
+      Int: ${intelligence}
+    `);
+  }
+
+  return (
+    <div className="wrapper">
+      <img
+        alt="8-bit wizard character"
+        src="https://sandpack-bundler.vercel.app/img/mage-sprite.gif"
+      />
+      <button onClick={triggerLevelUp}>
+        Level Up
+      </button>
+    </div>
+  );
+}
+
+export default Character;
+```
+
+- My solution: To declare variables for the values so they update right away:
+- What is going on with this code?
+- Why are we seeing stale values when you click on the 'Level Up' button?
+- It's not actually changing the variable as you would expect, `strength = strength + 1`
+- The way the `triggerLevelUp()` function works in state, is they schedule an update.
+- It's a way to tell React, hey we are changing some stuff, increase this value by 1.
+- So please, re-render with this new value. Telling React to redo all the work that it has already done, to determine what the UI is.
+- And on the next pass, next render, it should use the new values.
+- When React sees `setStrength(strength + 1);`, React makes a "calendar appointmet" but *it doesn't interupt what it is already doing*, running through the function.
+- **It's going to go through the rest of the function, without changing anything.**
+
+- And the next time we run the function `Character`, the new values will be populated.
+
+```JAVASCRIPT
+function Character() {
+  const [strength, setStrength] = React.useState(6);
+  const [dexterity, setDexterity] = React.useState(9);
+  const [intelligence, setIntelligence] = React.useState(15);
+
+  function triggerLevelUp() {
+    const nextStrength = strength + 1;
+    const nextDexterity = dexterity + 2;
+    const nextIntelligence = intelligence + 3;
+    
+    setStrength(nextStrength);
+    setDexterity(nextDexterity);
+    setIntelligence(nextIntelligence);
+
+    window.alert(`
+      Congratulations! Your hero now has the following stats:
+      Str: ${nextStrength}
+      Dex: ${nextDexterity}
+      Int: ${nextIntelligence}
+    `);
+  }
+```
