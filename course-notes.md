@@ -4213,7 +4213,8 @@ export default Character;
 - It's not actually changing the variable as you would expect, `strength = strength + 1`
 - The way the `triggerLevelUp()` function works in state, is they schedule an update.
 - It's a way to tell React, hey we are changing some stuff, increase this value by 1.
-- So please, re-render with this new value. Telling React to redo all the work that it has already done, to determine what the UI is.
+- So please, re-render with this new value.
+- Telling React to redo all the work that it has already done, to determine what the UI is.
 - And on the next pass, next render, it should use the new values.
 - When React sees `setStrength(strength + 1);`, React makes a "calendar appointmet" but *it doesn't interupt what it is already doing*, running through the function.
 - **It's going to go through the rest of the function, without changing anything.**
@@ -4243,3 +4244,79 @@ function Character() {
     `);
   }
 ```
+
+#### Exercise, Counter 2.0
+
+- The buttons have already been added to the page, but they don't do anything yet. The task is to wire up the buttons with the following ACs.
+
+ACs:
+
+- The up arrow button should increase the count by 1.
+- The double arrow up button should increase the count by 10.
+- The refresh button should reset the count to 0.
+- The pound button should set the count to a random number between 1 and 100.
+- The double down arrow button should decrease the count by 10.
+- The down arrow button should decrease the count by 1.
+
+- Starter code:
+
+```JAVASCRIPT
+import { ChevronUp, ChevronsUp, ChevronDown, ChevronsDown, RotateCcw, Hash } from 'react-feather'
+
+function Counter() {
+  const [count, setCount] = React.useState(0);
+
+  return (
+    <div className="wrapper">
+      <p>
+        <span>Current value:</span>
+        <span className="count">
+          {count}
+        </span>
+      </p>
+      <div className="button-row">
+        <button>
+          <ChevronUp />
+          <span className="visually-hidden">
+            Increase slightly
+          </span>
+        </button>
+        <button>
+          <ChevronsUp />
+          <span className="visually-hidden">
+            Increase a lot
+          </span>
+        </button>
+        <button>
+          <RotateCcw />
+          <span className="visually-hidden">
+            Reset
+          </span>
+        </button>
+        <button>
+          <Hash />
+          <span className="visually-hidden">
+            Set to random value
+          </span>
+        </button>
+        <button>
+          <ChevronsDown />
+          <span className="visually-hidden">
+            Decrease a lot
+          </span>
+        </button>
+        <button>
+          <ChevronDown />
+          <span className="visually-hidden">
+            Decrease slightly
+          </span>
+        </button>
+      </div>
+    </div>
+  );
+}
+
+export default Counter;
+```
+
+-
