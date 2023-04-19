@@ -4411,3 +4411,99 @@ export default Counter;
 ```
 
 #### Why the dance?
+
+- Why so much to manage state management in React?
+- React is based on the confines of JavaScript.
+- JS doesn't give us a way to observe variables.
+- We need to know, when a variable changes in order for React to trigger a re-render.
+- I our counter example, the only way for the UI to update, is for all the code to re-run. It doesn't automatically re-run the code when you change a variable.
+
+```JAVASCRIPT
+import React from 'react';
+
+function Counter() {
+  const [count, setCount] = React.useState(0);
+
+  return (
+    <button onClick={() => setCount(count + 1)}>
+      Value: {count}
+    </button>
+  );
+}
+
+export default Counter;
+```
+
+- How do you get the incrementation, if you try in plain JS. You can't, it doesn't persist across function calls.
+
+```JAVASCRIPT
+function helloWorld() {
+  let count = 0;
+  count = count + 1;
+}
+
+helloWorld(); // 1
+helloWorld(); // 1
+helloWorld(); // 1
+helloWorld(); // 1
+```
+
+- Everytime you call that function, you get the same results, it doens't increment. We re-initialize the variable and increment by one.
+- The incrementation `count + 1` doesn't persist across function calls. JS doesn't give us a way to thread values through function calls.
+
+- Back to React, **Components in React are Functions in JS.**
+- If you think through what the `Counter()` function above does.
+
+```JAVASCRIPT
+// Start you app
+ReactDOM.render(<App />)
+// Transpiles to
+ReactDOM.render(React.createElement(App))
+// Calling this function, get an JS object with all the stuff
+{ type: App, props {}}
+// The point is, React is going to envoke the App() function
+// Re-render
+App()
+// Re-render
+App()
+// Re-render
+App()
+// Re-render
+App()
+
+```
+
+- The point is, React is going to envoke the `App()` function, everytime we trigger a re-render.
+- Everytime you re-render, it's like a timeline, a snapshot of that component.
+- The variable neeeds to be defined within the component, so every instance can have it's own dynamic state.
+
+- React exist in the confines of JS, and if we define a variable within a component/function, then that variable will be re-initialized everytime we call the function.
+
+```JAVASCRIPT
+function App() {
+  let count = 0;
+  return {
+    <p>{count}</p>
+  }
+}
+```
+
+- Back to `React.useState(0);`, we need to have some way, to access the current value of count, without redefining it in every function call.
+- The `React.useState()` function is reaching into React, and pulling out the state variable.
+- On the very first render, we are giving React the value, `const [count, setCount] = React.useState(0);` and putting it into the `count` variable.
+- On the second render, we are reaching in and getting the new value.
+- And so on, we are pulling the value out of React, which exist outside the scope of the function.
+
+- The `setCount` function, JS doesn't give us a way to observe values, so we need to tell React it's time to render.
+- The `setCount` is doing two things:
+  - Primary thing, we are changing the value, and scheduling the update, so when we re-render the function, the `count` variable will have the new value.
+  - Secondary thing, we are also signaling to React it's time to re-render.
+
+- The easiest way to think about React, is a series of snapshots over time.
+- When you first call a component, `App()` you get an initial value.
+- Then everytime you call the component after that, you get another snapshot and on and one.
+- For each of these snapshot, the `state` variable is being populated within React.
+
+- React doesn't compile to some other langauge, it is always restricted by the rules of JS.
+
+### Forms
