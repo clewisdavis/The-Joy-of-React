@@ -4507,3 +4507,47 @@ function App() {
 - React doesn't compile to some other langauge, it is always restricted by the rules of JS.
 
 ### Forms
+
+- Everyone's favorite thing to build, you know, the worlds most popular website, is just one form.
+- Lots of packages claiming to solve all the form problems, but forms are not that bad to build in React.
+
+#### Data Binding
+
+- When building we apps, we want to sync a bit of state to a particular form input.
+- For example, a 'username' fiel dshodl be bound to the value of a `username` state variable.
+
+- This is commonly known as 'data binding'. Most fornt end frameworks offer a way to bind a particular bit of state to a particular form control.
+- Here is what it typically looks like in React.
+
+```JAVASCRIPT
+import React from 'react';
+
+function SearchForm() {
+  const [searchTerm, setSearchTerm] = React.useState('dogs');
+  
+  return (
+    <>
+      <form>
+        <label htmlFor="search-input">
+          Search:
+        </label>
+        <input
+          type="text"
+          id="search-input"
+          value={searchTerm}
+          onChange={(event) => {
+            setSearchTerm(event.target.value);
+          }}
+        />
+      </form>
+      <p>
+        Search term: {searchTerm}
+      </p>
+    </>
+  );
+}
+
+export default SearchForm;
+```
+
+- What's going on above?
