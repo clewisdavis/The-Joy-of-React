@@ -4551,3 +4551,77 @@ export default SearchForm;
 ```
 
 - What's going on above?
+- If you start without the `value` or `onChange` you have an uncontrolled element.
+- Uncontrolled Element, React creates the element, puts it on the page but after that, React doesn't know what we are doing with it.
+
+- If you want to bind the input so that it always holds the value in state variable, `searchTerm`, you have to do a few things.
+- First, you have to set the `value` property, `value="hello"`
+
+```JAVASCRIPT
+        <input
+          type="text"
+          id="search-input"
+          value="hello"
+        />
+```
+
+- However, notice you cannot change the value in the field, React is restricting you from updating.
+- The reason, value servers as a form of lock, once you set the value, that input is always **bound** to that value.
+- Now, we are going to add the expression slot, `value={searchTerm}`, but notice you still cannot change it.
+
+```JAVASCRIPT
+        <input
+          type="text"
+          id="search-input"
+          value={searchTerm}
+        />
+```
+
+- The input is still locked into whatever the value of the variable is, `searchTerm`.
+- Why? This is because we haven't called the state function, `setSearchTerm`.
+
+- Data binding example, set up an `onClick` button, to update the value of the state variable, `searchTerm`
+
+```JAVASCRIPT
+  return (
+    <>
+      <form>
+        <label htmlFor="search-input">
+          Search:
+        </label>
+        <input
+          type="text"
+          id="search-input"
+          value={searchTerm}
+        />
+      </form>
+      <p>
+        Search term: {searchTerm}
+      </p>
+
+      <button
+        onClick={() => setSearchTerm(Math.random())}
+      >Click Me</button>
+    </>
+  );
+```
+
+- Now, when you click the button, the state variable updates and you can see the new value in the search input.
+- But this is only **one way data binding**. Half of the equation.
+- To set up **two way data binding**, you also want to update the value of state variable when you update the value of the search input.
+- To do that, you have to add a `onChange` listener on the input.
+
+```JAVASCRIPT
+        <input
+          type="text"
+          id="search-input"
+          value={searchTerm}
+          onChange={(event) => {
+            console.log(event);
+          }}
+        />
+```
+
+- And pass in the `event`, in JS, an event is an object that describes the change that just happened. For example, if you type in an input, the `change` event, describes that change.
+
+-
