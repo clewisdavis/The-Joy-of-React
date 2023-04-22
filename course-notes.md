@@ -4624,4 +4624,45 @@ export default SearchForm;
 
 - And pass in the `event`, in JS, an event is an object that describes the change that just happened. For example, if you type in an input, the `change` event, describes that change.
 
--
+- When you console log the event, you get back and object, the thing to pay attention to, is the `target`. Then you can get access to all the attributes of that `target`.
+- For example; `console.log(event.target.value)`
+
+```JAVASCRIPT
+        <input
+          type="text"
+          id="search-input"
+          value={searchTerm}
+          onChange={(event) => {
+            console.log(event.target.value);
+          }}
+        />
+```
+
+- Now when you type in the field, you see characters you are typing in.
+- 🤔 But why isn't it showing in the field, and only logging in the console?
+- React is allowing the `onChange` to fire, but as soon as it finishes firing the `onChange` event, React makes sure the value remains locked into what the value of `searchTerm` is.
+- It happens so fast, **inbetween paint cycles**, you don't see it in render, but for brief moment, the value is updated and then React sets it back.
+
+- Now, we can correct this by calling the `setSearchTerm` state function when the user types in the input search box.
+- And going to call it with the `event.target.value`.
+
+```JAVASCRIPT
+        <input
+          type="text"
+          id="search-input"
+          value={searchTerm}
+          onChange={(event) => {
+            setSearchTerm(event.target.value);
+          }}
+        />
+```
+
+- In other words, I type in the text box, the event fires, it references the element that trigged the event, and that shows the value the user just entered.
+- And because you are updating the state variable `searchTerm`, and react locks it down, you have updated the `value={searchTerm}` to what the user put in the field.
+
+- The shown value of the input, will always be in sync with whatever the `searchTerm` variable holds.
+
+- Do you actually have to bind the value? Two way data binding, if you remove the `value` on the input, you loose two way data binding.
+- If the state changes by some other way, say a button, the state variable will change, but it gets out of sync with what is shown in the input.
+
+#### Controlled vs. Uncontrolled Inputs
