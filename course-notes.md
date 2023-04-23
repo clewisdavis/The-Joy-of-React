@@ -4666,3 +4666,77 @@ export default SearchForm;
 - If the state changes by some other way, say a button, the state variable will change, but it gets out of sync with what is shown in the input.
 
 #### Controlled vs. Uncontrolled Inputs
+
+- When we set the `value` attribute ona form control, we tell React that it should be a **controlled element**.
+- In React, this means React is managing the input.
+
+- If we don't set the `value`, the input is an **uncontrolled element**. This means React doesn't do any management.
+
+- The golden rule: **An element should always be either a controlled or uncontrolled element.**
+- This can lead to a common issue, like the following:
+
+```JAVASCRIPT
+import React from 'react';
+
+function SignupForm() {
+  // No default value:
+  const [username, setUsername] = React.useState();
+  
+  return (
+    <form>
+      <label htmlFor="username">
+        Select a username:
+      </label>
+      <input
+        type="text"
+        id="username"
+        value={username}
+        onChange={event => {
+          setUsername(event.target.value);
+        }}
+      />
+    </form>
+  );
+}
+
+export default SignupForm;
+```
+
+- If you try typing into the input, you can an error in the console.
+- `Warning: A component is changing an uncontrolled input to be controlled.`
+- Why is this happening? We are setting the `value={username}`.
+- **Here is the problem:** `username` is undefined at first, since there is not default value in the state hook. Here is what it's doing.
+
+```JAVASCRIPT
+const username = undefined;
+
+<input
+  type="text"
+  id="username"
+  value={username}
+  onChange={event => {
+    setUsername(event.target.value);
+  }}
+/>
+```
+
+- When we set `value` to `undefined`, the same as not setting it as all. react will treat the input as an **uncontrolled element**.
+- When the user starts typing in the input, the `onChange` event updates the value of `username` from `undefined` to a string.
+- And so, React flips the element to a controlled element, and throws the warning.
+
+- **Here is how to solve the problem:** We always want to make sure we are passing a define `value`. You can do this by initializing `username` to an empty strong:
+
+```JAVASCRIPT
+// 🚫 Incorrect. `username` will flip from `undefined` to a string:
+const [username, setUsername] = React.useState();
+
+// ✅ Correct. `username` will always be a string:
+const [username, setUsername] = React.useState('');
+```
+
+- Wiht this change, our input is being controlled by React state from the very first render, since we are always passing a defined value.
+- Even though empty strings are considered falsy they stil count.
+
+#### The onClick Parable
+
+- In the context of a modern React application, this isn't usually what we want. We don't want to reload the entire page, we want to fetch a bit of data and re-render a few components with that data. This produces a faster, smoother user experience.
