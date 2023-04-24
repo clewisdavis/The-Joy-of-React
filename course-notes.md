@@ -4740,3 +4740,153 @@ const [username, setUsername] = React.useState('');
 #### The onClick Parable
 
 - In the context of a modern React application, this isn't usually what we want. We don't want to reload the entire page, we want to fetch a bit of data and re-render a few components with that data. This produces a faster, smoother user experience.
+
+- A mistake most React dev's make, imagine this lesson, you are building a search form:
+
+```JAVASCRIPT
+import React from 'react';
+
+function SearchForm({ runSearch }) {
+  const [searchTerm, setSearchTerm] = React.useState('');
+  
+  return (
+    <div className="search-form">
+      <input
+        type="text"
+        value={searchTerm}
+        onChange={event => {
+          setSearchTerm(event.target.value);
+        }}
+      />
+      <button>
+        Search!
+      </button>
+    </div>
+  );
+}
+
+export default SearchForm;
+```
+
+- In this example, `runSearch` is the function we want to call when the suer clicks on the Search button. In a real app, it would make s netwrok request, and update some state with the results.
+
+- Here is the question: how should we use this function?
+- A lot of engineers will solve for this by adding an `onClick` handler to the submit button:
+
+```JAVASCRIPT
+<button onClick={() => runSearch(serchTerm)}>
+  Search!
+</button>
+```
+
+- There are a numbe ro fproblems with this approach.
+- For example, what if the user tries to search by pressing "Enter" after typing in the text input?
+- You could start to do down the path, and put an `onKeyDown` event listener?
+
+```JAVASCRIPT
+<input
+  type="text"
+  value={searchTerm}
+  onChange={event => {
+    setSearchTerm(event.target.value);
+  }}
+  onKeyDown={event => {
+    if (event.key === 'Enter') {
+      runSearch(searchTerm);
+    }
+  }}
+/>
+```
+
+- **We are going down the wrong path here.** We are re-implementing stuff that the browser already knows how to do!
+
+#### Use a Form
+
+- The path you want to head down, to solve this problem, is to wrap your form contorls in a `<form>` tag.
+
+- Then, instead of listening for clicks and keys, we can listen for the **form submit event.**
+- See how much simpler the code gets:
+
+```JAVASCRIPT
+import React from 'react';
+
+function SearchForm({ runSearch }) {
+  const [searchTerm, setSearchTerm] = React.useState('');
+  
+  return (
+    <form
+      className="search-form"
+      onSubmit={event => {
+        event.preventDefault();
+        runSearch(searchTerm);
+      }}
+    >
+      <input
+        type="text"
+        value={searchTerm}
+        onChange={event => {
+          setSearchTerm(event.target.value);
+        }}
+      />
+      <button>
+        Search!
+      </button>
+    </form>
+  );
+}
+
+export default SearchForm;
+```
+
+- The form submit event will be called automatically when the suer clicks the button, or presses "Enter" whenever the input or button is focused.
+- When that event fires, we will run our search.
+
+- Instead of trying to re-create a bunch of standard web platform stuff, **we should use the platform native behaviour** and let it solve these sorts of problems for us!
+
+- By using a form submit event, we get to user client-side validation:
+
+```JAVASCRIPT
+<input
+  type="password"
+  required={true}
+  minLength={8}
+/>
+```
+
+#### Default form behavior
+
+- One little quick with using `onSubmit`. We need to prevent teh drault submission behavior:
+
+```JAVASCRIPT
+<form
+  className="search-form"
+  onSubmit={event => {
+    event.preventDefault();
+    runSearch(searchTerm);
+  }}
+>
+```
+
+- To understand why, remember back in the day, before `fetch`, `XMLHttpRequest` and JSON.
+- If you wanted to make a request to a server, like when fetching serach results, you couldn't request only the data. You needed to request a whole new HTML file.
+- The user would be redirected to a new URL, and the sever would render a template into an HTML doc, using the data sent with the request.
+
+- **Forms still operate this way by default.** When you submit a form, the browser will try to send the user to the URL specified by the `action` attribute:
+
+```HTML
+<!--
+  Submitting this form will redirect the user to the
+  /search page, sending along the data collected from
+  the form fields.
+-->
+<form
+  method="POST"
+  action="/search"
+>
+```
+
+- If we omit the `action` attribute, the browswer will use the current URL, effectively reloading the page.
+
+- 👀**In the context of a modern Rect app, this isn't what we want. We do not want to reload the entire page, we want to fetch a bit of data and re-render a few components with that data. This produces a faster, smoother user experience.**👀
+
+- That's why we need to include `event.preventDefault()`. It stops the browswer from exectuting a full page reload.
