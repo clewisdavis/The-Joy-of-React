@@ -4890,3 +4890,174 @@ export default SearchForm;
 - 👀**In the context of a modern Rect app, this isn't what we want. We do not want to reload the entire page, we want to fetch a bit of data and re-render a few components with that data. This produces a faster, smoother user experience.**👀
 
 - That's why we need to include `event.preventDefault()`. It stops the browswer from exectuting a full page reload.
+
+### Other Form Controls
+
+- The web platform provides lots of additional form controls:
+- Textareas
+- Radio Buttons
+- Checkboxes
+- Selects
+- Ranges
+- Color pickers
+
+- And are are a little different from one another, can be frustrating to work with.
+- Take textarea for example, defines the value as children rather than a `value`
+
+```HTML
+<textarea>
+  This is the current value
+</textarea>
+```
+
+- Another example, the select tag uses a `selected` prop on one of the `<option>` children to signify the selected value:
+
+```HTML
+<select>
+  <option value="a">
+    Option 1
+  </option>
+  <option value="b" selected>
+    Option 2
+  </option>
+  <option value="c">
+    Option 3
+  </option>
+</select>
+```
+
+- Good news, React ha stweked many of these form contorls so they have similar behavior. Lot less chaos with form controls in Rect.
+
+- Essentialy all form controls follow the same pattern:
+
+1. The current vallue is tracked using either `value` (for most inputs) or `checked` (for ccheckboxes and radio).
+2. We respond to changes with the `onChange` event listener.
+
+- 🎁 [Bonus cheatsheet covering all the forms](https://courses.joshwcomeau.com/joy-of-react/02-state/11-bonus-cheatsheet)
+
+#### Select Tag
+
+- The `<select>` tag allows the user to select a single option form a list of predefined options.
+
+- When wrokign wtih select tags in React, htey wrok pretty much exaclty like text inputs. We use `value` and `onChange`. Example:
+
+```JAVASCRIPT
+import React from 'react';
+
+function App() {
+  const [
+    selectedOption,
+    setSelectedOption
+  ] = React.useState('red');
+
+  return (
+    <form>
+      <fieldset>
+        <legend>
+          What is your favourite color?
+        </legend>
+        
+        <select
+          value={selectedOption}
+          onChange={event => {
+            setSelectedOption(event.target.value)
+          }}
+        >
+          <option value="red">
+            Red
+          </option>
+          <option value="green">
+            Green
+          </option>
+          <option value="blue">
+            Blue
+          </option>
+        </select>
+      </fieldset>
+      
+      <p>
+        Selected value:
+        <br />
+        {selectedOption}
+      </p>
+    </form>
+  );
+}
+
+export default App;
+```
+
+- By setting the `value` prop, we make this a controlled compoennt, binding the selected option to our React state.
+- When we add the `onChange` event listener, we allow this state to be changed by selecting a different option form the list.
+
+- This feels like a huge improvement, compared to default functionality of this form control. We don't ahe to mess wtih adding the `selected` attribute to one of the `<option>` children.
+
+#### Radio Buttons
+
+- Radio buttons, allow the user to select one choice from a group of options.
+- The tricky thing, is state is split across multiple independent HTML elements.
+- There is only one `<select>` tag, but multiple `<input type="radio">` buttons.
+- An example of a controlled radio button group in React:
+
+```JAVASCRIPT
+import React from 'react';
+
+function App() {
+  const [
+    value,
+    setValue
+  ] = React.useState('no');
+
+  return (
+    <form>
+      <fieldset>
+        <legend>Do you agree?</legend>
+        
+        <input
+          type="radio"
+          name="agreed-to-terms"
+          id="agreed-yes"
+          value="yes"
+          checked={value === "yes"}
+          onChange={event => {
+            setValue(event.target.value)
+          }}
+        />
+        {' '}
+        <label htmlFor="agreed-yes">
+          Yes
+        </label>
+        <br />
+        
+        <input
+          type="radio"
+          name="agreed-to-terms"
+          id="agreed-no"
+          value="no"
+          checked={value === "no"}
+          onChange={event => {
+            setValue(event.target.value)
+          }}
+        />
+        {' '}
+        <label htmlFor="agreed-no">
+          No
+        </label>
+      </fieldset>
+    </form>
+  );
+}
+
+export default App;
+```
+
+- Radio has a ton of properties.
+- `name` - The browser needs to knwo taht each button is part of the same group, so selecting one option will de-select the others. This is done with the `name` prop. Each radio button ina gruop should sahre the same `name`.
+- `value` - Each radio button has its own value. This property will be copied over to our React state when the option is ticked. This is the definition / meaning for each radio button.
+- `id` - like other form contorls, this is needed so that the `<label>` can be associated wtiht he right input, so that clicking the label focuses the input.
+- `checked` - This is the prop that binds a given radio button to our React state, making it a controlled value. It should be set to a boolean value: `true` if it's ticked, `false` if it is not. Only one radio button should be set to `true` at a time.
+
+- In most cases we bind React state to `value`. In this case, we don't have a single `value` prop to bind to, since we have multiple radio buttons.
+- So instead, we bind to `checked`, controlling the ticked/unticked status for each button in the group with React state.
+
+### Exercises, Forms
