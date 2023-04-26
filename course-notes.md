@@ -5061,3 +5061,64 @@ export default App;
 - So instead, we bind to `checked`, controlling the ticked/unticked status for each button in the group with React state.
 
 ### Exercises, Forms
+
+- Form exercises
+
+#### Controlled Country Picker
+
+- AC's
+- Use the `COUNTRIES` constant to dynamically generate a th set of `<option>` elements.
+  - In order to map over an objec,t you will need to use  soemthing like Object.keys() or Object.entries()
+- There should be a 'blank' option, selected by default. It shouldn't default to the first country in the list.
+- The indicator at the bottom shoudl update when the user changes their selected country.
+- No warnings in the dev console.
+
+```JAVASCRIPT
+// starter code
+import React from 'react';
+
+import { COUNTRIES } from './data';
+
+/*
+  “COUNTRIES” is a dictionary-like object
+  with the following shape:
+
+  {
+    AF: "Afghanistan",
+    AL: "Albania",
+    DZ: "Algeria",
+  }
+*/
+
+function App() {
+  const [
+    country,
+    setCountry,
+  ] = React.useState('');
+
+  return (
+    <form>
+      <fieldset>
+        <legend>Shipping Info</legend>
+        <label htmlFor="country">
+          Country:
+        </label>
+        <select
+          id="country"
+          name="country"
+        >
+          {/* TODO: Options here! */}
+        </select>
+      </fieldset>
+
+      <p className="country-display">
+        Selected country: {country}
+      </p>
+
+      <button>Submit</button>
+    </form>
+  );
+}
+
+export default App;
+```
