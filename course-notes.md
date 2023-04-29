@@ -5122,3 +5122,22 @@ function App() {
 
 export default App;
 ```
+
+- Use `Object.entries(COUNTRIES)` to get the data.
+- Then you can use that with `map()` to interate over all the countries.
+- And use desctruturing, to get variables the array.
+- `countryNames` is an array of arrays. Every array inside has exactly two items.
+
+```JAVASCRIPT
+// ['CA', 'Canada'], you can desctrucutre that data and use it in your function.
+countryNames.map(([id, label]) => {
+  return (
+    <option>
+      {label}
+    </option>
+  )
+})
+```
+
+- Now the countries will be rendered.
+- Also on the `<option>`, add the `value={id}` and use that as the key, `key={id}`
