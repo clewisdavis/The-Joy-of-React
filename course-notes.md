@@ -5124,9 +5124,13 @@ export default App;
 ```
 
 - Use `Object.entries(COUNTRIES)` to get the data.
+- `countryNames` is an array of arrays. Every array inside has exactly two items. First one is the ID, key of the object, and the second item is the value.
+- The ID, keys are the unique identifier for each country. This is what we are going to use in our React state.
 - Then you can use that with `map()` to interate over all the countries.
-- And use desctruturing, to get variables the array.
-- `countryNames` is an array of arrays. Every array inside has exactly two items.
+- And use desctructuring, to get variables the array.
+- Remember, `countryName` is an array of an array, and every array has exaclty two items. `['US', 'United States']`
+- First item is going to be the country code, `'CA'`
+- Second item is the country label, like `'Canada'`
 
 ```JAVASCRIPT
 // ['CA', 'Canada'], you can desctrucutre that data and use it in your function.
@@ -5139,5 +5143,149 @@ countryNames.map(([id, label]) => {
 })
 ```
 
-- Now the countries will be rendered.
-- Also on the `<option>`, add the `value={id}` and use that as the key, `key={id}`
+- Now the countries will be rendered out in the select.
+- Also on the `<option>`, add the `value={id}` and use that as the key, `key={id}`.
+- Now I want to use the `id` as the value, since that will be set in react state. `value={id}`
+- And since the `id` is unique, you can use that as the `key`, `key={id}`.
+
+- Event, add the `onChange` handler to the select.
+
+```JAVASCRIPT
+onChange={event => {
+  console.log(event.target);
+}}
+```
+
+- And to get the value, just update to `event.target.value`
+- Then take that value and put it into your state setter, `setCountry()` function.
+
+```JAVASCRIPT
+onChange={event => {
+  setCountry(event.target.value);
+}}
+```
+
+- Now you see the selected country update in the UI, because we are passing it along to `react.state`
+
+- Now we have to do the data binding.
+- So you have two way data binding, and if you want to pre-populate the state. `value={country}`
+
+```JAVASCRIPT
+  <select
+    id="country"
+    name="country"
+    value={country}
+    onChange={event => {
+      setCountry(event.target.value);
+    }}
+  >
+```
+
+- Setting an intial value, empty string, `React.useState('')`
+- In the `select` add an option for the empty / default
+
+```JAVASCRIPT
+   <select
+     required
+     id="country"
+     name="country"
+     value={country}
+     onChange={event => {
+       setCountry(event.target.value);
+     }}
+   >
+     {/* TODO: Options here! */}
+     <option value="">-- Select Country --</option>
+     {countryNames.map(([id, label]) => {
+        return (
+          <option value={id} key={id}>
+            {label}
+          </option>
+        )
+     }
+     )}
+   </select>
+```
+
+- One nice thing, when you set the `value=""` to empty, and add the `required` property to the `select`, you get some built in validation.
+
+- Nice UX enhancement, to add a `<optgroup label="Countries"></optgroup>` around the options, makes a nice nested feel to the countries list.
+- The last thing, is to display the full name of the country.
+
+```JAVASCRIPT
+  <p className="country-display">
+    Selected country: {COUNTRIES[country]}
+  </p>
+```
+
+- Full solution:
+
+```JAVASCRIPT
+import React from 'react';
+
+import { COUNTRIES } from './data';
+
+/*
+  “COUNTRIES” is a dictionary-like object
+  with the following shape:
+
+  {
+    AF: "Afghanistan",
+    AL: "Albania",
+    DZ: "Algeria",
+  }
+*/
+
+const countryNames = Object.entries(COUNTRIES);
+// console.log(countryNames);
+
+function App() {
+  const [
+    country,
+    setCountry,
+  ] = React.useState('');
+
+  return (
+    <form>
+      <fieldset>
+        <legend>Shipping Info</legend>
+        <label htmlFor="country">
+          Country:
+        </label>
+        <select
+          required
+          id="country"
+          name="country"
+          value={country}
+          onChange={event => {
+            setCountry(event.target.value);
+          }}
+        >
+          <option value="">-- Select Country --</option>
+          <optgroup label="Countries">
+            {countryNames.map(([id, label]) => {
+               return (
+                 <option value={id} key={id}>
+                   {label}
+                 </option>
+               )
+            }
+            )}
+          </optgroup>
+
+        </select>
+      </fieldset>
+
+      <p className="country-display">
+        Selected country: {COUNTRIES[country]}
+      </p>
+
+      <button>Submit</button>
+    </form>
+  );
+}
+
+export default App;
+```
+
+### Exercise, Two Factor Authentication
