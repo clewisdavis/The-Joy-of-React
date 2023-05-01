@@ -5289,3 +5289,86 @@ export default App;
 ```
 
 ### Exercise, Two Factor Authentication
+
+- Two factor authentication is teh best practice in terms of secure sign in. The most common pattern is to prompt the user to enter a short code from the app.
+
+- Let's build this form.
+- AC's
+  - The input value should be held in React state.
+  - When teh user submits their code, a `window.alert` should elt the m know whether it's correct or not, by comparing their submitted value with teh `CORRECT_CODE` constant.
+  - A `<form>` tag shoul dbe used.
+
+- Hint: You need to mange default behavior.
+
+```JAVASCRIPT
+// starter code
+import React from 'react';
+
+const CORRECT_CODE = '123456';
+
+function TwoFactor() {
+  return (
+    <>
+      <label htmlFor="auth-code">
+        Enter authorization code:
+      </label>
+      <div className="row">
+        <input
+          id="auth-code"
+          type="text"
+          required={true}
+          maxLength={6}
+        />
+        <button>Validate</button>
+      </div>
+    </>
+  );
+}
+
+export default TwoFactor;
+```
+
+- My attempt:
+
+```JAVASCRIPT
+import React from 'react';
+
+const CORRECT_CODE = '123456';
+
+function TwoFactor() {
+
+  const [code, setCode] = React.useState('');
+  
+  return (
+    <form
+      onSubmit={event => {
+        event.preventDefault();
+          if (code === CORRECT_CODE) {
+            window.alert('correct')
+          } else 
+            window.alert('please try again');
+      }}
+    >
+      <label htmlFor="auth-code">
+        Enter authorization code:
+      </label>
+      <div className="row">
+        <input
+          id="auth-code"
+          type="text"
+          required={true}
+          maxLength={6}
+          value={code}
+          onChange={(event) => {
+            setCode(event.target.value);
+            console.log(code);
+          }}
+        />
+        <button>Validate</button>
+      </div>
+    </form>
+  );
+}
+
+export default TwoFactor;
+```
