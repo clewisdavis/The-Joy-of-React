@@ -5295,7 +5295,7 @@ export default App;
 - Let's build this form.
 - AC's
   - The input value should be held in React state.
-  - When teh user submits their code, a `window.alert` should elt the m know whether it's correct or not, by comparing their submitted value with teh `CORRECT_CODE` constant.
+  - When the user submits their code, a `window.alert` should let them know whether it's correct or not, by comparing their submitted value with teh `CORRECT_CODE` constant.
   - A `<form>` tag shoul dbe used.
 
 - Hint: You need to mange default behavior.
@@ -5328,7 +5328,36 @@ function TwoFactor() {
 export default TwoFactor;
 ```
 
-- My attempt:
+- **My attempt:**
+- AC's
+- The input value should be held in React state.
+
+```JAVASCRIPT
+  const [code, setCode] = React.useState('');
+```
+
+- When the user submits their ocode,a `window.alert` should let them know whether it's correct or not, by comparing their submitted vallue with the `CORRRECT_CODE` constant.
+
+```JAVASCRIPT
+    if (code === CORRECT_CODE) {
+      window.alert('correct');
+    } else 
+      window.alert('please try again');
+
+    // you could also do this with ternary
+    code ===  CORRECT_CODE ? window.alert('correct') : window.alert('please try again');
+```
+
+- A `<form>` tag should be used and manage the default behavior
+
+```JAVASCRIPT
+    <form
+      onSubmit={event => {
+        event.preventDefault();
+        code ===  CORRECT_CODE ? window.alert('correct') : window.alert('please try again');
+      }}
+    >
+```
 
 ```JAVASCRIPT
 import React from 'react';
@@ -5372,3 +5401,26 @@ function TwoFactor() {
 
 export default TwoFactor;
 ```
+
+- Josh's solution:
+- Creates a seperate function for the submit.
+
+```JAVASCRIPT
+  function handleSubmit(event) {
+    // prevent the default behavior browser refresh
+    event.preventDefault();
+    // Creates a boolean value
+    const isCorrrect = code === CORRECT_CODE;
+    window.alert(isCorrect ? 'Correct!' : 'Incorrect');
+  }
+
+  return (
+    <form onSubmit={handleSubmit}>
+    // rest of stuff here
+    </form>
+  )
+```
+
+### Exercise, Generative Art
+
+
