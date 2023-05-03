@@ -5423,4 +5423,116 @@ export default TwoFactor;
 
 ### Exercise, Generative Art
 
+- Build some generative art in this exercise.
+- Wire up the form controls to the Rect state so when update the forms, they will twekak the art.
 
+- AC's
+
+1. The range slider should be bound to the `numOfLines` state.
+2. The select control should be boud to the `colorTheme` state.
+3. The radio buttons should be boud to the `shape` state.
+4. The radio button lbels should work correctly. The user should be able to click the text "Polygons" to select that option.
+5. The inputs should conform to the HTML standards, eg. radio buttons should be grouped using the "name attribute.
+
+- Note: All change shoudl happen in the `App.js.`
+
+- My attempt:
+
+1. The range slider should be bound to the `numOfLines` state.
+
+```JAVASCRIPT
+// React state: const [numOfLines, setNumOfLines] = React.useState(5);
+    <label
+      htmlFor="num-of-lines"
+      className="control-heading"
+    >
+      Number of Lines:
+    </label>
+    <input
+      id="num-of-lines"
+      type="range"
+      min="1"
+      max="15"
+      value={numOfLines}
+      onChange={(element) => {
+        return (
+          setNumOfLines(element.target.value)
+        )
+      }}
+    />
+```
+
+2. The select control should be boud to the `colorTheme` state.
+
+```JAVASCRIPT
+// React state: const [colorTheme, setColorTheme] = React.useState('basic');
+    <label
+      className="control-heading"
+      htmlFor="color-theme"
+    >
+      Color Theme:
+    </label>
+    <select 
+      id="color-theme"
+      value={colorTheme}
+      onChange={(element) => {
+        return (
+          setColorTheme(element.target.value)
+        )
+      }}
+    >
+      <option value="basic">
+        Basic
+      </option>
+      <option value="monochrome">
+        Monochrome
+      </option>
+      <option value="froot-loops">
+        Froot Loops
+      </option>
+      <option value="spooky">
+        Spooky Night
+      </option>
+    </select>
+```
+
+3. The radio buttons should be boud to the `shape` state.
+
+```JAVASCRIPT
+    <div className="radio-wrapper">
+      <div className="radio-option">
+        <input 
+          type="radio" 
+          name="choose-shape"
+          id="shape-circles"
+          value="circles"
+          checked={shape === "circles"}
+          onChange={(element) => {
+            return (
+              setShape(element.target.value)
+            )
+          }}
+        />
+        <label htmlFor="shape-circles">
+          Circles
+        </label>
+      </div>
+      <div className="radio-option">
+        <input 
+          type="radio"
+          name="choose-shape"
+          id="shape-polygons"
+          value="polygons"
+          checked={shape === "polygons"}
+          onChange={(element) => {
+            return (
+              setShape(element.target.value)
+            )
+          }}
+        />
+        <label htmlFor="shape-polygons">
+          Polygons
+        </label>
+      </div>
+    </div>
+```
