@@ -5431,7 +5431,7 @@ export default TwoFactor;
 1. The range slider should be bound to the `numOfLines` state.
 2. The select control should be boud to the `colorTheme` state.
 3. The radio buttons should be boud to the `shape` state.
-4. The radio button lbels should work correctly. The user should be able to click the text "Polygons" to select that option.
+4. The radio button labels should work correctly. The user should be able to click the text "Polygons" to select that option.
 5. The inputs should conform to the HTML standards, eg. radio buttons should be grouped using the "name attribute.
 
 - Note: All change shoudl happen in the `App.js.`
@@ -5498,6 +5498,8 @@ export default TwoFactor;
 
 3. The radio buttons should be boud to the `shape` state.
 
+- For radio buttons, use the `checked` property to manage the state. We are saying that this input should be checked if a certian condition is true. Add a condition on the `checked` property. `checked={shape === "circles}` then this input/radio should be checked.
+
 ```JAVASCRIPT
     <div className="radio-wrapper">
       <div className="radio-option">
@@ -5536,3 +5538,30 @@ export default TwoFactor;
       </div>
     </div>
 ```
+
+1. The radio button labels should work correctly. The user should be able to click the text "Polygons" to select that option.
+
+- Radio buttons, to make them part of the same group, add the `name="my-radio` property to all the radio button in the same group.
+- To make the label interactive so you can click on it. Give the radio button input an `id="shape-circle"` and then give the corresponding label the same value, but use the `htmlFor="shape-circle"` attribute.
+
+```JAVASCRIPT
+    <div className="radio-option">
+      <input 
+        type="radio"
+        name="choose-shape"
+        id="shape-polygons"
+        value="polygons"
+        checked={shape === "polygons"}
+        onChange={(element) => {
+          return (
+            setShape(element.target.value)
+          )
+        }}
+      />
+      <label htmlFor="shape-polygons">
+        Polygons
+      </label>
+    </div>
+```
+
+  Note: Do things in a conventional DOM friendly way, and you will sidestep a whole lot of issues from server side rendering. If React does not load for example, the browser can still perform the functionality.
