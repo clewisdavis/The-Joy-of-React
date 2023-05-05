@@ -25,7 +25,7 @@ import { createRoot } from 'react-dom/client';
   - `react-dom` for the web
   - `react-native` for mobile (iOS / Android) or desktop (Windows / MacOS) apps
   - `react-three-fiber` for 3D scenes using WebGL and Three.js
-- All the platfoms use the same core framework, `react`, but you have to specify the correct package based on what you are building.
+- All the platforms use the same core framework, `react`, but you have to specify the correct package based on what you are building.
 
 - You can use the React skills you learn, to build apps across platforms.
 
@@ -48,7 +48,7 @@ const element = React.createElement(
 
 - The `React.createElement()` is a function that accepts 3 or more arguments.
     1. The type of element
-    2. The properties we want this elemetn to have
+    2. The properties we want this element to have
     3. The element's contents, what the element should have as children.
 
 - This function returns a React element. Plain old JS objects, if you console log it, you will see it's a description of a paragraph tg.
@@ -66,7 +66,7 @@ const root = createRoot(container);
 root.render(element);
 ```
 
-- The `document.querySelector` is a reference point of the exsiting DOM element.
+- The `document.querySelector` is a reference point of the existing DOM element.
 - In your `inded.html` file, you include the `id="root"` element to the DOM element you want to mount the app. `<div id="root"></div>`
 
 - This element wil be the apps container.
@@ -5565,3 +5565,7 @@ export default TwoFactor;
 ```
 
   Note: Do things in a conventional DOM friendly way, and you will sidestep a whole lot of issues from server side rendering. If React does not load for example, the browser can still perform the functionality.
+
+## Prop Vs. State
+
+- When learning React it is normal for the concepts of "props" and "state" to be a bit confusing and intermingled.
