@@ -67,7 +67,7 @@ root.render(element);
 ```
 
 - The `document.querySelector` is a reference point of the existing DOM element.
-- In your `inded.html` file, you include the `id="root"` element to the DOM element you want to mount the app. `<div id="root"></div>`
+- In your `index.html` file, you include the `id="root"` element to the DOM element you want to mount the app. `<div id="root"></div>`
 
 - This element wil be the apps container.
 - This element will be the root of our app.
@@ -83,7 +83,7 @@ root.render(element);
 </p>
 ```
 
-- With taht DOM element craeted, it adds it to the page at the specified root.
+- With that DOM element created, it adds it to the page at the specified root.
 - **It takes a JS based description of some HTML, and uses it to produce real-world DOM nodes.**
 
 - But, the real magic happens when things change.
@@ -91,15 +91,15 @@ root.render(element);
 
 ## Build your own React
 
-- Build your own `render` funtion that takes React elements and produces the equivlent DOM struture.
+- Build your own `render` function that takes React elements and produces the equivalent DOM structure.
 
-- Write a `render` function that accepts a Rect element and a reference to a DOM contianer element that will hold our app.
+- Write a `render` function that accepts a Rect element and a reference to a DOM container element that will hold our app.
 
 - Acceptance criteria:
   - A link should be shown in the "result" pane, linking to a wikipedia.org, adn with the text "Read more on Wikipedia"
   - It should work with any element type (eg anchors, paragraphs, button...)
-  - It shoud lhandle all HTML attributes (eg. href, id, disabled...)
-  - The element should contain the text specidied uner `children`. `children` will always be a stiring.
+  - It should handle all HTML attributes (eg. href, id, disabled...)
+  - The element should contain the text specified under `children`. `children` will always be a stirring.
 
 ```JAVASCRIPT
 // SOLUTION
@@ -161,7 +161,7 @@ const element = (
 - Instead of writing `Rect.createElement`, we use an HTML like syntax to create React elements.
 
 - Why use JSX? As your codebase grows, it becomes easier to read with JSX.
-- React elemetns can form a tree structure, just like HTML. This happens when we set the "children" parameter of a React element to another React element.
+- React elements can form a tree structure, just like HTML. This happens when we set the "children" parameter of a React element to another React element.
 
 - Written out, we wind up with a really long tree structures that are hard to read using plain JS:
 
@@ -227,15 +227,15 @@ const element = (
 
 - This is done in a build step, tools like Babel.
 
-- ℹ️ The JSX we write gets converted into `React.createElement`. By the time our code is running int he user's browser, al the JSX has been zapped out, and we are left wtih a JS file, full of nested `React.createElement` calls.
+- ℹ️ The JSX we write gets converted into `React.createElement`. By the time our code is running int he user's browser, al the JSX has been zapped out, and we are left with a JS file, full of nested `React.createElement` calls.
 
-- React import? Best practive to always import React, `import React from 'react';`
+- React import? Best practice to always import React, `import React from 'react';`
 - In JSX, it's obfuscated, meaning it's not used by JSX, only after JSX becomes compiled into `React.createElement`
 
 ### Expression Slots
 
 - When you want to see the result of an expression, you have to wrap it in a `{}`
-- But what is actaully going on here?
+- But what is actually going on here?
 
 ```JAVASCRIPT
 import { render } from 'react-dom';
@@ -299,7 +299,7 @@ const compiledElement = React.createElement(
 
 ### Comments in JSX
 
-- To add a comment in JSX, we use experssoin slot:
+- To add a comment in JSX, we use expression slot:
 
 ```JAVASCRIPT
 const element = (
@@ -309,11 +309,11 @@ const element = (
 );
 ```
 
-- Single line syntax comments everythign out, including the `{}` for the expression slot.
+- Single line syntax comments everything out, including the `{}` for the expression slot.
 
-### Attribute expressoin slots
+### Attribute expression slots
 
-- We can use the same trick for dynamic attritbute values.
+- We can use the same trick for dynamic attribute values.
 
 ```JAVASCRIPT
 const someIdentifier = 'some-unique-identifier';
@@ -325,7 +325,7 @@ const element = (
 );
 ```
 
-- This allos su to craete expression slots for the valeu of the `id` attribute.
+- This allow su to create expression slots for the value of the `id` attribute.
 - How it compiles.
 
 ```JAVASCRIPT
@@ -342,7 +342,7 @@ const element = React.createElement(
 
 ### Type coercion
 
-- React wil automaticaly convert types as required when supplying attributes in JSX.
+- React wil automatically convert types as required when supplying attributes in JSX.
 - These are identical.
 
 ```JAVASCRIPT
@@ -353,9 +353,9 @@ const element = React.createElement(
 <input required={true} />
 ```
 
-- In the first example, we set the requried attribute as a string `"true"`, second example, it's set as a boolean attribute `true`. Either way, the input will wind up being required.
+- In the first example, we set the required attribute as a string `"true"`, second example, it's set as a boolean attribute `true`. Either way, the input will wind up being required.
 
-- You can also pass numbers or strings for numberic attribute:
+- You can also pass numbers or strings for number attribute:
 
 ```JAVASCRIPT
 // ✅ Valid
@@ -365,22 +365,22 @@ const element = React.createElement(
 ```
 
 - ℹ️ Boolean attributes:
-- In HTML, it's possibel to set attributes to `true` just by specifying only the key.
+- In HTML, it's possible to set attributes to `true` just by specifying only the key.
 - `<input required>`
-- In JSX, these are equivilant:
-- `<input requried />` and `<input required={true} />`
+- In JSX, these are equivalent:
+- `<input required />` and `<input required={true} />`
 - Prefer to spell it out.
 
 ### Differences from HTML
 
-- JSX looks like HTML, but are soem fundamental differences.
+- JSX looks like HTML, but are some fundamental differences.
 
 - **Reserved Words**
 - In JS, has a couple of reserved words, keywords with built in functionality and we cannot use them as variable names.
 
 - For example, `const while = 10;`, if we run this code, we get a syntax error, `while` is reserved for "while loops".
 
-- Becuse JSX gets transformed into JS, cannot use reserved word inour JSX. This can be a problem, sometimes, HTML attrubutes sometimes overlap with oru JS reserved words.
+- Becurse JSX gets transformed into JS, cannot use reserved word in our JSX. This can be a problem, sometimes, HTML attributes sometimes overlap with oru JS reserved words.
 
 - Example; `for` and `class`
 - React uses a slight variation on these two terms: `htmlForm` and `className`
@@ -421,7 +421,7 @@ const element = (
 );
 ```
 
-- In HTML5, some elements don't ahve closing tags, the `img` tag for example.
+- In HTML5, some elements don't have closing tags, the `img` tag for example.
 
 ```HTML
 <img alt="A friendly dog" src="/img/dog.jpg">
@@ -440,7 +440,7 @@ const element = (
 
 ### Case sensitive tags
 
-- HTML is a case insensitive langauge. Many years ago, it was common to write HTML in all uppercase.
+- HTML is a case insensitive language. Many years ago, it was common to write HTML in all uppercase.
 
 ```HTML
 <MAIN>
@@ -453,7 +453,7 @@ const element = (
 </MAIN>
 ```
 
-- JSX, is case sensiteive, our gags must all be lowercase.
+- JSX, is case sensitive, our gags must all be lowercase.
 
 ```JAVASCRIPT
 const element = (
@@ -493,7 +493,7 @@ const element = (
 );
 ```
 
-- Other properteis that need to be 'camelCased' include:
+- Other properties that need to be 'camelCased' include:
 
 - `onclick` to `onClick`
 - `tabindex` to `tabIndex`
@@ -516,7 +516,7 @@ const element = (
 
 ### Inline Styles
 
-- In HTML, teh style attribtue allows ut o apply some styles inline, to an element.
+- In HTML, teh style attribute allows ut o apply some styles inline, to an element.
 
 ```HTML
 <h1 style="font-size: 2rem;">
@@ -544,7 +544,7 @@ const element = (
 - `border-bottom-color` becomes `borderBottomColor`
 - `-webkit-font-smoothing` becomes `WebkitFontSmoothing`
 
-- And, React wil automatically apply the `px` suffix for certian properties.
+- And, React wil automatically apply the `px` suffix for certain properties.
 
 ```JAVASCRIPT
 <div
@@ -595,7 +595,7 @@ const root = createRoot(container);
 root.render(element);
 ```
 
-- In this example, no space between the bodl text and the number. It renders `returns:123`.
+- In this example, no space between the bold text and the number. It renders `returns:123`.
 - Why, consider how this compiles to JS.
 
 ```JAVASCRIPT
@@ -614,7 +614,7 @@ const element = React.createElement(
 - Our div has two children, the `<strong>` tag and the `daysUntilSantaReturns` variable.
 - JSX doesn't compile to HTML, it compiles to JS. And when that JS is executed, it's only going to create and append two HTML nodes.
 
-  - A `<strong>` tag wtih some text
+  - A `<strong>` tag with some text
   - A text node, for the number `123`
 
 - So how do we fix it? The most common solution is to add a single whitespace character in curly braces:
@@ -659,7 +659,7 @@ const element = React.createElement(
 
 - Acceptance Criteria:
   - The UI should match the screenshot above
-  - The label should be attached to the input; clickign the label text should focus the input
+  - The label should be attached to the input; clicking the label text should focus the input
   - The button should have the appropriate styles, applied with the class `submit-btn`
 
 ```JAVASCRIPT
@@ -696,8 +696,8 @@ root.render(element);
 - Acceptance Criteria:
 
   - The UI should match the mockup, using the data from the `message` object
-  - The user's avatar shoudl have helpful descriptive alt text
-  - The user's name should be a link, and it should link to `/users/[username]`. With this data, it should be `/users/benjamintorn`. No actaul profile page, so link will not do anything
+  - The user's avatar should have helpful descriptive alt text
+  - The user's name should be a link, and it should link to `/users/[username]`. With this data, it should be `/users/benjamintorn`. No actual profile page, so link will not do anything
   - The footer should include the word "Posted" before the published date.
 
 - HINT: You might want to start with the message content and footer, saving the header for last.
@@ -712,7 +712,7 @@ import { createRoot } from 'react-dom/client';
 
 const message = {
   content:
-    'Just ate at “Les Corbeaux En Colère”. Wonderful little venue!',
+    'Just ate at “Les Bordeaux En Colère”. Wonderful little venue!',
   published: 'January 21st at 9:45pm',
   author: {
     avatarSrc: 'https://sandpack-bundler.vercel.app/img/avatars/009.png',
@@ -765,16 +765,16 @@ const profileUrl = `/users/${message.author.handle}`;
 - Then you can just use that variable. Check out the lesson on string interpolation with template strings.
 - <https://courses.joshwcomeau.com/joy-of-react/10-javascript-primer/03-string-interpolation>
 
-- Modern JS, allows ust o embed variabels and other expressions right inside strings:
+- Modern JS, allows ust o embed variables and other expressions right inside strings:
 
 ```JAVASCRIPT
 const dynamicString = `hello ${userName}!`;
 ```
 
-- In orde rto use strin ginterpolation, we need to use the backticks (`).
+- In order rto use string interpolation, we need to use the backticks (`).
 - Strings created with backtics are known as "template strings". With one super-power, can embed dynamic segments.
 
-- We create a dynamic segemtn withinour string, by writing `${}`.
+- We create a dynamic segment within our string, by writing `${}`.
 - Anything placed between that squiggly bracket wil be evaluated as a JS expression.
 
 - For example; we can do things like.
@@ -796,13 +796,13 @@ console.log(className);
 ## Components
 
 - Components are a huge part of React, one thing to know, it's a component based framework.
-- What is a component exactly? **A component is a bundle of markup, styles, and logic that controls everything about a specific part of the user interfce.**
+- What is a component exactly? **A component is a bundle of markup, styles, and logic that controls everything about a specific part of the user interface.**
 - It's a different mental model when it comes to code organization. Instead of seperating our apps into markup (HTML), styles (CSS), and logic (JS), we organize our apps into components.
 - Good image reference: <https://twitter.com/areaweb>
 
-### Mechanisms of resuse
+### Mechanisms of reuse
 
-- Traditional HTML doesn't really have a way to reuse amrkup. Some languages use `partials` to acheive this. A chunk of HTML inserted into another HTML document.
+- Traditional HTML doesn't really have a way to reuse markup. Some languages use `partials` to achieve this. A chunk of HTML inserted into another HTML document.
 
 - In CSS, the main way to reuse is a `class`. A `btn` style for example.
 
@@ -815,7 +815,7 @@ console.log(className);
 }
 ```
 
-- For JS, the mechanism to reuse is the `function`. For example, a function to process data in smoe way:
+- For JS, the mechanism to reuse is the `function`. For example, a function to process data in some way:
 
 ```JAVASCRIPT
 function shout(sentence) {
@@ -825,24 +825,24 @@ function shout(sentence) {
 shout('here we go');
 ```
 
-- With React, compoennta re the main mechanisme of reuse.
-- Instead of partials for HTML, classes for CSS and function for JS, we create a compoent that bundles up all 3, and allows us to creat ea library of high-level UI elements.
+- With React, components re the main mechanisms of reuse.
+- Instead of partials for HTML, classes for CSS and function for JS, we create a component that bundles up all 3, and allows us to create ea library of high-level UI elements.
 
 - ℹ️ MOdern React also features `hooks`, which offers a way to reuse React logic. In future lessons.
 
 ### Thinking in Components
 
-- Go through the exercices and start thinking in terms of compoennts.
+- Go through the exercises and start thinking in terms of components.
 - Annotate the screenshots, how would you organize them and break them down as components?
 - Where would you re-use? How would you break them down.
 - What can variants of the same component? One component with different instances?
-- Is the difference enough to create a seperate component? Button, vs Button Icons for example.
+- Is the difference enough to create a separate component? Button, vs Button Icons for example.
 - Think in terms of broad strokes, and the page routes / navigation.
 - Then start to break down the components within each route.
 
 ### Basic Syntax
 
-- In React, components can be defined as JS funcitons.
+- In React, components can be defined as JS functions.
 - Typically, React components return one or more React elements.
 - For example;
 
@@ -859,7 +859,7 @@ function FriendlyGreeting() {
         color: 'sienna',
       }}
     >
-      Greetings, weary traveller!
+      Greetings, weary traveler!
     </p>
   );
 }
@@ -869,14 +869,14 @@ const root = createRoot(container);
 root.render(<FriendlyGreeting />);
 ```
 
-- This example. `FriendlyGreeting` create a React element that descirbes a paragraph, with some built in styles.
+- This example. `FriendlyGreeting` create a React element that describes a paragraph, with some built in styles.
 - We render a component just like hwo we render an HTML tag. Instead of rendering a `<div>` or a `<h1>`, we render a `<FriendlyGreeting>`.
 
 - **The big component rule**
 
 - One must rule to follow when creating components. React components need to start with a **Capital Letter**.
 - Has to do with the JSX to JS transformation.
-- If our component had a lower-case function name, React would rednder `<friendlygreeting>` HTML elsement, instead of processing it as a component.
+- If our component had a lower-case function name, React would render `<friendlygreeting>` HTML element, instead of processing it as a component.
 
 - **A React element is a description of a thing we want to create.**
 - In some cases we want to create a DOM node, like a `<p>`. In other cases, we want to create a component instance.
@@ -889,7 +889,7 @@ root.render(<FriendlyGreeting />);
 
 - How would you tweak our greeting component to take a person's name?
 - How do you funnel data into a component. Similar to giving data to and HTML element `<div id="some-div">Hello</div>`, passing `some-div` to that HTML element.
-- You do the same thing, when it comes to React compoennts, `<FriendlyGreeting name="chris" />`
+- You do the same thing, when it comes to React components, `<FriendlyGreeting name="chris" />`
 - So what React does, as it's rendering, it collects all the data you specified, and calling the Component with that data.
 - It does this through the props, which becomes an object.
 
@@ -918,7 +918,7 @@ render(
 ```
 
 - Now you can create the same component, but you can specify the data.
-- ℹ️ Desctucturing: To extract data directly from an object, direclty in the function decloration, or anywhere else.
+- ℹ️ Destructuring: To extract data directly from an object, directly in the function declaration, or anywhere else.
 
 ```JAVASCRIPT
 // Destruction the props object, { name }
@@ -960,14 +960,14 @@ function FriendlyGreeting({ name, age, location, className }) {
 
 ### Default values
 
-- Let's suppose we are wroking on our `FriendlyGreeting` component. But we don't know everyone's name.
+- Let's suppose we are working on our `FriendlyGreeting` component. But we don't know everyone's name.
 
 - For example, you can render a fallback value. I you know their name: `Hey Chris!`, If not, `Hey There!`
 
 - We can do this with the `||` operator, like.
 
 ```JAVASCRIPT
-funciton FriendlyGreeting({ name }) {
+function FriendlyGreeting({ name }) {
     return (
         <p>
           Hey {name || 'there'}!
@@ -996,7 +996,7 @@ function FriendlyGreeting({ name = 'there' }) {
 
 - It's become a well-established convention to specify the default values within the prop object.
 
-- Another example, we have a decorative "Horizonal Rule" compoennt, essentially a way to draw a line between sections. Has a default width of 100px, btu we can override that value.
+- Another example, we have a decorative "Horizontal Rule" component, essentially a way to draw a line between sections. Has a default width of 100px, btu we can override that value.
 
 ```JAVASCRIPT
 function HorizontalRule({ width = 100 }) {
@@ -1011,11 +1011,11 @@ function HorizontalRule({ width = 100 }) {
 <HorizontalRule />
 ```
 
-- ℹ️ `defaultProps` property, is used by older versions of react. Don't use this property, the recommended approach is to use desctructuring assignment.
+- ℹ️ `defaultProps` property, is used by older versions of react. Don't use this property, the recommended approach is to use destructuring assignment.
 
 ### The Children Props
 
-- Imagine you are buidling a custom button component. It should look and act just like a regular HTML button, but have red background and white text.
+- Imagine you are building a custom button component. It should look and act just like a regular HTML button, but have red background and white text.
 
 ```JAVASCRIPT
 function RedButton({ contents }) {
@@ -1048,7 +1048,7 @@ root.render(
 </button>
 ```
 
-- React allos us to do the same thing with oru custom components:
+- React allows us to do the same thing with oru custom components:
 
 ```JAVASCRIPT
 root.render(
@@ -1075,7 +1075,7 @@ function RedButton({ children }) {
 }
 ```
 
-- React does this for us, when we pass soemthing between the open and close tags, react will automatically supply that value to use under `children`
+- React does this for us, when we pass something between the open and close tags, react will automatically supply that value to use under `children`
 
 - For example, if you console.log this element, you will see `children` under `props`
 
@@ -1249,7 +1249,7 @@ export default App;
 
 #### Creating a "Button" component
 
-- With the two `<button>` elements, Create a `Button` compoennt and use it to render both buttons.
+- With the two `<button>` elements, Create a `Button` component and use it to render both buttons.
 
 - Starter code:
 
@@ -1392,9 +1392,9 @@ root.render(
 
 - The color signifies a meaning, green a confirmation, and red error.
 - What is we had a status prop, cancel or confirm.
-- And we use this status to determint the color.
+- And we use this status to determine the color.
 
-- **Solution 3: Symantic "status" prop**
+- **Solution 3: Semantic "status" prop**
 
 ```JAVASCRIPT
 // status: 'cancel' | 'confirm'
@@ -1442,7 +1442,7 @@ root.render(
 );
 ```
 
-- This way, we created some seperation between the semantic meaning of this button and the particlar color. So if you want to change things in the future, you can do it in one place.
+- This way, we created some separation between the semantic meaning of this button and the particular color. So if you want to change things in the future, you can do it in one place.
 
 ### Application Structure
 
@@ -1454,14 +1454,14 @@ root.render(
 #### Index.js
 
 - The root `index.js` file is the first bit of code to be executed. Responsible for rendering our React app, turning the elements we write into live DOM nodes.
-- Ther ewill only be 1 spot int he entire codebase that calls the `createRoot` and `render` methods form react-dom.
-- Common to do setup tasks in this file as well. Projects created with `create-react-app` include some performace, also you can include CSS files.
+- There will only be 1 spot int he entire codebase that calls the `createRoot` and `render` methods form react-dom.
+- Common to do setup tasks in this file as well. Projects created with `create-react-app` include some performance, also you can include CSS files.
 - Typically don't want to render a bunch of JSX, or include things like headers and buttons etc.
-- General rule, just renders the single elment: `<App />`
+- General rule, just renders the single element: `<App />`
 
 #### App
 
-- Common fo rour projects to have a component called `App`
+- Common for our projects to have a component called `App`
 - This is the home base, React component in our project.
 - Could manage core layout stuff, like headers and footers.
 - If you are using a routing solution like react Router, top level routes are often included in this file.
@@ -1488,7 +1488,7 @@ root.render(
 - `Adjacent JSX elements must be wrapped in an enclosing tag. Did you want a JSX fragment <>...</>?`
 
 - Why does this happen?
-- 🤔 Hint: Try converint the JSX to `React.createElement` function calls.
+- 🤔 Hint: Try converting the JSX to `React.createElement` function calls.
 
 - Why can't React simply return multiple elements?
 
@@ -1578,7 +1578,7 @@ return (
 
 - **Better way with, Fragments**
 
-- 🚀 A fragment is a special React component taht doe snot product a DOM node. It looks like this:
+- 🚀 A fragment is a special React component that doe snot product a DOM node. It looks like this:
 
 ```JAVASCRIPT
 import React from 'react';
@@ -1623,7 +1623,7 @@ return (
 
 ### Iteration
 
-- From a previous example; Building a CRM, we extracted a `ContactCard` compoennt and used it for our 3 contacts:
+- From a previous example; Building a CRM, we extracted a `ContactCard` component and used it for our 3 contacts:
 
 ```JAVASCRIPT
 <ul>
@@ -1646,7 +1646,7 @@ return (
 ```
 
 - This solution works, but we don't always have the data when we write the code.
-- If we are building a CRM software, this data will be dynamic. Every user will have a seperate set of contacts, and change ove rtime. We can't hardcode.
+- If we are building a CRM software, this data will be dynamic. Every user will have a separate set of contacts, and change over time. We can't hardcode.
 
 - In React, we solve this by using iteration. We dynamically create these React elements by using raw JS.
 
@@ -1696,9 +1696,9 @@ export default App;
 - We want to create a `<ContactCard>` element for each of the contacts in the `data` array, passing in their name/job/email.
 
 - In React, we use pure JS, there is no "React syntax" for doing this iteration.
-- 🤔 HINT: You can render an array inside the JSX, React will unpack it for you. For a refresher, you can look at "[Aray Iteration Methods](https://courses.joshwcomeau.com/joy-of-react/10-javascript-primer/08-array-iteration-methods)" lesson.
+- 🤔 HINT: You can render an array inside the JSX, React will unpack it for you. For a refresher, you can look at "[Array Iteration Methods](https://courses.joshwcomeau.com/joy-of-react/10-javascript-primer/08-array-iteration-methods)" lesson.
 
-- You can use the `map.()` method to interate over the data
+- You can use the `map.()` method to iterate over the data
 
 ```JAVASCRIPT
 const elements = data.map(contact => (
@@ -1781,7 +1781,7 @@ function App() {
 
 #### JSX inside JS inside JSX
 
-- When interating with React, it is not uncommon to wind up with a structure like this:
+- When iterating with React, it is not uncommon to wind up with a structure like this:
 
 ```JAVASCRIPT
 <ul>
@@ -1845,17 +1845,17 @@ function App() {
 - Our contacts data array has a unique identifier, `id`.
 - We pass that string onto the `key` property, to resolve the error.
 
-#### Why are keys neceessary?
+#### Why are keys necessary?
 
 - Why can't React figure this out on it's own?
-- You need keys, to help react understand exaclty how the data shifts over time.
+- You need keys, to help react understand exactly how the data shifts over time.
 - When updating the DOM, there are multiple ways to get from one UI to another. And if you give React unique identifiers, we can see how those things change 🤔
 - [Video explanation](https://courses.joshwcomeau.com/joy-of-react/01-fundamentals/06.02-keys)
 
 #### Using the array index as the key?
 
 - What if you are not given a unique id for each contact, like the example above.
-- A common approachc is to use the array index. The index is provided when we call the `.map()` method.
+- A common approach is to use the array index. The index is provided when we call the `.map()` method.
 
 ```JAVASCRIPT
 const todos = [
@@ -1883,7 +1883,7 @@ function TodoList() {
 <li key={2}>return library book</li>
 ```
 
-- This can be a bit risky, React keys are meant to be uniquely identiry a bit of content.
+- This can be a bit risky, React keys are meant to be uniquely identity a bit of content.
 - In the re-order case, you could end up with something like this.
 
 ```JAVASCRIPT
@@ -1897,7 +1897,7 @@ function TodoList() {
 
 #### Key Rules
 
-- Some ruels that govern how keys should be used.
+- Some rules that govern how keys should be used.
 
 ##### Top level element
 
@@ -1926,7 +1926,7 @@ function NavigationLinks({ links }) {
 - From React's perspective, it has a group of `<li>` elements, does not dig any deeper at the child elements.
 - To fix it, just move the `key` up to the `<li>`.
 
-- When using fragments, it's sometimes requried to switch to the long form `react.Fragment`, so you can apply the key.
+- When using fragments, it's sometimes required to switch to the long form `react.Fragment`, so you can apply the key.
 
 ```JAVASCRIPT
 // 🚫 Missing key: 
@@ -1957,7 +1957,7 @@ function Thing({ data }) {
 ##### Not global
 
 - Keys only have to be unique within their array, the `key` prop does not have to be globally unique  across the entire application.
-- Each `.map()` cal produces a seperate arry, and so it's not a problem.
+- Each `.map()` cal produces a separate array, and so it's not a problem.
 
 #### Exercises, Iteration
 
@@ -2032,7 +2032,7 @@ const data = [
 
 ```JAVASCRIPT
 function App() {
-  // interate over
+  // iterate over
   const element = data.map(avatar => (
     // console.log(data);
     <Avatar
@@ -2049,7 +2049,7 @@ function App() {
 }
 ```
 
-- Note, Josh's solution, you can put the code inline within the return. Not make a seperate variable.
+- Note, Josh's solution, you can put the code inline within the return. Not make a separate variable.
 
 ```JAVASCRIPT
 function App() {
@@ -2078,7 +2078,7 @@ function App() {
 ```
 
 - Getting fancy
-- Use desctructuring to simplify the return
+- Use destructuring to simplify the return
 - Arrow function, implicit return
 
 ```JAVASCRIPT
@@ -2099,11 +2099,11 @@ function App() {
 #### Shopping Cart
 
 - Imagine building a shopping cart UI. You receive an array of items being held in teh card from the server.
-- If an item is otu of stock, they cannot purchase it. Should be displayed seperately.
+- If an item is otu of stock, they cannot purchase it. Should be displayed separately.
 
 - Started on, but two problems remain:
   - Need to show all the items in teh user's cart, not just the first one.
-  - Need to show two seperate tables. One for in-stock, and one for sold-out.
+  - Need to show two separate tables. One for in-stock, and one for sold-out.
 
 - AC's
   - Update the `CartTable` component to use iteration.
@@ -2250,7 +2250,7 @@ function Friend({ name, isOnline }) {
 }
 ```
 
-- you can't put an `if` statement in teh middle of a function call liek this. Here is a more simple example:
+- you can't put an `if` statement in teh middle of a function call like this. Here is a more simple example:
 
 ```JAVASCRIPT
 console.log(
@@ -2270,7 +2270,7 @@ console.log(
 console.log(/* Some chunk of JS here */);
 ```
 
-- In React, we are allowd to put *expressions* in our JSX, but NOT *statements*.
+- In React, we are allowed to put *expressions* in our JSX, but NOT *statements*.
 - Expression: JS code that produces a value. `5 * 10` produces `50`. `num > 100` produces either `true` or `false`
 - Statement: An instruction to the computer to do a thing. `let hi = 5;` or `if (hi > 10) { // stuff here }`
 
@@ -2297,7 +2297,7 @@ export default Friend;
 ```
 
 - No rule that says your JSX has to be part of the `return` statement.
-- We can assign chunks of JSX to a variable, anywhere within oru compoennt definition.
+- We can assign chunks of JSX to a variable, anywhere within oru component definition.
 
 - This JSX compiles to:
 
@@ -2346,7 +2346,7 @@ function SomeBoringComponent() {
 
 #### With &&
 
-- The downside to useing an `if` statement is we have to pull that logic up, away from the rest of the markup.
+- The downside to using an `if` statement is we have to pull that logic up, away from the rest of the markup.
 - Makes it harder to understand hwo a component is structured. Having to hop all over the place to understand what is being returned.
 
 - Good news, a way to embed the `if` logic right in our JSX, using the `&&` operator.
@@ -2399,11 +2399,11 @@ function Friend({ name, isOnline }) {
 
 - If the left hand value of isOnline `{isOnline && <div className="green-dot" />}` is false, the expression short-circuits, evaluates `isOnline` to `false.
 
-- If the value it `true`, it evaluates tow hatever is on the right hand side of the operator `{isOnline && <div className="green-dot" />}`, which is the `<div>` element containing our green dot.
+- If the value it `true`, it evaluates tow whatever is on the right hand side of the operator `{isOnline && <div className="green-dot" />}`, which is the `<div>` element containing our green dot.
 
-- 🎁 You can check out Logical Operators for JS primer. or [MDN Loginal AND &&](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Logical_AND)
+- 🎁 You can check out Logical Operators for JS primer. or [MDN Logical AND &&](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Logical_AND)
 
-##### Common gatcha: the number zero
+##### Common galcha: the number zero
 
 - The `&&` operator doesn't return `true` or `false`. It returns the left hand side or the right hand side.
 - React will render any number you give it, even zero.
@@ -2505,7 +2505,7 @@ function App({ user }) {
   return (
     <>
       {isLoggedIn && <AdminDashboard />}
-      {!isLoggedIn && <p>Please lonin first</p>}
+      {!isLoggedIn && <p>Please login first</p>}
     </>
   );
 }
@@ -2517,7 +2517,7 @@ function App({ user }) {
 - Same code above, with ternary
 
 ```JAVASCRIPT
-funtion App({ user }) {
+function App({ user }) {
   const isLoggedIn = !!user;
 
   return (
@@ -2532,7 +2532,7 @@ funtion App({ user }) {
 ```
 
 - Ternary operator has been part of JS since IE 3 in 1996!
-- It rose to prominence with React, because it allows us to embed the if/else logic wihtin out JSX. Because a ternary opertor is an opertor instead fo a statement, it can be used inside JS expressions.
+- It rose to prominence with React, because it allows us to embed the if/else logic within out JSX. Because a ternary operator is an operator instead fo a statement, it can be used inside JS expressions.
 
 - It consists of three parts:
 
@@ -2580,9 +2580,9 @@ function Friend({ name, isOnline }) {
 - In a large enough app, it can be beneficial to conditionally render to reduce the number of DOM nodes at any given time.
 - The down side, adding DOM nodes can be a much slower task than toggling a CSS property.
 
-- But in most cases the perforance differences are so small, does not matter.
+- But in most cases the performance differences are so small, does not matter.
 
-- Suggest: use conditional rendering by default, test on low end devices, is something seems laggy, try an alternative approach.
+- Suggest: use conditional rendering by default, test on low end devices, is something seems slow, try an alternative approach.
 
 #### Exercises
 
@@ -2685,7 +2685,7 @@ function App() {
 export default App;
 ```
 
-- Added another expression slot after the name, with the logical `&&` operator, if `inOnline` is true, it will return the `VisuallyHidden` componennt.
+- Added another expression slot after the name, with the logical `&&` operator, if `inOnline` is true, it will return the `VisuallyHidden` component.
 
 ```JAVASCRIPT
 import VisuallyHidden from './VisuallyHidden';
@@ -2748,7 +2748,7 @@ export default VisuallyHidden;
 
 ##### Exercises, User Profile with Badges
 
-- Most social sites have community badges, awards for people who acheive certain goals.
+- Most social sites have community badges, awards for people who achieve certain goals.
 - In this exercise, we want to update a set of user profiles to conditionally render some badges. For users who have no badges, the section will be omitted.
 
 - The markup for the badges, looks like:
@@ -2924,7 +2924,7 @@ export default StarRating;
 
 ##### A functional alternative
 
-- An alternative approach is the `range` funtion.
+- An alternative approach is the `range` function.
 - `range` is a utility function. It is not part of the JS language. but it is in utility libraries like [lodash](https://lodash.com/).
 
 - Examples to create an array
@@ -2972,10 +2972,10 @@ function StarRating({ rating }) {
 - Then use the `.map` trick to iterate over that array, creating a copy of our star image for each one.
 - For the `key` prop, we use the number generated within teh array, since we know it's unique.
 
-##### Range funtion code
+##### Range function code
 
 - Code for the `range` function.
-- You can either inlude this in your `utils.js` or load from [lodash](https://lodash.com/docs/4.17.15#range).
+- You can either include this in your `utils.js` or load from [lodash](https://lodash.com/docs/4.17.15#range).
 
 ```JAVASCRIPT
 const range = (start, end, step = 1) => {
@@ -3021,10 +3021,10 @@ const range = (start, end, step = 1) => {
 
 - AC's
 - 1. Use the template for a `Grid` component, which will be provided with a `numRows` prop for the number of rows, and a `numCols` prop for the number of columns.
-- 2. There shold be X divs with a class of `row`, where X is equal to the `numRows` prop.
+- 2. There should be X divs with a class of `row`, where X is equal to the `numRows` prop.
 - 3. Inside each `row`, there should be Y divs with a class of `cell`, where Y is equal to the `numCols` prop.
 - 4. You should use the provided `range` function to solve this problem.
-- 5. There shouldn't be any key-related warnings in the console. Youc an assume that the grid is "static", with no plans to support reordering the rows or cells.
+- 5. There shouldn't be any key-related warnings in the console. You an assume that the grid is "static", with no plans to support reordering the rows or cells.
 
 - Starter code:
 
@@ -3096,12 +3096,12 @@ export default Grid;
 
 ### Styling in React
 
-- React is unpoinionated when it comes to styling. As a results, dozens of options when it comes to using CSS with React.
+- React is un-opinionated when it comes to styling. As a results, dozens of options when it comes to using CSS with React.
 
-- Technically, you can do things the traditional way. Bunch of CSS files and incude them as a `<link>` in your `index.html`.
+- Technically, you can do things the traditional way. Bunch of CSS files and incudes them as a `<link>` in your `index.html`.
 
 - 🤔 Thinking in Components
-- The core idea with components is taht each compoent is a bundle of markup (in JSX)
+- The core idea with components is that each component is a bundle of markup (in JSX)
   - Logic in JS
   - Styles in CSS
   - Markup in HTML
@@ -3111,7 +3111,7 @@ export default Grid;
 
 #### CSS Modules
 
-- Let' build a component, called "Sidenote", a callout to hold tangential information.
+- Let' build a component, called "Side note", a call out to hold tangential information.
 - Here is a rough sketch of the markup
 
 ```JAVASCRIPT
@@ -3160,7 +3160,7 @@ export default Sidenote;
 ```
 
 - It is strange that you can import a css file, from a JS file. This is being done with the power of tooling, webpack
-- Also, note how super short and generic, `.wrapper` for example is typically used througout an application. A top level element.
+- Also, note how super short and generic, `.wrapper` for example is typically used throughout an application. A top level element.
 - Surely you cannot just name things `.wrapper`, it will collide with other styles named `.wrapper`.
 - The power of CSS modules, in the example above, log out styles and see what you get.
 - What you get is an object where the keys, are the short names you defined in the `CSS` file.
@@ -3174,7 +3174,7 @@ export default Sidenote;
 ```
 
 - However, notice they have a prefix, of a bunch of stuff. Where is this coming from?
-- 🚀 This prefix, is what **gaurantees the uniqueness**.
+- 🚀 This prefix, is what **guarantees the uniqueness**.
 - If you inspect you element, you will see the final output, of the class names, are prefixed.
 
 ```HTML
@@ -3190,13 +3190,13 @@ export default Sidenote;
 - It tells Webpack to
   - Create longer names for each style.
   - Inject them into the `<head>` of our document.
-  - And producing the `styles` object, so we can use the styles in our compoennt `className={styles.wrapper}`
+  - And producing the `styles` object, so we can use the styles in our component `className={styles.wrapper}`
 
 - We get all the benefits of the naming convention BEM, without having to manually do it. All the hard stuff just happens.
 - How is the prefix defined? It is using the file path, and converting it into the prefix. `/components/Sidenote.module.css` gets converted to the prefix for each style. `_components_Sidenote_module__wrapper`
 - **You will never have a collision, because you can never have two files with the same name.**
 
-- Other tools do the same thing, like `styled compoennts` but has a learning curve.
+- Other tools do the same thing, like `styled components` but has a learning curve.
 - The nice thing about CSS Modules, it's a lot like writing vanilla CSS.
 
 #### Exercises, CSS Modules
@@ -3220,7 +3220,7 @@ export default Sidenote;
 
 - The `wrapper` class contains a shared style. The `type` class like `notice`, `success` contains teh category specific styles.
 
-- In this exerciese, you will iimipelemnt this pattern using CSS modules. The task is to apply the correct class name base on the `type` prop.
+- In this exercises, you will implement this pattern using CSS modules. The task is to apply the correct class name base on the `type` prop.
 
 - AC's
 - All sidenotes should have the `wrapper` class applied.
@@ -3283,7 +3283,7 @@ export default Sidenote;
 }
 ```
 
-- To add multiple classes, use a template string literal to combine, concatanate.
+- To add multiple classes, use a template string literal to combine, concatenate.
 - The store that into a variable, and pass into your `className={sideNoteClasses}` with an expression slot.
 
 ```JAVASCRIPT
@@ -3306,9 +3306,9 @@ export default Sidenote;
 
 - ℹ️ When to use square brackets?
 - What is the difference between `styles[type]` and `styles.type`. When do we use dot and when do we use square brackets?
-- When we use square brackets, we create an "expression slot". We can put any JS expression we want in there, and it will resolve that expressoin to a key.
+- When we use square brackets, we create an "expression slot". We can put any JS expression we want in there, and it will resolve that expression to a key.
 
-- Dot notation has become the standard way of doing things if we know the exact name of they key we want to loook up.
+- Dot notation has become the standard way of doing things if we know the exact name of they key we want to look up.
 - But most times, it's tucked away in a variable:
 
 ```JAVASCRIPT
@@ -3362,7 +3362,7 @@ export default Movie;
 ```
 
 - My Attempt:
-- I used the Logical AND `&&` opertator on the rating to display the class. Then passed that into an expression slot.
+- I used the Logical AND `&&` operator on the rating to display the class. Then passed that into an expression slot.
 
 ```JAVASCRIPT
 import React from 'react';
@@ -3421,7 +3421,7 @@ export default Movie;
 </span>
 ```
 
-- ℹ️ Class utilities: The `className` prop expects a string, this string can include multiple classes, seperated by spaces.
+- ℹ️ Class utilities: The `className` prop expects a string, this string can include multiple classes, separated by spaces.
 - We can dynamically create this string using String Interpolation.
 
 ```JAVASCRIPT
@@ -3460,7 +3460,7 @@ import clsx from 'clsx';
 - The modern web is interactive. The app can respond to user actions in real time. Without the need to fetch the whole page.
 
 - In this module:
-  - How to respond to user acitons with event binding.
+  - How to respond to user actions with event binding.
   - How React manages the DOM for us, and what it means to re-render.
   - The `useState` hook and how to use it to build interactive components.
   - Understand the difference between props and state.
@@ -3478,10 +3478,10 @@ import clsx from 'clsx';
 - These events are important when building dynamic applications, we will listen for these events and use them to trigger state changes.
 - When the use clicks on "X" button, we dismiss teh prompt, when user submits the form, we show a loading spinner.
 
-- In order to respond to an event, we need to listent for it. JS already provides a built in way to do this, `addEventListener` method:
+- In order to respond to an event, we need to listen for it. JS already provides a built in way to do this, `addEventListener` method:
 
 ```JAVASCRIPT
-cosnt button = document.querySelector('.btn');
+const button = document.querySelector('.btn');
 
 function doSomething() {
   // stuff here
@@ -3491,9 +3491,9 @@ button.addEventListener('click', doSomething);
 ```
 
 - In the code above, we are listening for a specific event `click` targeting a specific element `btn`. We have a function to handle this event `doSomething`.
-- When the user cicks on this particular button, your handler function will be invoked, allowing us to do something in response.
+- When the user clicks on this particular button, your handler function will be invoked, allowing us to do something in response.
 
-- The web platform offers another way to do this. We can embed our hadler right in the HTML
+- The web platform offers another way to do this. We can embed our handler right in the HTML
 
 ```HTML
 <button onclick="doSomething()">
@@ -3504,7 +3504,7 @@ button.addEventListener('click', doSomething);
 - Rect piggybacks on this pattern, allowing us to pass an event handler right into the JSX:
 
 ```JAVASCRIPT
-funtion App() {
+function App() {
   function doSomething() {
     // Stuff here
   }
@@ -3519,12 +3519,12 @@ funtion App() {
 
 - As with the `addEventListener`, this code will do the same thing: when use clicks on the button, the `doSomething` function is called.
 
-- **This is the recommeded way to handle events in React.**
+- **This is the recommended way to handle events in React.**
 - Try and use the "onX" props like `onClick` and `onChange` when possible.
 
 - Few reasons why:
-  - **Automatic cleanup:** When we use an event listener, we supposed to remove it when we are done, with `removeEventListener`. If we forget to do this, we introduce a memory leak. React automatically removes listners when we use 'on X' handler functions.
-  - **Improved performance:** React can optimize thigns for use, like batching multiple event listeners together to reduce the memory consumption.
+  - **Automatic cleanup:** When we use an event listener, we supposed to remove it when we are done, with `removeEventListener`. If we forget to do this, we introduce a memory leak. React automatically removes listeners when we use 'on X' handler functions.
+  - **Improved performance:** React can optimize things for use, like batching multiple event listeners together to reduce the memory consumption.
   - **No DOM interaction:** Avoid interacting with the DOM directly.
 
 - ℹ️ One of the core ideas behind React, is that is does the DOM manipulation for you. Stay within React's abstraction rather than trying to compete with it to manage the DOM.
@@ -3541,7 +3541,7 @@ funtion App() {
 
 ##### Passing a function reference
 
-- When working wiht event handlers in React, we need to pass a reference to the function. We don't call the function like we do in HTML:
+- When working with event handlers in React, we need to pass a reference to the function. We don't call the function like we do in HTML:
 
 ```HTML
 // ✅ We want to do this:
@@ -3551,15 +3551,15 @@ funtion App() {
 <button onClick={doSomething()} />
 ```
 
-- When we include the parentheses, we invoke th function right away, the moment the React app is rendered. We want to give React a reference to the function, so React can call it at a later time, when the user clicks on the buton.
+- When we include the parentheses, we invoke th function right away, the moment the React app is rendered. We want to give React a reference to the function, so React can call it at a later time, when the user clicks on the button.
 
 #### Specifying Arguments
 
-- Here is the thing, what if we want to specify an arguemnt to a function?
+- Here is the thing, what if we want to specify an argument to a function?
 
 - For example, if you wanted to make a function called `setTheme`, and we use it to change the user's color theme from Light Mode, to Dark Mode.
 
-- To do this, we need to supplyt he name of the theme we are switching to, like this:
+- To do this, we need to supply he name of the theme we are switching to, like this:
 
 ```JAVASCRIPT
 // Switch to light mode:
@@ -3607,10 +3607,10 @@ setTheme('dark');
 
 - The goal of the game is to click the ball, to show an alert when the ball is clicked:
 
-- We can us the `window.aletr()` to show the message.
+- We can us the `window.alert()` to show the message.
 - AC's
   - When the user click on the ball, a winning message should be shown.
-  - You should handle 'click' events speficically, as this even is triggered on click, on tap, or even when a user focuses on teh elemetn with the keyboard and hits "Enter" Key
+  - You should handle 'click' events specifically, as this even is triggered on click, on tap, or even when a user focuses on teh element with the keyboard and hits "Enter" Key
     - If you don't use a pointer device, you can use the keyboard method to test your code.
 
 ```JAVASCRIPT
@@ -3636,7 +3636,7 @@ export default ClickBallGame;
 ```
 
 - Solution:
-- ℹ️ You can write as a seperate function, especially is you have multiple expressions inside your function.
+- ℹ️ You can write as a separate function, especially is you have multiple expressions inside your function.
 
 ```JAVASCRIPT
 import React from 'react';
@@ -3686,7 +3686,7 @@ export default ClickBallGame;
 - Now, in addition to the ball, it now has a bomb. If the bomb is clicked, we want to show a 'lose' message.
 - The problem with the started code, clicking on either the item, the ball or bomb, it shows the 'lose' message.
 
-- You mission, if you choose it, it to fix the code so that i thows the right message depending on which item is clicked.
+- You mission, if you choose it, it to fix the code so that i throws the right message depending on which item is clicked.
 
 - AC's
   - When the user clicks the ball, a winning message should be shown.
@@ -3792,7 +3792,7 @@ export default Counter;
 - State is used for values that change over time.
 
 - To create a state variable, we use the `useState` function.
-- This funtion takes a single argument: the initial value. In this case, that value is `0`. The value is chosen because when the page first loads, we clicked the button 0 times.
+- This function takes a single argument: the initial value. In this case, that value is `0`. The value is chosen because when the page first loads, we clicked the button 0 times.
 
 - `useState` is a **hook**. A hook is a special type of function that allows us to 'hook into' React internals.
 
@@ -3801,7 +3801,7 @@ export default Counter;
 1. The current value of the state variable. We've decided to call it `count`, this can be whatever you want to name it.
 2. A function we can use to update the state variable. We named it `setCount`. It's best practice to pre-pend the `set` to the function.
 
-- ℹ️ Destructing Assignment, below is the same thing as the above `const [count, setCount]` we are descructuring `count` and `setCount`.
+- ℹ️ Destructing Assignment, below is the same thing as the above `const [count, setCount]` we are destructuring `count` and `setCount`.
 
 ```JAVASCRIPT
 const countArray = React.useState(0);
@@ -3823,7 +3823,7 @@ const [errorMessage, setErrorMessage] = React.useState();
 const [flowerBouquet, setFlowerBouquet] = React.useState();
 ```
 
-- `user` The first desctuctured variable si the name of the thing we are tracking.
+- `user` The first destructured variable si the name of the thing we are tracking.
 - `setUser` The second variable prefixes that name with the `set`, specifying it's a function that can be called to change the thing. This is sometimes referred to as a "setter function", since it sets the new value of teh state variable.
 
 - ℹ️ Importing the hook?
@@ -3840,7 +3840,7 @@ const [count, setCount] = React.useState(1);
 console.log(count);
 ```
 
-- We can also supply a function. React will cal lthis function on the very first render to valculate the initial value:
+- We can also supply a function. React will call this function on the very first render to evaluate the initial value:
 
 ```JAVASCRIPT
 const [count, setCount] = ReactuseState(() => {
@@ -3858,7 +3858,7 @@ const [count, setCount] = React.useState(() => {
 });
 ```
 
-- The benefit here is taht we are only doing the expensive work (redon from localStorage) once, on the intial render, rather than doing it on every single render.
+- The benefit here is that we are only doing the expensive work (redon from localStorage) once, on the initial render, rather than doing it on every single render.
 
 - In a later lesson, discuss localStorage
 
@@ -3899,7 +3899,7 @@ function run() {
 ```
 
 - Now, when I call the `run` function, nothing is logged to the console. That's because the `console.log` is wrapped up in an inner function, `sayHi`.
-- Everytime we call the `run` function, we are creating a breand new `sayHi` function, but never calling it.
+- every time we call the `run` function, we are creating a brand new `sayHi` function, but never calling it.
 
 #### Core React Loop
 
@@ -4028,7 +4028,7 @@ button.innerText = "Value: 1";
 
 - Even in web frameworks, the definition is pretty consistent.
 
-- In React, however the term "render" means somethign slighly different. I think so much of the confusion in React comes from this misunderstanding.
+- In React, however the term "render" means something slightly different. I think so much of the confusion in React comes from this misunderstanding.
 
 - In this example:
 
@@ -4047,7 +4047,7 @@ function AgeLimit({ age }) {
 ```
 
 - Our `AgeLimit` component check an `age` prop and returns one of two paragraphs.
-- Now, let's suppose we re-render this compoennt, and wind up with the following before/after pair of snapshots:
+- Now, let's suppose we re-render this component, and wind up with the following before/after pair of snapshots:
 
 ```JAVASCRIPT
 age: 16
@@ -4077,31 +4077,31 @@ age: 17
 - As a result, *no DOM mutation* happens at all.
 
 - When we talk about 're-rendering', we are saying to check it anything's changed.
-- 💡 If we spot a difference between snapshots, React will need to update the DOM, but it will be a pricisely-targeted minimal change. 💡
+- 💡 If we spot a difference between snapshots, React will need to update the DOM, but it will be a precisely-targeted minimal change. 💡
 
-- When React deos cahnge a part of the DOM, teh browser will need to re-paint. A re-paint is when the pixels on the screen are re-drawn because a part of the DOM was mutated.
+- When React does change a part of the DOM, teh browser will need to re-paint. A re-paint is when the pixels on the screen are re-drawn because a part of the DOM was mutated.
 
 - This is done natively by the browser when teh DOM is edited with JS, whether by React, Angular, jQuery, vanilla JS, etc.
 
-To Summerize: 🚀 React Re-Rendering
+To Summarize: 🚀 React Re-Rendering
 
 - A **re-render** is a React process where we figure out what needs to change, AKA reconciliation, to spot the difference between snapshots.
 
-- If somethign has changed betweent eh two snapshots, React will "commit" those changes by deiting the DOM, so that it matches the latest snapshot.
+- If something has changed between eh two snapshots, React will "commit" those changes by deleting the DOM, so that it matches the latest snapshot.
 
 - Whenever a SOM node is edited, the browser will re-paint, re-drawing the relevant pixel so that the user sees the correct UI.
 
 - **No all re-renders require re-paints!** If nothing has changed between snapshots, React won't edit any DOM nodes, and nothing will be re-painted.
 
-- 👀 The critical thing to understand si taht when we talk about re-rendering, we are not sayign that we should throw away the current UI and re-biuld everythign from scratch.
+- 👀 The critical thing to understand si that when we talk about re-rendering, we are not saying that we should throw away the current UI and re-build everything from scratch.
 
-- React ties to keep the re-painting to a minimum, because re-painting is slow. Instead of generating a bunch of new DOM notes from scratch (lots of painting), it figures out what's changed between snapshots and make the requried tweaks with surgical precision.
+- React ties to keep the re-painting to a minimum, because re-painting is slow. Instead of generating a bunch of new DOM notes from scratch (lots of painting), it figures out what's changed between snapshots and make the required tweaks with surgical precision.
 
 - For more in-depth; see react docs [Render and Commit](https://react.dev/learn/render-and-commit)
 
 #### Asynchronous Updates
 
-- Consider the following code: What value woud you expect to see in the developer console when the user clicks the button for the first time?
+- Consider the following code: What value would you expect to see in the developer console when the user clicks the button for the first time?
 
 ```JAVASCRIPT
 function App() {
@@ -4132,14 +4132,14 @@ function App() {
 - Here is the catch: **state setters are not immediate.**
 
 - When we call `setCount` we tell Rect that we would like to request a change to a state variable.
-- React does not immediately drop everything; it watis until the current operation is completed (processing the click), and then updates the value and triggers a re-render.
+- React does not immediately drop everything; it waits until the current operation is completed (processing the click), and then updates the value and triggers a re-render.
 
 - For now, the thing to remember is that **updating a state variable is asynchronous**. It affects what the state will be for the **next render**. It's a scheduled update.
 
 - Here is how to fix the code, so that we have access to the new value right away:
 
 ```JAVASCRIPT
-cuntion App() {
+function App() {
   const [count, setCount] = React.useState(0);
 
   return (
@@ -4216,7 +4216,7 @@ export default Character;
 - So please, re-render with this new value.
 - Telling React to redo all the work that it has already done, to determine what the UI is.
 - And on the next pass, next render, it should use the new values.
-- When React sees `setStrength(strength + 1);`, React makes a "calendar appointmet" but *it doesn't interupt what it is already doing*, running through the function.
+- When React sees `setStrength(strength + 1);`, React makes a "calendar appointment" but *it doesn't interrupt what it is already doing*, running through the function.
 - **It's going to go through the rest of the function, without changing anything.**
 
 - And the next time we run the function `Character`, the new values will be populated.
@@ -4434,7 +4434,7 @@ function Counter() {
 export default Counter;
 ```
 
-- How do you get the incrementation, if you try in plain JS. You can't, it doesn't persist across function calls.
+- How do you get the increment, if you try in plain JS. You can't, it doesn't persist across function calls.
 
 ```JAVASCRIPT
 function helloWorld() {
@@ -4448,8 +4448,8 @@ helloWorld(); // 1
 helloWorld(); // 1
 ```
 
-- Everytime you call that function, you get the same results, it doens't increment. We re-initialize the variable and increment by one.
-- The incrementation `count + 1` doesn't persist across function calls. JS doesn't give us a way to thread values through function calls.
+- every time you call that function, you get the same results, it doesn't increment. We re-initialize the variable and increment by one.
+- The increment `count + 1` doesn't persist across function calls. JS doesn't give us a way to thread values through function calls.
 
 - Back to React, **Components in React are Functions in JS.**
 - If you think through what the `Counter()` function above does.
@@ -4457,11 +4457,11 @@ helloWorld(); // 1
 ```JAVASCRIPT
 // Start you app
 ReactDOM.render(<App />)
-// Transpiles to
+// Transpile to
 ReactDOM.render(React.createElement(App))
 // Calling this function, get an JS object with all the stuff
 { type: App, props {}}
-// The point is, React is going to envoke the App() function
+// The point is, React is going to evoke the App() function
 // Re-render
 App()
 // Re-render
@@ -4473,11 +4473,11 @@ App()
 
 ```
 
-- The point is, React is going to envoke the `App()` function, everytime we trigger a re-render.
-- Everytime you re-render, it's like a timeline, a snapshot of that component.
-- The variable neeeds to be defined within the component, so every instance can have it's own dynamic state.
+- The point is, React is going to evoke the `App()` function, every time we trigger a re-render.
+- every time you re-render, it's like a timeline, a snapshot of that component.
+- The variable needs to be defined within the component, so every instance can have it's own dynamic state.
 
-- React exist in the confines of JS, and if we define a variable within a component/function, then that variable will be re-initialized everytime we call the function.
+- React exist in the confines of JS, and if we define a variable within a component/function, then that variable will be re-initialized every time we call the function.
 
 ```JAVASCRIPT
 function App() {
@@ -4501,10 +4501,10 @@ function App() {
 
 - The easiest way to think about React, is a series of snapshots over time.
 - When you first call a component, `App()` you get an initial value.
-- Then everytime you call the component after that, you get another snapshot and on and one.
+- Then every time you call the component after that, you get another snapshot and on and one.
 - For each of these snapshot, the `state` variable is being populated within React.
 
-- React doesn't compile to some other langauge, it is always restricted by the rules of JS.
+- React doesn't compile to some other language, it is always restricted by the rules of JS.
 
 ### Forms
 
@@ -4514,9 +4514,9 @@ function App() {
 #### Data Binding
 
 - When building we apps, we want to sync a bit of state to a particular form input.
-- For example, a 'username' fiel dshodl be bound to the value of a `username` state variable.
+- For example, a 'username' field should be bound to the value of a `username` state variable.
 
-- This is commonly known as 'data binding'. Most fornt end frameworks offer a way to bind a particular bit of state to a particular form control.
+- This is commonly known as 'data binding'. Most front end frameworks offer a way to bind a particular bit of state to a particular form control.
 - Here is what it typically looks like in React.
 
 ```JAVASCRIPT
@@ -4657,7 +4657,7 @@ export default SearchForm;
         />
 ```
 
-- In other words, I type in the text box, the event fires, it references the element that trigged the event, and that shows the value the user just entered.
+- In other words, I type in the text box, the event fires, it references the element that triggered the event, and that shows the value the user just entered.
 - And because you are updating the state variable `searchTerm`, and react locks it down, you have updated the `value={searchTerm}` to what the user put in the field.
 
 - The shown value of the input, will always be in sync with whatever the `searchTerm` variable holds.
@@ -4734,8 +4734,8 @@ const [username, setUsername] = React.useState();
 const [username, setUsername] = React.useState('');
 ```
 
-- Wiht this change, our input is being controlled by React state from the very first render, since we are always passing a defined value.
-- Even though empty strings are considered falsy they stil count.
+- With this change, our input is being controlled by React state from the very first render, since we are always passing a defined value.
+- Even though empty strings are considered falsy they still count.
 
 #### The onClick Parable
 
@@ -4768,18 +4768,18 @@ function SearchForm({ runSearch }) {
 export default SearchForm;
 ```
 
-- In this example, `runSearch` is the function we want to call when the suer clicks on the Search button. In a real app, it would make s netwrok request, and update some state with the results.
+- In this example, `runSearch` is the function we want to call when the suer clicks on the Search button. In a real app, it would make s network request, and update some state with the results.
 
 - Here is the question: how should we use this function?
 - A lot of engineers will solve for this by adding an `onClick` handler to the submit button:
 
 ```JAVASCRIPT
-<button onClick={() => runSearch(serchTerm)}>
+<button onClick={() => runSearch(searchTerm)}>
   Search!
 </button>
 ```
 
-- There are a numbe ro fproblems with this approach.
+- There are a number ro problems with this approach.
 - For example, what if the user tries to search by pressing "Enter" after typing in the text input?
 - You could start to do down the path, and put an `onKeyDown` event listener?
 
@@ -4802,7 +4802,7 @@ export default SearchForm;
 
 #### Use a Form
 
-- The path you want to head down, to solve this problem, is to wrap your form contorls in a `<form>` tag.
+- The path you want to head down, to solve this problem, is to wrap your form controls in a `<form>` tag.
 
 - Then, instead of listening for clicks and keys, we can listen for the **form submit event.**
 - See how much simpler the code gets:
@@ -4841,7 +4841,7 @@ export default SearchForm;
 - The form submit event will be called automatically when the suer clicks the button, or presses "Enter" whenever the input or button is focused.
 - When that event fires, we will run our search.
 
-- Instead of trying to re-create a bunch of standard web platform stuff, **we should use the platform native behaviour** and let it solve these sorts of problems for us!
+- Instead of trying to re-create a bunch of standard web platform stuff, **we should use the platform native behavior** and let it solve these sorts of problems for us!
 
 - By using a form submit event, we get to user client-side validation:
 
@@ -4855,7 +4855,7 @@ export default SearchForm;
 
 #### Default form behavior
 
-- One little quick with using `onSubmit`. We need to prevent teh drault submission behavior:
+- One little quick with using `onSubmit`. We need to prevent teh default submission behavior:
 
 ```JAVASCRIPT
 <form
@@ -4868,7 +4868,7 @@ export default SearchForm;
 ```
 
 - To understand why, remember back in the day, before `fetch`, `XMLHttpRequest` and JSON.
-- If you wanted to make a request to a server, like when fetching serach results, you couldn't request only the data. You needed to request a whole new HTML file.
+- If you wanted to make a request to a server, like when fetching search results, you couldn't request only the data. You needed to request a whole new HTML file.
 - The user would be redirected to a new URL, and the sever would render a template into an HTML doc, using the data sent with the request.
 
 - **Forms still operate this way by default.** When you submit a form, the browser will try to send the user to the URL specified by the `action` attribute:
@@ -4885,11 +4885,11 @@ export default SearchForm;
 >
 ```
 
-- If we omit the `action` attribute, the browswer will use the current URL, effectively reloading the page.
+- If we omit the `action` attribute, the browser will use the current URL, effectively reloading the page.
 
 - 👀**In the context of a modern Rect app, this isn't what we want. We do not want to reload the entire page, we want to fetch a bit of data and re-render a few components with that data. This produces a faster, smoother user experience.**👀
 
-- That's why we need to include `event.preventDefault()`. It stops the browswer from exectuting a full page reload.
+- That's why we need to include `event.preventDefault()`. It stops the browser from executing a full page reload.
 
 ### Other Form Controls
 
@@ -4926,20 +4926,20 @@ export default SearchForm;
 </select>
 ```
 
-- Good news, React ha stweked many of these form contorls so they have similar behavior. Lot less chaos with form controls in Rect.
+- Good news, React has tweaked many of these form controls so they have similar behavior. Lot less chaos with form controls in Rect.
 
-- Essentialy all form controls follow the same pattern:
+- Essentially all form controls follow the same pattern:
 
-1. The current vallue is tracked using either `value` (for most inputs) or `checked` (for ccheckboxes and radio).
+1. The current value is tracked using either `value` (for most inputs) or `checked` (for checkboxes and radio).
 2. We respond to changes with the `onChange` event listener.
 
-- 🎁 [Bonus cheatsheet covering all the forms](https://courses.joshwcomeau.com/joy-of-react/02-state/11-bonus-cheatsheet)
+- 🎁 [Bonus cheat sheet covering all the forms](https://courses.joshwcomeau.com/joy-of-react/02-state/11-bonus-cheatsheet)
 
 #### Select Tag
 
 - The `<select>` tag allows the user to select a single option form a list of predefined options.
 
-- When wrokign wtih select tags in React, htey wrok pretty much exaclty like text inputs. We use `value` and `onChange`. Example:
+- When working with select tags in React, they work pretty much exactly like text inputs. We use `value` and `onChange`. Example:
 
 ```JAVASCRIPT
 import React from 'react';
@@ -4954,7 +4954,7 @@ function App() {
     <form>
       <fieldset>
         <legend>
-          What is your favourite color?
+          What is your favorite color?
         </legend>
         
         <select
@@ -4987,10 +4987,10 @@ function App() {
 export default App;
 ```
 
-- By setting the `value` prop, we make this a controlled compoennt, binding the selected option to our React state.
+- By setting the `value` prop, we make this a controlled component, binding the selected option to our React state.
 - When we add the `onChange` event listener, we allow this state to be changed by selecting a different option form the list.
 
-- This feels like a huge improvement, compared to default functionality of this form control. We don't ahe to mess wtih adding the `selected` attribute to one of the `<option>` children.
+- This feels like a huge improvement, compared to default functionality of this form control. We don't ahe to mess with adding the `selected` attribute to one of the `<option>` children.
 
 #### Radio Buttons
 
@@ -5052,9 +5052,9 @@ export default App;
 ```
 
 - Radio has a ton of properties.
-- `name` - The browser needs to knwo taht each button is part of the same group, so selecting one option will de-select the others. This is done with the `name` prop. Each radio button ina gruop should sahre the same `name`.
+- `name` - The browser needs to know that each button is part of the same group, so selecting one option will de-select the others. This is done with the `name` prop. Each radio button ina group should share the same `name`.
 - `value` - Each radio button has its own value. This property will be copied over to our React state when the option is ticked. This is the definition / meaning for each radio button.
-- `id` - like other form contorls, this is needed so that the `<label>` can be associated wtiht he right input, so that clicking the label focuses the input.
+- `id` - like other form controls, this is needed so that the `<label>` can be associated with he right input, so that clicking the label focuses the input.
 - `checked` - This is the prop that binds a given radio button to our React state, making it a controlled value. It should be set to a boolean value: `true` if it's ticked, `false` if it is not. Only one radio button should be set to `true` at a time.
 
 - In most cases we bind React state to `value`. In this case, we don't have a single `value` prop to bind to, since we have multiple radio buttons.
@@ -5068,9 +5068,9 @@ export default App;
 
 - AC's
 - Use the `COUNTRIES` constant to dynamically generate a th set of `<option>` elements.
-  - In order to map over an objec,t you will need to use  soemthing like Object.keys() or Object.entries()
+  - In order to map over an object,t you will need to use  something like Object.keys() or Object.entries()
 - There should be a 'blank' option, selected by default. It shouldn't default to the first country in the list.
-- The indicator at the bottom shoudl update when the user changes their selected country.
+- The indicator at the bottom should update when the user changes their selected country.
 - No warnings in the dev console.
 
 ```JAVASCRIPT
@@ -5126,14 +5126,14 @@ export default App;
 - Use `Object.entries(COUNTRIES)` to get the data.
 - `countryNames` is an array of arrays. Every array inside has exactly two items. First one is the ID, key of the object, and the second item is the value.
 - The ID, keys are the unique identifier for each country. This is what we are going to use in our React state.
-- Then you can use that with `map()` to interate over all the countries.
-- And use desctructuring, to get variables the array.
-- Remember, `countryName` is an array of an array, and every array has exaclty two items. `['US', 'United States']`
+- Then you can use that with `map()` to iterate over all the countries.
+- And use destructuring, to get variables the array.
+- Remember, `countryName` is an array of an array, and every array has exactly two items. `['US', 'United States']`
 - First item is going to be the country code, `'CA'`
 - Second item is the country label, like `'Canada'`
 
 ```JAVASCRIPT
-// ['CA', 'Canada'], you can desctrucutre that data and use it in your function.
+// ['CA', 'Canada'], you can destructure that data and use it in your function.
 countryNames.map(([id, label]) => {
   return (
     <option>
@@ -5181,7 +5181,7 @@ onChange={event => {
   >
 ```
 
-- Setting an intial value, empty string, `React.useState('')`
+- Setting an initial value, empty string, `React.useState('')`
 - In the `select` add an option for the empty / default
 
 ```JAVASCRIPT
@@ -5296,7 +5296,7 @@ export default App;
 - AC's
   - The input value should be held in React state.
   - When the user submits their code, a `window.alert` should let them know whether it's correct or not, by comparing their submitted value with teh `CORRECT_CODE` constant.
-  - A `<form>` tag shoul dbe used.
+  - A `<form>` tag should dbe used.
 
 - Hint: You need to mange default behavior.
 
@@ -5336,7 +5336,7 @@ export default TwoFactor;
   const [code, setCode] = React.useState('');
 ```
 
-- When the user submits their ocode,a `window.alert` should let them know whether it's correct or not, by comparing their submitted vallue with the `CORRRECT_CODE` constant.
+- When the user submits their code,a `window.alert` should let them know whether it's correct or not, by comparing their submitted value with the `CORRRECT_CODE` constant.
 
 ```JAVASCRIPT
     if (code === CORRECT_CODE) {
@@ -5403,14 +5403,14 @@ export default TwoFactor;
 ```
 
 - Josh's solution:
-- Creates a seperate function for the submit.
+- Creates a separate function for the submit.
 
 ```JAVASCRIPT
   function handleSubmit(event) {
     // prevent the default behavior browser refresh
     event.preventDefault();
     // Creates a boolean value
-    const isCorrrect = code === CORRECT_CODE;
+    const isCorrect = code === CORRECT_CODE;
     window.alert(isCorrect ? 'Correct!' : 'Incorrect');
   }
 
@@ -5424,17 +5424,17 @@ export default TwoFactor;
 ### Exercise, Generative Art
 
 - Build some generative art in this exercise.
-- Wire up the form controls to the Rect state so when update the forms, they will twekak the art.
+- Wire up the form controls to the Rect state so when update the forms, they will tweak the art.
 
 - AC's
 
 1. The range slider should be bound to the `numOfLines` state.
-2. The select control should be boud to the `colorTheme` state.
-3. The radio buttons should be boud to the `shape` state.
+2. The select control should be bound to the `colorTheme` state.
+3. The radio buttons should be bound to the `shape` state.
 4. The radio button labels should work correctly. The user should be able to click the text "Polygons" to select that option.
 5. The inputs should conform to the HTML standards, eg. radio buttons should be grouped using the "name attribute.
 
-- Note: All change shoudl happen in the `App.js.`
+- Note: All change should happen in the `App.js.`
 
 - My attempt:
 
@@ -5462,7 +5462,7 @@ export default TwoFactor;
     />
 ```
 
-2. The select control should be boud to the `colorTheme` state.
+2. The select control should be bound to the `colorTheme` state.
 
 ```JAVASCRIPT
 // React state: const [colorTheme, setColorTheme] = React.useState('basic');
@@ -5487,8 +5487,8 @@ export default TwoFactor;
       <option value="monochrome">
         Monochrome
       </option>
-      <option value="froot-loops">
-        Froot Loops
+      <option value="fruit-loops">
+        Fruit Loops
       </option>
       <option value="spooky">
         Spooky Night
@@ -5496,9 +5496,9 @@ export default TwoFactor;
     </select>
 ```
 
-3. The radio buttons should be boud to the `shape` state.
+3. The radio buttons should be bound to the `shape` state.
 
-- For radio buttons, use the `checked` property to manage the state. We are saying that this input should be checked if a certian condition is true. Add a condition on the `checked` property. `checked={shape === "circles}` then this input/radio should be checked.
+- For radio buttons, use the `checked` property to manage the state. We are saying that this input should be checked if a certain condition is true. Add a condition on the `checked` property. `checked={shape === "circles}` then this input/radio should be checked.
 
 ```JAVASCRIPT
     <div className="radio-wrapper">
@@ -5568,8 +5568,8 @@ export default TwoFactor;
 
 ## Prop Vs. State
 
-- When learrning React it is normal for the concepts of "props" and "state" to be a bit confusing and intermingled.
-- Waht is the difference between them exactly? When do you use props and when to use state?
+- When learning React it is normal for the concepts of "props" and "state" to be a bit confusing and intermingled.
+- What is the difference between them exactly? When do you use props and when to use state?
 
 ### Props
 
@@ -5582,7 +5582,7 @@ export default TwoFactor;
   >
 ```
 
-- For exampke, the `Button` component below takes a "variant" prop. This prope will be used internally to control styleing, like how the `class` attribute works in HTML.
+- For example, the `Button` component below takes a "variant" prop. This prop will be used internally to control styling, like how the `class` attribute works in HTML.
 
 ```JAVASCRIPT
     import Button from './Button';
@@ -5608,13 +5608,13 @@ export default TwoFactor;
     export default App;
 ```
 
-- Props allow us to customize behaviour of a given component, so the exact same component can do different things in different scenarios.
+- Props allow us to customize behavior of a given component, so the exact same component can do different things in different scenarios.
 
 - 🚀 **Props are the inputs to our components, like arguments passed to a function.**
   
 ### State
 
-- In the example above, our application is static. Everytime we run this code, we get the same results.
+- In the example above, our application is static. every time we run this code, we get the same results.
 - But what if we wanted stuff to change over time? **That's where state comes in.**
 
 - Let's tweak our example:
