@@ -5680,3 +5680,26 @@ export default TwoFactor;
 - Props are basically a subway network, a system of tunnels we can use to funnel data around.
 
 ## Complex State
+
+- So far we have seen how store numbers and strings in React state. Most times, our state will be in a more complex shape, ike an object or an array.
+
+- For example; in the previous exercise, the gradient generator tool where users select 2 to 5 colors, and use state to generate a gradient.
+- How to you keep track of the state for the colors?
+
+- In this case, the `colors` state variable, hold an array of strings:
+
+```JAVASCRIPT
+  const [colors, setColors] = React.useState(['#FFD500', '#FF0040']);
+```
+
+- React doesn't care what type out state is. We can store numbers or strings or arrays or objects. We can even store functions in state if we want!
+
+- 👀 But there's a catch, React state changes have to be immutable.
+- When we call `setColors`, we need to provide a brand new array.
+- **We should never mutate arrays or objects help in state**
+
+- Immutability is a big topic in JS. You can see the lesson in the JS primer, [Assignment vs. Mutation](https://courses.joshwcomeau.com/joy-of-react/10-javascript-primer/11-assignment-vs-mutation)
+
+### Mutation Bugs
+
+- Video summary
