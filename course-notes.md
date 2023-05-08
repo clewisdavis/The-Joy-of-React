@@ -5702,4 +5702,40 @@ export default TwoFactor;
 
 ### Mutation Bugs
 
-- Video summary
+- Video summary:
+- In our color picker example, we are unable to choose the colors.
+- The problem, when we use complex state, with arrays or objects, we have to specify a new array.
+- Otherwise, React doesn't think we changed anything.
+**- React uses, reference equality as a way to check if something has changed.**
+- React will check, is the object or array you are passing me, the same entity, the same reference, if it is, React does not re-render. React figures it is intentional.
+
+- Refresher: equality, objects, memory, pointers, really important to have a firm grasp on these concepts.
+- For this exercise, startup a node console to explore these concepts. New terminal, `node`
+
+- Create a new array
+
+```JAVASCRIPT
+  let arr = [1, 2, 3, 4]
+```
+
+- Then create a new variable called `nextArr` and assign it to `arr`
+
+```JAVASCRIPT
+  let nextArr = arr;
+```
+
+- Then, take `nextArr` and modify the first value to be equal to 5
+
+```JAVASCRIPT
+  nextArr[0] = 5
+```
+
+- Now, the question is, what is the value of `arr`? You might think, the value is the same, because you didn't change `arr`, you changed `nextArr`
+- But when you check the value of `arr`, is has the new initial value of 5. `[5, 2, 3, 4]`
+- In fact, `nextArr === arr` is `true`, exactly equal to each other.
+- What is going on here in JS? We don't have to think about the high level memory storage. In JS, whenever we write a variable, it makes a physical change in the computer, stores it in RAM.
+- And the variable is just a pointer to that.
+
+- For example; our `arr` variable, just points to this array held in memory.
+- And when you say, `let nextArr = arr;`, we are not creating a new array, you are just pointing `arr` and `nextArr` to the same thing, same array.
+- 4:26
