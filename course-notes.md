@@ -5738,4 +5738,39 @@ export default TwoFactor;
 
 - For example; our `arr` variable, just points to this array held in memory.
 - And when you say, `let nextArr = arr;`, we are not creating a new array, you are just pointing `arr` and `nextArr` to the same thing, same array.
-- 4:26
+- Both variables point to the same entity that exist in memory.
+- When we change an item in `nextArr`, we are changing the same item, we are not creating a clone of it.
+
+- If you take two arrays, with the exact same value, are they equal?
+
+```JAVASCRIPT
+  [1, 2, 3] === [1, 2, 3]
+  // false
+```
+
+- This is `false` because you have two separate arrays.
+**- The way JS works, you have objects in memory, and variables that point to them**
+
+- What if you wanted to create a copy with the same values?
+- You can use the spread operator `...`, this will copy the contents of the array.
+
+```JAVASCRIPT
+  let betterCloneArr = [...arr]
+  // [ 5, 2, 3, 4 ]
+```
+
+- This works not matter how many values you have, it is unpacking the array into the new `betterCloneArr` variable.
+- And it's creating a new array
+- Now notice, `betterCloneArr` is not equal to `arr`
+
+```JAVASCRIPT
+  betterCloneArr === arr
+  // false
+```
+
+- 👀 JS Primer on the [Spread operator](https://courses.joshwcomeau.com/joy-of-react/10-javascript-primer/12-rest-spread)
+- And a good blog post, [visual reference to JS](https://daveceddia.com/javascript-references/)
+
+- In our color picker example, all that matters is that React gets a new object and does the re-render.
+
+### Never mutate React state (even when it seems to work)
