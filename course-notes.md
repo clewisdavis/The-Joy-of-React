@@ -5774,3 +5774,47 @@ export default TwoFactor;
 - In our color picker example, all that matters is that React gets a new object and does the re-render.
 
 ### Never mutate React state (even when it seems to work)
+
+- In the example, we follow these steps
+
+1. Create a new array
+2. Modify that new array
+3. Set the new array into state
+
+- Is it OK to flip the order of the first two steps? What is we modify the array, then clone it? Like this:
+
+```JAVASCRIPT
+  <input
+  onChange={event => {
+    // Mutate the array:
+    colors[index] = event.target.value;
+
+    // Create a new copy, and set it into state:
+    setColors([...colors]);
+  }}
+/>
+```
+
+- Seems simpler, right? Make whatever modifications we want, and then copy the array right before we call `setColors`, so that we are providing a new value.
+
+- **Here is the problem**. By doing it this way, we are modifying the values held in React state.
+- React really doesn't expect us to do this, and has no guardrails in place to warn us if we try.
+
+- You might get lucky and get away with it once, but if you make a habit of it, you will likely start getting weird / glitchy behavior.
+- A random part fo the page won't be updated when supposed to. Or maybe the DOM structure will get shuffled, putting elements in different parts of the DOM.
+
+- These bugs are really hard to diagnose and fix, you will save yourself a whole lot of trouble if you do your best to avoid mutating React state.
+
+### But isn't' this inefficient?  
+
+- To create brand new arrays on every single change, isn't that inefficient? Wouldn't it be more performant to mutate the existing array instead?
+- When it comes to React state, these is no choice; we need to produce a new array whenever the state changes.
+
+- Fortunately, this isn't an issue. Cloning an array is an incredibly quick operation.
+
+- In our color gradient picker example, when we clone the `[...colors]` array, it takes about 2 microseconds.
+- That's two millionths of a second. For context, the average human blink is 100 milliseconds; we could clone 50,000 arrays in the blink of an eye.
+
+### Exercises, Complex State
+
+-
