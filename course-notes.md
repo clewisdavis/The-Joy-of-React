@@ -5817,4 +5817,13 @@ export default TwoFactor;
 
 ### Exercises, Complex State
 
+- Working on the gradient generator tool! Instead of limiting the user to 2 colors, let's ad up to 5 colors.
+
+- AC's
+  - The color inputs should work; picking a new color should update the gradient accordingly.
+  - Clicking "Add color" should add a new color, at the end of the array.
+  - Clicking "Remove color" should remove the last color in the array.
+  - When adding new colors, they should default to `FF0000` bright red.
+  - There should always be between 2 and 5 colors. No more, no less. The user should be given feedback as to why the buttons stop working once they hit a limit.
+
 -
