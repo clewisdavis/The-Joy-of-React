@@ -5826,4 +5826,115 @@ export default TwoFactor;
   - When adding new colors, they should default to `FF0000` bright red.
   - There should always be between 2 and 5 colors. No more, no less. The user should be given feedback as to why the buttons stop working once they hit a limit.
 
--
+- Starter code, gradient picker
+
+```JAVASCRIPT
+// App.js
+import React from 'react';
+function App() {
+  const [colors, setColors] = React.useState([
+    '#FFD500',
+    '#FF0040',
+  ]);
+  
+  const colorStops = colors.join(', ');
+  const backgroundImage = `linear-gradient(${colorStops})`;
+
+  return (
+    <div className="wrapper">
+      <div className="actions">
+        <button>
+          Remove color
+        </button>
+        <button>
+          Add color
+        </button>
+      </div>
+      
+      <div
+        className="gradient-preview"
+        style={{
+          backgroundImage,
+        }}
+      />
+      
+      <div className="colors">
+        {colors.map((color, index) => {
+          const colorId = `color-${index}`;
+          return (
+            <div key={colorId} className="color-wrapper">
+              <label htmlFor={colorId}>
+                Color {index + 1}:
+              </label>
+              <div className="input-wrapper">
+                <input
+                  id={colorId}
+                  type="color"
+                  value={color}
+                  onChange={(element) => {
+                      // create a new array
+                      const nextColors = [...colors];
+                      // mutate it
+                      nextColors[index] = event.target.value;
+                      // add to state
+                      setColors(nextColors);
+                      console.log(colors);
+                  }}
+                />
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+export default App;
+```
+
+- AC: The color inputs should work; picking a new color should update the gradient accordingly.
+
+```JAVASCRIPT
+<div className="input-wrapper">
+    <input
+      id={colorId}
+      type="color"
+      // add a value to make a controlled
+      value={color}
+      onChange={(element) => {
+          // create a new array
+          const nextColors = [...colors];
+          // mutate it
+          nextColors[index] = event.target.value;
+          // add to state
+          setColors(nextColors);
+          console.log(colors);
+  />
+</div>
+```
+
+- AC: Clicking "Add color" should add a new color, at the end of the array.
+- Tip 🤔 Don't forget the rule about 'Never Mutate React State',
+  - 1. Create a new array
+  - 2. Modify that new array
+  - 3. Set that new array into state
+
+```JAVASCRIPT
+   <button
+     onClick={(event) => {
+       console.log(event.target)
+       // create a new array
+       let newColors = [...colors]
+       // modify that array
+       newColors.push("#FF0000")
+       // set it to state
+       setColors(newColors)
+       console.log(colors)
+     }}
+   >
+     Add color
+   </button>
+```
+
+- AC: Clicking "Remove color" should remove the last color in the array.
