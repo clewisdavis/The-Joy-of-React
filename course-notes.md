@@ -5926,7 +5926,7 @@ export default App;
        console.log(event.target)
        // create a new array
        let newColors = [...colors]
-       // modify that array
+       // modify that array, set default to red
        newColors.push("#FF0000")
        // set it to state
        setColors(newColors)
@@ -5937,4 +5937,36 @@ export default App;
    </button>
 ```
 
-- AC: Clicking "Remove color" should remove the last color in the array.
+- AC: Clicking "Remove color" should remove the last color in the array. Don't forget about about the react mutate rule.
+
+```JAVASCRIPT
+  <button
+    onClick={(event) => {
+      console.log(event.target)
+      // 1. create a new array
+      let removeColor = [...colors]
+      // 2. modify that array
+      removeColor.pop()
+      // 3. set to state
+      setColors(removeColor)
+      console.log(`new colors ${colors}`)
+    }}
+  >
+    Remove color
+  </button>
+```
+
+- AC: When adding new colors, they should default to `#FF000` (bright red).
+
+```JAVASCRIPT
+       // modify that array, set default to red
+       newColors.push("#FF0000")
+```
+
+- AC: There should always be between 2 and 5 colors. No more, no less. The user should be given feedback as to why the buttons stop working once they hit a limit.
+
+```JAVASCRIPT
+// get the number or colors from the colors array
+// if 2 colors, disable the remove button, throw an alert
+// if 5 colors, disable the add button, throw an alert
+```
