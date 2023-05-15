@@ -5966,7 +5966,110 @@ export default App;
 - AC: There should always be between 2 and 5 colors. No more, no less. The user should be given feedback as to why the buttons stop working once they hit a limit.
 
 ```JAVASCRIPT
+// my attempt
 // get the number or colors from the colors array
 // if 2 colors, disable the remove button, throw an alert
 // if 5 colors, disable the add button, throw an alert
+```
+
+```JAVASCRIPT
+import React from 'react';
+function App() {
+  const [colors, setColors] = React.useState([
+    '#FFD500',
+    '#FF0040',
+  ]);
+  
+  const colorStops = colors.join(', ');
+  const backgroundImage = `linear-gradient(${colorStops})`;
+
+  // function for the minimum
+  function colorMin(param) {
+    console.log(param)
+    param < 2 ? alert('min of 2') : undefined
+  }
+
+  // function for the max
+  function colorMax(param) {
+    console.log(param)
+    param > 5 ? alert('max of 5') : undefined
+  }
+
+  return (
+    <div className="wrapper">
+      <div className="actions">
+        <button
+          onClick={(event) => {
+            console.log(event.target)
+            // 1. create a new array
+            let removeColor = [...colors]
+            // 2. modify that array
+            removeColor.pop()
+            // 3. set to state
+            setColors(removeColor)
+            console.log(`new colors ${colors}`)
+            // color min
+            colorMin(removeColor.length)
+          }}
+        >
+          Remove color
+        </button>
+        <button
+          onClick={(event) => {
+            console.log(event.target)
+            // 1. create a new array
+            let newColors = [...colors]
+            // 2. modify that array
+            newColors.push("#FF0000")
+            // 3. set it to state
+            setColors(newColors)
+            // color max
+            colorMax(newColors.length)
+          }}
+        >
+          Add color
+        </button>
+      </div>
+      
+      <div
+        className="gradient-preview"
+        style={{
+          backgroundImage,
+        }}
+      />
+      
+      <div className="colors">
+        {colors.map((color, index) => {
+          const colorId = `color-${index}`;
+          return (
+            <div key={colorId} className="color-wrapper">
+              <label htmlFor={colorId}>
+                Color {index + 1}:
+              </label>
+              <div className="input-wrapper">
+                <input
+                  id={colorId}
+                  type="color"
+                  // add a value to make a controlled
+                  value={color}
+                  onChange={(element) => {
+                      // create a new array
+                      const nextColors = [...colors];
+                      // mutate it
+                      nextColors[index] = event.target.value;
+                      // add to state
+                      setColors(nextColors);
+                      console.log(colors);
+                  }}
+                />
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+export default App;
 ```
