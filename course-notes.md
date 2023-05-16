@@ -6073,3 +6073,39 @@ function App() {
 
 export default App;
 ```
+
+- Video Solution:
+- For the condition AC, to check the minimum and max conditions
+- Create a separate function for the `addColor` and `removeColor` with and if statement for the min, max requirement.
+
+```JAVASCRIPT
+  function addColor() {
+    if (colors.length >=5) {
+      window.alert('There is a maximum of 5 colors')
+      return; //stops here
+    }
+     // 1. create a new array
+     let newColors = [...colors]
+     // 2. modify that array
+     newColors.push("#FF0000")
+     // 3. set it to state
+     setColors(newColors)    
+  }
+
+  function removeColor() {
+    if(colors.length <=2) {
+      window.alert('There is a minimum of 2 colors')
+      return; //stops here
+    }
+      // 1. create a new array
+      let removeColor = [...colors]
+      // 2. modify that array
+      removeColor.pop()
+      // 3. set to state
+      setColors(removeColor)
+  }
+```
+
+## Dynamic Key Generation
+
+-
