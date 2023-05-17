@@ -6108,4 +6108,81 @@ export default App;
 
 ## Dynamic Key Generation
 
--
+- When interating over data with `.map`, we nee dto give each Rect element a unique `key` attribute so that React knows which DOM operations to trigger between renders.
+
+- In previous exercises, the data conveniently came with unique tokens for each item, and we used those tokens:
+
+```JAVASCRIPT
+const inventory = [
+  {
+    id: 'abc123',
+    name: 'Soft-boiled egg press',
+  },
+  {
+    id: 'def456',
+    name: 'Hello Kitty toothbrush',
+  },
+];
+
+// We can use the `id` field in our iterations:
+inventory.map(item => (
+  <ShopItem key={item.id} item={item} />
+));
+```
+
+- But what if our data doesn't have a unique token we can use?
+
+- This is one of the most common questions that developers have. React needs a unique value for each item, but we don't have one.
+- Sometimes we can use the array index for the key, but this approach doesn't always work. How can we solve this problem?
+
+### Stickers example
+
+- This example, when you click to produce random stickers:
+- The core logic is done, but we get an warning in the console. Let's fix it.
+
+- The goal is to fix the key warning by dynamically generating the keys for each sticker. We don't want to use the array index this time around.
+
+```JAVASCRIPT
+// starter code
+import React from 'react';
+
+import styles from './StickerPad.module.css';
+import { getSticker } from './Stickers.data';
+
+function StickerPad() {
+  const [stickers, setStickers] = React.useState([]);
+
+  return (
+    <button
+      className={styles.wrapper}
+      onClick={(event) => {
+        const stickerData = getSticker();
+        const newSticker = {
+          ...stickerData,
+          x: event.clientX,
+          y: event.clientY,
+        };
+
+        const nextStickers = [...stickers, newSticker];
+        setStickers(nextStickers);
+      }}
+    >
+      {stickers.map((sticker) => (
+        <img
+          className={styles.sticker}
+          src={sticker.src}
+          alt={sticker.alt}
+          style={{
+            left: sticker.x,
+            top: sticker.y,
+            width: sticker.width,
+            height: sticker.height,
+          }}
+        />
+      ))}
+    </button>
+  );
+}
+
+export default StickerPad;
+```
