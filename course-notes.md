@@ -6186,3 +6186,104 @@ function StickerPad() {
 
 export default StickerPad;
 ```
+
+- In order for React to work in the optimal way, it needs a unique identifier for each of the images
+
+```JAVASCRIPT
+   <img
+     // need to set a key
+     key={}
+     className={styles.sticker}
+     src={sticker.src}
+     alt={sticker.alt}
+     style={{
+       left: sticker.x,
+       top: sticker.y,
+       width: sticker.width,
+       height: sticker.height,
+     }}
+   />
+```
+
+- We don't have a unique identifier in the data file. You can try to use the src.
+
+```JAVASCRIPT
+const STICKERS = [
+  {
+    src: 'https://sandpack-bundler.vercel.app/img/stickers/cactus.svg',
+    alt: 'potted cactus sticker',
+    width: 295 / 2,
+    height: 452 / 2,
+  }
+]
+```
+
+- You can try to use the source `key={sticker.src}`, but the moment you have two of the same, you get an key error in the console.
+- Or you could try and dynamically generate a string based on multiple properties, this is better but you can still get key errors.
+
+```JAVASCRIPT
+  key={`${sticker.src}-${sticker.x}-${sticker.y}`}
+```
+
+- What if you try and use a random value, `key={Math.random}`, seems to work, you don't get any warnings. But still not a good idea. The reason is performance. Think about the role of the key, to tell React how things should change and update.
+
+```JAVASCRIPT
+   <img
+     // need to set a key
+     key={Math.random()}
+     className={styles.sticker}
+     src={sticker.src}
+     alt={sticker.alt}
+     style={{
+       left: sticker.x,
+       top: sticker.y,
+       width: sticker.width,
+       height: sticker.height,
+     }}
+   />
+```
+
+- Every time you give a new key, you are telling React to re-render that element in the DOM. Even though you didn't need to, or nothing changed, all the same properties.
+- When you use `Math.random` as the `key` it is destroying all the DOM elements and creating new ones each time. Over time this can cause inefficiencies and performance issues.
+
+- This concept is a good idea, to generate a unique value each time
+- The problem is, we don't want to do it in the render, on the element, every time we update the stickers array.
+
+- What if we did it on the handler, `onClick` handler.
+
+```JAVASCRIPT
+  return (
+    <button
+      className={styles.wrapper}
+      onClick={(event) => {
+        const stickerData = getSticker();
+        const newSticker = {
+          ...stickerData,
+          x: event.clientX,
+          y: event.clientY,
+          // Add to the handler, generate a unique id
+          id: Math.random(),
+        };
+
+        const nextStickers = [...stickers, newSticker];
+        setStickers(nextStickers);
+      }}
+     >
+      {stickers.map((sticker) => (
+        <img
+          // Apply it to the element
+          key={sticker.id}
+          className={styles.sticker}
+          src={sticker.src}
+          alt={sticker.alt}
+          style={{
+            left: sticker.x,
+            top: sticker.y,
+            width: sticker.width,
+            height: sticker.height,
+          }}
+        />
+      ))}
+    </button>
+  );
+```
