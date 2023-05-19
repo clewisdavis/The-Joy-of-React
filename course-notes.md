@@ -6250,6 +6250,12 @@ const STICKERS = [
 - The problem is, we don't want to do it in the render, on the element, every time we update the stickers array.
 
 - What if we did it on the handler, `onClick` handler.
+- On the `newSticker` object, we set `id: Math.random()`
+- Then on the `img` element, we set the key to `key={sticker.id}`
+
+- If you console.log the `stickers` object, you will see the id, and how it does not change when you add new stickers, the id persists.
+- It generates the id, only on the `onClick`, when you first generate the sticker. Every other time, is just uses the static value of `key={sticker.id}`
+- We have create a persistent id, a real static value, and React will know, if it has to do any work to re-render or not.
 
 ```JAVASCRIPT
   return (
@@ -6271,7 +6277,8 @@ const STICKERS = [
      >
       {stickers.map((sticker) => (
         <img
-          // Apply it to the element
+          // Use that previously created unique value for teh key:
+          // Apply it to the element:
           key={sticker.id}
           className={styles.sticker}
           src={sticker.src}
@@ -6287,3 +6294,9 @@ const STICKERS = [
     </button>
   );
 ```
+
+- You can use other methods, to generate a unique id, `Date.now()`, or `crypto.randomUUID()` 🤔 this is not cryptography not cryptocurrency 😄, this generates a UUID, really long.
+
+- This is the strategy, create a unique identifier when you create the object, you can use this when fetching data, the moment you get that data back, you can add unique identifiers to the object
+
+## Lifting State Up
