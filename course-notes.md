@@ -6300,3 +6300,46 @@ const STICKERS = [
 - This is the strategy, create a unique identifier when you create the object, you can use this when fetching data, the moment you get that data back, you can add unique identifiers to the object
 
 ## Lifting State Up
+
+- In React, lifting state up is one of the core React concepts, and really important. One of the most critical lessons in this course.
+
+- Video notes:
+- Data fetching, API request to the backend, to fetch all the information.
+- In this example, a simple search UI, with an `<App/>` and two children components, `<SearchForm />`, and `<SearchResults />`
+
+- `<SearchForm />` is the component that holds the actual state, `searchTerm`
+- The state is defined in `<SearchForm />`
+
+```JAVASCRIPT
+function SearchForm() {
+  const [searchTerm, setSearchTerm] = React.useState('');
+}
+```
+
+- 🤔 Initially, you might think you can just push the state from one component to the other, two way, regardless of parent child relationship. Any part of the application could access any other part of the application, it's data or state.
+- The problem is, over time you end up with spaghetti code. You end up with this situation where everything is pointing to everything.
+- You get in a situation, where, can I change or remove this bit of state, what far area of the app will this impact or break?
+- Very poor visibility in how these things are setup?
+
+- 📣 📣 The rule in React, is that data can only pass through components via props, or via context. 📣 📣
+- We have to follow the lines of our application.
+- Have some data in `<App />` we would be able to pass some data down to it children, `<SearchForm />` and `<SearchResults />`
+
+```JAVASCRIPT
+  // App.js
+  function App() {
+    return (
+      <>
+        <header>
+          <a className="logo" href="/">
+            Wanda’s Fruits
+          </a>
+          <SearchForm />
+        </header>
+        <main>
+          <SearchResults />
+        </main>
+      </>
+    );
+  }
+```
