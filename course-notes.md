@@ -6323,7 +6323,7 @@ function SearchForm() {
 
 - 📣 📣 The rule in React, is that data can only pass through components via props, or via context. 📣 📣
 - We have to follow the lines of our application.
-- Have some data in `<App />` we would be able to pass some data down to it children, `<SearchForm />` and `<SearchResults />`
+- Have some data in `<App />` we would be able to pass some data down to it children, `<SearchForm />` and `<SearchResults />` through props.
 
 ```JAVASCRIPT
   // App.js
@@ -6342,4 +6342,163 @@ function SearchForm() {
       </>
     );
   }
+```
+
+- The way we solve this problem, WE HAVE TO LIFT THE STATE UP, we have to lift it up higher in the tree.
+- 🤔 As long as a parent can pass to a child, THAT'S HOW THE WHOLE DATA FLOW WORKS.
+- This is also called, unidirectional data flow:
+  - parents can pass to children
+  - but children cannot pass to parents
+  - and siblings cannot pass to siblings
+- DATA ALWAYS FLOWS IN THIS SINGULAR DIRECTION
+
+- In our search example, we are going to lift the state up, to the `<App/>` component.
+
+```JAVASCRIPT
+// App.js
+import React from 'react';
+
+import SearchForm from './SearchForm';
+import SearchResults from './SearchResults';
+
+function App() {
+  // Lift the state up to App
+  const [searchTerm, setSearchTerm] = React.useState('');
+  // Pass it down below via props in each component
+  return (
+    <>
+      <header>
+        <a className="logo" href="/">
+          Wanda’s Fruits
+        </a>
+        <SearchForm  searchTerm={searchTerm}/>
+      </header>
+      <main>
+        <SearchResults searchTerm={searchTerm}/>
+      </main>
+    </>
+  );
+}
+
+export default App;
+```
+
+- Then add a new prop, to the child components, `<SearchForm />` and `<SearchResults />`
+
+```JAVASCRIPT
+// SearchForm.js
+import React from 'react';
+
+// pass in the prop searchTerm
+function SearchForm({ searchTerm }) {
+  
+  function runSearch(event) {
+    event.preventDefault();
+    
+    // Actual search stuff omitted from
+    // this example.
+  }
+  
+  return (
+    <form onSubmit={runSearch}>
+      <label
+        className="visually-hidden"
+        htmlFor="search-input"
+      >
+        Search term:
+      </label>
+      <input
+        id="search-input"
+        className="search-input"
+        // bind to the form
+        value={searchTerm}
+        onChange={event => {
+          setSearchTerm(event.target.value);
+        }}
+      />
+      <button>
+        Search
+      </button>
+    </form>
+  );
+}
+
+export default SearchForm;
+```
+
+```JAVASCRIPT
+// SearchResults.js
+function SearchResults({ searchTerm }) {
+  return (
+    <p>
+      You searched for: {searchTerm}.
+    </p>
+  );
+}
+
+export default SearchResults;
+```
+
+- Now if you set the default value in the `useState()` in the parent component `<App />` you will see it passed down to the children components.
+- We passed down a static value, but how do you update this state? When someone searches in the form, how do you update the state now.
+
+- 🤔 How do you write to state that lives in a different component? 🤔
+- Functions in JS, is data just like any other data, JS is a functional programming language.
+- 🚀 You can just pass down the state function, `setSearchTerm` down as a prop, so the children have access to it, you can pass down a function as a prop, just like any other data. And that child component will have access to it.
+
+```JAVASCRIPT
+// App.js, pass down the setSearchTerm state function
+    <SearchForm  
+      searchTerm={searchTerm}
+      setSearchTerm={setSearchTerm}
+    />
+```
+
+- Then in your child component, pass in the `setSearchTerm` function, so the form can be updated.
+
+```JAVASCRIPT
+// SearchForm.js
+function SearchForm({ searchTerm, setSearchTerm }) {
+  // component here
+}
+```
+
+- Step by Step Review, walk though what happens when you make a single change to our search input.
+
+- Type the letter `a`. The first thing that happens is the `onChange` event fires on the `<SearchForm />` component.
+- The `onChange` event, evokes the `setSearchTerm` function, passing in the new value, which is the letter `a`, grabbing it from `event.target.value`.
+
+```JAVASCRIPT
+  onChange={event => {
+    setSearchTerm(event.target.value);
+  }}
+```
+
+- Whenever you call a state setter function in react, it is going to re-render that component that owns that bit of state.
+- Because the `setSearchTerm` function is owned by `<App/>` the app component re-renders. Whenever their is a change in the state, `searchTerm`, the component re-renders.
+- So when `searchTerm` is updates in state, it tells react to update the component, and any children components.
+- So `<App/>` updates and forces a re-render for `<SearchForm/>` and `<SearchResults/>`
+
+```JAVASCRIPT
+function App() {
+  
+  const [searchTerm, setSearchTerm] = React.useState('');
+  
+  return (
+    <>
+      <header>
+        <a className="logo" href="/">
+          Wanda’s Fruits
+        </a>
+        <SearchForm  
+          searchTerm={searchTerm}
+          setSearchTerm={setSearchTerm}
+        />
+      </header>
+      <main>
+        <SearchResults searchTerm={searchTerm}/>
+      </main>
+    </>
+  );
+}
 ```
