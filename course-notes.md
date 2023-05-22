@@ -6502,3 +6502,148 @@ function App() {
   );
 }
 ```
+
+- So when `<SearchResults />` re-renders, it is now equal to the search term, `a`
+
+- Now, in a larger application, where do you lift the state to?
+- You might think, I can just lift up the state, all the way up to `<App />`, that way every single component would have access if needed.
+- But not a best practice, a couple reasons
+  - **Performance**, we only want to re-render the components that require the data. If you put the state to far up, you will be re-rendering components that don't care about that data.
+  - **Code organization**, hard to manage that many state hooks in the same component, unique names for it all. A simple blog for example, could have hundreds of state hooks.
+- 🤔 You should find the lowest ancestor, you want to move the state as low as you can but no lower.
+- 🚀 This is our strategy, for lifting state up. 🚀
+
+### Exercises, Lifting up State
+
+- Exercises for lifing up state
+
+#### Cookie Clicker
+
+- We will build a simple version of the cookie clicker game, but instead we will use a Canadian toonie, whatever that is.
+
+- AC's
+  - "Your coin balance", at the bottom of the page, should update to show the value of `numOfCoins`.
+  - Clicking the coin should increment this value by 2, since it's a $2 coin.
+
+- Parent Component
+
+```JAVASCRIPT
+// App.js
+import React from 'react';
+
+import BigCoin from './BigCoin';
+
+function App() {
+  return (
+    <div className="wrapper">
+      <main>
+        <BigCoin />
+      </main>
+      <footer>
+        Your coin balance:
+        <strong>0</strong>
+      </footer>
+    </div>
+  );
+}
+
+export default App;
+```
+
+- The child component
+
+```JAVASCRIPT
+// BigCoin.js
+import React from 'react';
+import './BigCoin.css';
+
+function BigCoin() {
+  const [numOfCoins, setNumOfCoins] = React.useState(0);
+  
+  return (
+    <div className="coin-wrapper">
+      <button
+        className="coin"
+        onClick={() => setNumOfCoins(numOfCoins + 2)}
+      >
+        <span className="visually-hidden">
+          Add 2 coins
+        </span>
+        <img
+          className="coin-image"
+          alt=""
+          src="https://sandpack-bundler.vercel.app/img/toonie.png"
+        />
+      </button>
+    </div>
+  );
+}
+
+export default BigCoin;
+```
+
+- AC 1: "Your coin balance", at the bottom of the page, should update to show the value of `numOfCoins`.
+  - Lift up the state, and pass it down to `<BigCoin/>` component
+- AC 2: Pass in the state variable in the footer.
+
+```JAVASCRIPT
+import React from 'react';
+
+import BigCoin from './BigCoin';
+
+function App() {
+
+  // lift up state
+  const [numOfCoins, setNumOfCoins] = React.useState(0);
+  
+  return (
+    <div className="wrapper">
+      <main>
+        <BigCoin 
+          numOfCoins={numOfCoins}
+          setNumOfCoins={setNumOfCoins}
+        />
+      </main>
+      <footer>
+        Your coin balance:
+        <strong>{numOfCoins}</strong>
+      </footer>
+    </div>
+  );
+}
+
+export default App;
+```
+
+- Pass down the state via props to the `<BigCoin />` component
+
+```JAVASCRIPT
+import React from 'react';
+import './BigCoin.css';
+
+function BigCoin({ numOfCoins, setNumOfCoins }) {
+  
+  return (
+    <div className="coin-wrapper">
+      <button
+        className="coin"
+        onClick={() => {
+          setNumOfCoins(numOfCoins + 2)
+          console.log(numOfCoins)
+        }}
+      >
+        <span className="visually-hidden">
+          Add 2 coins
+        </span>
+        <img
+          className="coin-image"
+          alt=""
+          src="https://sandpack-bundler.vercel.app/img/toonie.png"
+        />
+      </button>
+    </div>
+  );
+}
+
+export default BigCoin;
+```
