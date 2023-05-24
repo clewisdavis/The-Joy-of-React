@@ -6647,3 +6647,73 @@ function BigCoin({ numOfCoins, setNumOfCoins }) {
 
 export default BigCoin;
 ```
+
+#### Exercise, Shopping List
+
+- Let's build our own shopping list, the design and JSX is already implemented, but it is entirely static.
+- Your job is to update the code so that it works.
+
+- AC's
+- The shown list of items should be driven from React state. We can remove the placeholder foods, and start wtih an empty list.
+- Submitting the form should add a new item to the list, and show it in the UI.
+- When submitting the form, the text input should be reset, sot hat it's empty. This way, users can easily add multiple items without having to erase their previous entry.
+- There should be no "key" warnings in the console. Ideally, you shouldn't use the index for the key.
+
+- Starter code
+
+```JAVASCRIPT
+// App.js
+import React from 'react';
+
+import AddNewItemForm from './AddNewItemForm';
+
+function App() {
+  return (
+    <div className="wrapper">
+      <div className="list-wrapper">
+        <ol className="shopping-list">
+          <li>Avocados</li>
+          <li>Broccoli</li>
+          <li>Carrots</li>
+        </ol>
+      </div>
+      <AddNewItemForm />
+    </div>
+  );
+}
+
+export default App;
+```
+
+- Child component
+
+```JAVASCRIPT
+// AddNewItemForm.js
+import React from 'react';
+
+function AddNewItemForm() {
+  return (
+    <div className="new-list-item-form">
+      <form>
+        <label htmlFor="new-list-form-input">
+          New item:
+        </label>
+        
+        <div className="row">
+          <input
+            id="new-list-form-input"
+            type="text"
+          />
+          <button>
+            Add
+          </button>
+        </div>
+      </form>
+    </div>
+  );
+}
+
+export default AddNewItemForm;
+```
+
+- exercises
