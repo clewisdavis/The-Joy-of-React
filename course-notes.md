@@ -6654,10 +6654,10 @@ export default BigCoin;
 - Your job is to update the code so that it works.
 
 - AC's
-- The shown list of items should be driven from React state. We can remove the placeholder foods, and start wtih an empty list.
-- Submitting the form should add a new item to the list, and show it in the UI.
-- When submitting the form, the text input should be reset, sot hat it's empty. This way, users can easily add multiple items without having to erase their previous entry.
-- There should be no "key" warnings in the console. Ideally, you shouldn't use the index for the key.
+- 1. The shown list of items should be driven from React state. We can remove the placeholder foods, and start wtih an empty list.
+- 2. Submitting the form should add a new item to the list, and show it in the UI.
+- 3. When submitting the form, the text input should be reset, sot hat it's empty. This way, users can easily add multiple items without having to erase their previous entry.
+- 4. There should be no "key" warnings in the console. Ideally, you shouldn't use the index for the key.
 
 - Starter code
 
@@ -6716,4 +6716,94 @@ function AddNewItemForm() {
 export default AddNewItemForm;
 ```
 
-- exercises
+- **AC 1.** Generate the list dynamically, based on state, map over the items and generate a unique ID for the key.
+
+```JAVASCRIPT
+// App.js
+import React from 'react';
+
+import AddNewItemForm from './AddNewItemForm';
+
+function App() {
+  // add state for the items, generate id
+  const [items, setItems] = React.useState([
+    { label: 'Apple', id: 123 },
+    { label: 'Bananna', id: 456 },
+  ]);
+  
+  return (
+    <div className="wrapper">
+      <div className="list-wrapper">
+        <ol className="shopping-list">
+          {items.map((item) => (
+            <li key={item.id}>{item.label}</li>
+          ))}
+        </ol>
+      </div>
+      <AddNewItemForm />
+    </div>
+  );
+}
+
+export default App;
+```
+
+- How would you add something to the list? Create a function, that will produce one of the objects and dynamically come up with a unique id and put that into state.
+
+```JAVASCRIPT
+  function handleAddItem(label) {
+    // create the new item and generate unique id
+    const newItem = {
+      label: label,
+      id: Math.random(),
+    };
+    // create new array, pass in the existing items, and add the new ones
+    const nextItems = [...items, newItem];
+    // put that into state
+    setItems(nextItems);
+  }
+```
+
+- Next, we have to figure out how to call this function, `handleAddItem()` pass it down as a prop to the `<AddNewItemForm />` component.
+
+```JAVASCRIPT
+// App.js
+import React from 'react';
+
+import AddNewItemForm from './AddNewItemForm';
+
+function App() {
+  // add state for the items, generate id
+  const [items, setItems] = React.useState([
+    { label: 'Apple', id: 123 },
+    { label: 'Bananna', id: 456 },
+  ]);
+
+  function handleAddItem(label) {
+    // create the new item and generate unique id
+    const newItem = {
+      label: label,
+      id: Math.random(),
+    };
+    // create new array, pass in the existing items, and add the new ones
+    const nextItems = [...items, newItem];
+    // put that into state
+    setItems(nextItems);
+  }
+  
+  return (
+    <div className="wrapper">
+      <div className="list-wrapper">
+        <ol className="shopping-list">
+          {items.map((item) => (
+            <li key={item.id}>{item.label}</li>
+          ))}
+        </ol>
+      </div>
+      <AddNewItemForm handleAddItem={handleAddItem} />
+    </div>
+  );
+}
+
+export default App;
+```
