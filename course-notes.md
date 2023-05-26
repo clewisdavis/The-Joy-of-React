@@ -6656,7 +6656,7 @@ export default BigCoin;
 - AC's
 - 1. The shown list of items should be driven from React state. We can remove the placeholder foods, and start wtih an empty list.
 - 2. Submitting the form should add a new item to the list, and show it in the UI.
-- 3. When submitting the form, the text input should be reset, sot hat it's empty. This way, users can easily add multiple items without having to erase their previous entry.
+- 3. When submitting the form, the text input should be reset, so that it's empty. This way, users can easily add multiple items without having to erase their previous entry.
 - 4. There should be no "key" warnings in the console. Ideally, you shouldn't use the index for the key.
 
 - Starter code
@@ -6807,3 +6807,52 @@ function App() {
 
 export default App;
 ```
+
+- **AC 2.** Submitting the form should add a new item to the list, and show it in the UI.
+
+- On the `<form>` element, add an `onSubmit` handler to mange the form and button
+- Add `event.preventDefault()` to stop the default browser behavior of reloading
+- Call the `handleAddItem` function that was passed in via props from the parent component.
+- Create a bit of state, to mange mange the new items. `const [label, setLabel] = React.useState('');`
+- And pass the state `label` variable to the `handleAddItem()` function.
+
+```JAVASCRIPT
+  return (
+    <div className="new-list-item-form">
+      <form onSubmit={(event) => {
+          // prevent the form from reloading
+          event.preventDefault();
+          // add a new item to the list, using new state management
+          handleAddItem(label);
+          // clear out the form, call the state function with empty string
+          setLabel('');
+        }
+      }
+      >
+      // other stuff...
+      </form>
+    </div>
+  );
+}
+```
+
+- Now make the input controlled by the new state.
+- Add `value={label}` to bind this to state
+- Add a `onChange` handler to the input, to capture the content as use enters in the field.
+
+```JAVASCRIPT
+    <input
+      id="new-list-form-input"
+      type="text"
+      value={label}
+      onChange={(event) => {
+        setLabel(event.target.value);
+      }}
+    />
+```
+
+- After you hit enter, you want to reset the form. `onSubmit` Call the set state function with an empty string. `seLabel('')`
+
+- Good rule for managing state, you want to keep state as low as it can be, but no lower.
+
+## Component Instances
