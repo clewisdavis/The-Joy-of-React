@@ -6856,3 +6856,40 @@ export default App;
 - Good rule for managing state, you want to keep state as low as it can be, but no lower.
 
 ## Component Instances
+
+- An important concept in React, and rarely discussed. Whenever we render a component in Rect, **we create a component instance**.
+- A lot of outdated info on this topic. React has changed a ton since then.
+
+- Video Summary:
+- Where does state live? Look at a minimal React app:
+
+```JAVASCRIPT
+    import React from 'react';
+    import { createRoot } from 'react-dom/client';
+
+    function RandomNumber() {
+      const [num, setNum] = React.useState(0);
+
+      return (
+        <button onClick={() => setNum(Math.random())}>
+          Current number: {num}
+        </button>
+      );
+    }
+
+    const root = createRoot(document.querySelector('#root'));
+    root.render(
+      <>
+        <RandomNumber />
+      </>
+    );
+```
+
+- In this example; we have a react app with a little bit of state. When you click the button, we set some state in the `num`. But where does this value come from? Where does it live?
+- In this example; when we call `root.render` and call the component `<RandomNumber />` **we mount this component**.
+
+- Mounting a Component consist of two parts:
+  - 1. The process of figuring out what the JSX is. Everything in the component and processing it, handlers, DOM elements and any logic. Take this description and hand it over to React, and React produces that component.
+  - 2. The second part, is we create a component instance, the very first time we render a component, it creates an object. And that object knows all the information about this particular instance of the component. Each one, gets it's own instance and manged by React.
+
+- So we mount the component, which creates this instance, and over time as we are changing the value, that value is stored on this instance.
