@@ -6893,3 +6893,86 @@ export default App;
   - 2. The second part, is we create a component instance, the very first time we render a component, it creates an object. And that object knows all the information about this particular instance of the component. Each one, gets it's own instance and manged by React.
 
 - So we mount the component, which creates this instance, and over time as we are changing the value, that value is stored on this instance.
+
+- In another example, if you remove an instance from the DOM, conditionally render a component based on some handler. React will destroy that instance and any state that is held within that component.
+- If state is stored in an instance of a component, and that component is removed by React, than you loose anything stored in state.
+- The example below, state is stored in the footer. When you toggle the button to display the footer. When you toggle the footer off, React removes that intance, destroys it from the DOM, and any state stored within the footer.
+
+```JAVASCRIPT
+import React from 'react';
+
+function App() {
+  const [
+    includeFooter,
+    setIncludeFooter,
+  ] = React.useState(false);
+
+  return (
+    <>
+      <h1>Some Application</h1>
+      <form className="footer-toggle-wrapper">
+        <input
+          type="checkbox"
+          id="footer-toggle"
+          checked={includeFooter}
+          onChange={(event) => {
+            setIncludeFooter(event.target.checked);
+          }}
+        />
+        <label htmlFor="footer-toggle">
+          Toggle Footer
+        </label>
+      </form>
+      {includeFooter && <Footer />}
+  
+    </>
+  );
+}
+
+function Footer() {
+  const [
+    backgroundColor,
+    setBackgroundColor,
+  ] = React.useState('#232538');
+
+  return (
+    <footer style={{ backgroundColor }}>
+      <form>
+        <label htmlFor="bg-picker">
+          Tweak background:
+        </label>
+        <input
+          type="color"
+          id="bg-picker"
+          value={backgroundColor}
+          onChange={(event) => {
+            setBackgroundColor(event.target.value);
+          }}
+        />
+      </form>
+      <p>
+        © Some Application Inc., 1998-present. All
+        Rights Reserved.
+      </p>
+    </footer>
+  );
+}
+
+export default App;
+```
+
+- What happens if you add multiple footers?
+
+```JAVASCRIPT
+{includeFooter && <Footer />}
+{includeFooter && <Footer />}
+{includeFooter && <Footer />}
+```
+
+- Each footer is a separate instance. And each have their own state variable.
+- Each instance is independent.
+- The moment we stop rendering that instance, that element gets deleted by React.
+- 🤔 Every time you render a component, you create an instance.
+
+- 📣 CORE CONCEPT: State is tied to a particular component instance, so if you unmount the component, and then re-mount it, that state is gone forever.
+- 📣 Or if you have the same component rendered multiple times, they all have their own version of state, because they are a separate instance.
