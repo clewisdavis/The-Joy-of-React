@@ -6896,7 +6896,7 @@ export default App;
 
 - In another example, if you remove an instance from the DOM, conditionally render a component based on some handler. React will destroy that instance and any state that is held within that component.
 - If state is stored in an instance of a component, and that component is removed by React, than you loose anything stored in state.
-- The example below, state is stored in the footer. When you toggle the button to display the footer. When you toggle the footer off, React removes that intance, destroys it from the DOM, and any state stored within the footer.
+- The example below, state is stored in the footer. When you toggle the button to display the footer. When you toggle the footer off, React removes that instance, destroys it from the DOM, and any state stored within the footer.
 
 ```JAVASCRIPT
 import React from 'react';
@@ -6976,3 +6976,43 @@ export default App;
 
 - 📣 CORE CONCEPT: State is tied to a particular component instance, so if you unmount the component, and then re-mount it, that state is gone forever.
 - 📣 Or if you have the same component rendered multiple times, they all have their own version of state, because they are a separate instance.
+
+## State Management Tools
+
+- One of the most common questions asked: "Should we use something like Redux to manage global state for use? Or is React capable enough on it's own?
+
+- And the answer is, it depends.
+
+### Some background info
+
+- In the early days, React would only be one piece of your front-end stack. The best practice was to combine React with something like Flux, Redux, or MobX.
+
+- The idea was to use React for *local state*, and tools like Redux for *global state*.
+- "Local state" is state tht is only needed in one particular part of the application. Like the value of a controlled form, input or button.
+- "Global State" is for broader things, like data about the currently logged in user, or maybe the currently selected color theme. A single piece of global state might be used in a dozen different corners of the app.
+
+- From 2014 to 2016 a number of packages were competing to be the "global state" partner for React. The outcome of that was [Redux](https://redux.js.org).
+
+### Intro to Redux
+
+- Summary, In Redux, the global state is represented as a single object that floats outside our React application. This state can't be directly edited; instead, Redux listens fro "actions", events that signify that something happening in our app.
+
+- All the action are logged by Redux. For example, a log for a typical e-commerce app.
+  - User logs in
+  - User submits search form
+  - Search results received from server
+  - User clicks on "Page 2" of search results
+  - Search results received from server
+  - User adds "Coffee  Machine" item to cart.
+
+- Each of these actions fires through Redux, and we can write some code that controls how these actions should affect the state.
+
+- Like in React, state updates in Redux are immutable.
+
+### Application Types
+
+How to choose when to use Redux vs. native React. Most web apps fall into three categories.
+
+1. Not much state
+2. Mostly client state
+3. Mostly server state
