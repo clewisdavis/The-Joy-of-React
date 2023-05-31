@@ -7019,7 +7019,7 @@ How to choose when to use Redux vs. native React. Most web apps fall into three 
 
 - Not Much State - This is mostly websites, static sites, news websites, and blogs fall into this category. They can still have a lot of local state, but minimal with global state.
 
-- Mostly Client State - This is, things that used to be a desktop application. Photoshop, video editors, word processors, all fit in this category. Lots of complex global state. We are just doing a lot of state manipulation in the browser. These are client heavy apps.
+- Mostly Client State - This is, things that used to be a desktop application. Photo shop, video editors, word processors, all fit in this category. Lots of complex global state. We are just doing a lot of state manipulation in the browser. These are client heavy apps.
 
 - Mostly server State - Web apps that work primarily with server state. A clear example is an analytics dashboard: A bunch of complex data in the database, and our app fetches that data and presents it to the user. Apps that are interfaces that let users read and manipulate data that lives in a database somewhere. Most CRUD (Create, Read, Update, Delete) fit into this category, most SaaS apps, social networks, search engines, e-commerce sites.
 
@@ -7053,7 +7053,7 @@ The challenges are different for each category.
 
 1. If it's a static website, use React alone, with the help of context
 2. If client-heavy app, use Redux for global state
-3. If it's a server heavy app, use React + something to help with the network stuff. For this course platorm, Josh uses's Vercel's SWR.
+3. If it's a server heavy app, use React + something to help with the network stuff. For this course platform, Josh uses's Vercel's SWR.
 
 **However**, React has evolved over the past few years, you can build large, sophisticated apps without any other state-management libraries.
 
@@ -7061,4 +7061,18 @@ The challenges are different for each category.
 
 ### Redux Toolkit and RTK-Query
 
--
+- [Redux Toolkit](https://redux-toolkit.js.org), an opinionated toolset that aims to sand down some of the rough edges of working with Redux.
+-Josh prefers the "Classic Redux" without the toolkit.
+- If already using Redux Toolkit, makes sense to use RTK Query.
+
+### Bonus: Input Cheatsheet
+
+- [Going to link to this](https://courses.joshwcomeau.com/joy-of-react/02-state/11-bonus-cheatsheet), to much to write up.
+- Text Inputs
+- Textareas
+- Radio buttons
+- Checkboxes
+- Select
+- Specialty Inputs, range, data, color
+
+## Project: Word Game
