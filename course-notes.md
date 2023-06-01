@@ -7076,3 +7076,28 @@ The challenges are different for each category.
 - Specialty Inputs, range, data, color
 
 ## Project: Word Game
+
+- In this project, we will create a clone of the popular game, Wordle.
+- In Wordle, you get a new word each day, and it's your challenge to guess what the is, in six guesses or less.
+- You use the colors of background, to figure out what should go where.
+- Touches on a lot of the core concepts we learned in previous lessons.
+
+### Strategies and Mindset
+
+- This project is broken down into 5 discrete exercises. We will build the Wordle clone step by step, working up to the finished game. Each one with it's own solution, and video walkthrough.
+
+- The flow of this project, for this project:
+
+1. Follow the instructions in the project's README.md, attempt to solve the first exercise.
+2. Once you have solved, or attempted to solve, watch the solution video for the first exercise.
+3. Repeat steps 1 and 2 for all 5 exercises.
+
+#### Growth mindset
+
+- Struggling and failing is much more productive than effortlessly breezing through an easier challenge. In this exercise, you will feel frustrated to solve, try and reframe it as a successful learning experience. Failure is inherently frustrating.
+
+## Local Development
+
+- The project source is here, <https://github.com/joy-of-react/word-clone>
+
+- This is a short lesson on getting the project running,
