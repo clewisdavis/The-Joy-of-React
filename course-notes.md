@@ -7100,4 +7100,34 @@ The challenges are different for each category.
 
 - The project source is here, <https://github.com/joy-of-react/word-clone>
 
-- This is a short lesson on getting the project running,
+- This is a short lesson on getting the project running.
+
+### Node, NPM and command line
+
+- If new to modern front end development, you can check out the [tools of the trade](https://courses.joshwcomeau.com/joy-of-react/11-tools-of-the-trade/00-introduction) lessons.
+- Covers the terminal, code editor, Node.js and npm.
+
+- Modern terminal tools
+  - [Hyper](https://hyper.is)
+  - VS Code terminal editor, View > Terminal in the VS Code app
+  - [iTerm2](https://iterm2.com)
+  - [Windows Terminal](https://apps.microsoft.com/store/detail/windows-terminal/9N0DX20HK701?hl=en-us&gl=us)
+
+- Shell language, when you use the terminal and press enter. That command will be interpreted by the shell language. The environment running within the terminal language.
+
+- **Bash**, is the most popular shell language. Most of the time, online instructions will be in Bash. It is the default shell language used by most Linux distributions.
+
+- Zsh, most modern MacOS versions ship with Zsh instead of Bash. And are very similar and share almost all the same commands. Can be used interchangeably.
+
+- If you are using either Linux or MaxOS, you are good to go. Your computer already has "industry standard" shell language. If on Windows, you have some setup work todo.
+
+- ℹ️ Skip the $, in most instructions you will see a command like this. `$ npm install some-package`
+- The dollar sign isn't meant to be included. You are meant to type everything after the dollar sign.
+- In the Bash shell language, the `$` is the prompt character, shown to indicate that the terminal is ready to receive a command.
+
+- ℹ️ Exiting Vi / Vim, these are a PITA to exit.
+- To quit without saving, use these steps:
+  - Press `Escape`
+  - Press `:` this should add the prompt at the bottom of the terminal.
+  - Type `q!`
+- If you'd like to save before quitting, you'd type `wq` (Write Quit) instead of `q!`.
