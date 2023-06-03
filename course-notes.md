@@ -7117,7 +7117,7 @@ The challenges are different for each category.
 
 - **Bash**, is the most popular shell language. Most of the time, online instructions will be in Bash. It is the default shell language used by most Linux distributions.
 
-- Zsh, most modern MacOS versions ship with Zsh instead of Bash. And are very similar and share almost all the same commands. Can be used interchangeably.
+- **Zsh**, most modern MacOS versions ship with Zsh instead of Bash. And are very similar and share almost all the same commands. Can be used interchangeably.
 
 - If you are using either Linux or MaxOS, you are good to go. Your computer already has "industry standard" shell language. If on Windows, you have some setup work todo.
 
@@ -7131,3 +7131,38 @@ The challenges are different for each category.
   - Press `:` this should add the prompt at the bottom of the terminal.
   - Type `q!`
 - If you'd like to save before quitting, you'd type `wq` (Write Quit) instead of `q!`.
+
+### Tip N' Tricks on Terminal
+
+- **Toggling command**, The `-` character will toggle you in between working directories, `cd -` in the terminal, kinda like the previous button on your tv remote, you can jump back and forth.
+
+- **Clearing the terminal**, you can type `clear` and erase all commands. You can also use the shortcut, `ctrl` + `L`.
+
+- **Switching to the GUI file explorer**, in MacOS, you can just enter `open .` to open the finder window for that directory.
+
+- **Chaining commands**, you can chain two commands together, using the `&&` operator. The first command runs, then the second automatically. For example; `npm install && npm run start`
+
+- **Terminal tiling and tabs**, when running a dev server, it is a long running process and is not able to accept additional commands. Modern terminal apps, you can run many terminal sessions in the same application. MacOS, the shortcut is `Shift` + `Command` + `d`.
+
+- To run a new tab, just do `Command` + `t`
+
+- ℹ️ Tip, you can use a window position manager, like [Rectangle](https://rectangleapp.com) or Moom
+
+- ℹ️ VS Code Tip, to open VS Code from the MacOS terminal, `code .`, first you need to set it up in VS Code.
+  - In VS Code, open the command palette with `Command` + `Shift` + `P`
+  - Type `Shell` in the command palette
+  - Select `Shell Command: Install code in PATH`
+
+- ℹ️ VS Code Tip, to view the markdown, run the command palette, `Command` + `Shift` + `P`, and type, `markdownopen` to view a rendered view of the markdown. or `Markdown: Open Preview`
+
+### Running the local dev server
+
+- Download the app from git, <https://github.com/joy-of-react/word-clone>
+- cd into the project
+- Run `npm install`
+- And run the app, `npm run start`
+- View the `README.md`
+
+## Getting Started
+
+-
