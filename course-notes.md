@@ -7165,4 +7165,5 @@ The challenges are different for each category.
 
 ## Getting Started
 
--
+- Fork the repo, on your own github, so you can submit it and review the solution videos.
+- The README.md is the file you want to follow, to go through each exercise.
