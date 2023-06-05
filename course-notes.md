@@ -7167,3 +7167,24 @@ The challenges are different for each category.
 
 - Fork the repo, on your own github, so you can submit it and review the solution videos.
 - The README.md is the file you want to follow, to go through each exercise.
+
+- My repo, forked copy: <https://github.com/clewisdavis/joy-of-react-word-clone>
+
+- In Wordle, users have 6 attempts to guess a 5-letter word. You are helped along the way by ruling out letters that are not in the word, and being told whether the correct letters are in teh correct location or not.
+
+### Exercise 1: GuessInput
+
+- First thing, we need a way to submit guesses.
+- We need to render a little form that holds a text input:
+- Create a new component for this UI, and render it inside the `Game` component.
+
+- **Acceptance Criteria:**
+- Create a new component, don't forget to use an NPM script to generate the scaffolding for you.
+- This component should render a `<form>` tag, including a label and a text input.
+- The text input should be controlled by React state.
+- When the form is submitted:
+  - The entered value should be logged to the console for now.
+  - The input should be reset to an empty string.
+- The user's input should be converted to ALL UPPERCASE. No lower case letters allowed.
+- The input should have a minimum and maximum length of 5.
+- Note: The `minLength` validator is a bit funky; you may wish to use the `pattern` attribute instead. This is discussed in mor detail on the Solution page.
