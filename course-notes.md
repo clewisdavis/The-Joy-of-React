@@ -7188,3 +7188,50 @@ The challenges are different for each category.
 - The user's input should be converted to ALL UPPERCASE. No lower case letters allowed.
 - The input should have a minimum and maximum length of 5.
 - Note: The `minLength` validator is a bit funky; you may wish to use the `pattern` attribute instead. This is discussed in mor detail on the Solution page.
+
+- Solution, GuessInput Component
+
+```JAVASCRIPT
+import React from "react";
+
+function GuessInput() {
+
+  const [guess, setGuess] = React.useState('');
+
+  function handleSubmit(event) {
+    // Prevent the default browser behavior 
+    event.preventDefault();
+    // log to console, the {} renders in console as a object
+    console.log({ guess });
+    // reset the input
+    setGuess('');
+  }
+
+  return (
+    <>
+     <form 
+       className="guess-input-wrapper"
+       onSubmit={handleSubmit}
+      >
+        <label htmlFor="guess-input">Enter guess:</label>
+        <input 
+          required
+          minLength={5}
+          maxLength={5}
+          pattern="[a-zA-Z]{5}"
+          title="5 letter word"
+          id="guess-input"
+          type="text"
+          value={guess}
+          onChange={ (event) => {
+            const nextGuess = event.target.value.toUpperCase();
+            setGuess(nextGuess);
+          }}
+          />
+    </form>
+    </>
+  );
+}
+
+export default GuessInput;
+```
