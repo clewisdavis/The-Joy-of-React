@@ -7235,3 +7235,25 @@ function GuessInput() {
 
 export default GuessInput;
 ```
+
+## Exercise 2: Keeping track of the list
+
+- The goal of this exercise is to render each of the user's guesses:
+
+- Sample DOM structure
+
+```JAVASCRIPT
+<div class="guess-results">
+  <p class="guess">FIRST</p>
+  <p class="guess">GUESS</p>
+</div>
+```
+
+- **Acceptance Criteria:**
+
+- 1. A new component should be created, to render previous guesses.
+- 2. When the user submits their guess, that value should be rendered within this new component.
+- 3. There should be no key warnings in the console!
+
+- Video Solution Notes:
+-
