@@ -7256,4 +7256,53 @@ export default GuessInput;
 - 3. There should be no key warnings in the console!
 
 - Video Solution Notes:
--
+- This exercise is tricky, seems simple, but how do you manage the state that we already have.
+- The standard solution, to access data from one component to another, is to lift the state up.
+- But, that does not work in this case. In this game, we only want to show the guess once it is submitted.
+- When you go down the path of just lifting the state up. You see the guess as you type it, in the input field.
+- What we want, the moment you type hello, and press enter, you see the guess. Transfer it, leaves the input and shows up in the list.
+
+- Instead, you want to track, juggle the data between two bits of state.
+- Create some new state, on the parent component `<Game/>`, that starts as an empty array.
+
+```JAVASCRIPT
+  const [guesses, setGuesses] = React.useState([]);
+```
+
+- Then write a new handler on the input `<GuessInput handleSubmitGuess={handleSubmitGuess}` and write the new function.
+- This function will take the guess as an argument and update the guess to include in the array.
+
+```JAVASCRIPT
+  function handleSubmitGuess(guess) {
+    // TODO
+  }
+```
+
+- In the `<GuessInput/>` component, pass the handler in as an argument. So it can receive it.
+
+```JAVASCRIPT
+  // GuessInput.js
+  function GuessInput({ handleSubmitGuess }) {
+    // Component here
+  }
+```
+
+- 🚀 In the `onSubmit` handler, for the input, pass that value up to the parent component, `Game.js`.
+
+```JAVASCRIPT
+  // GuessInput.js
+  function handleSubmit(event) {
+    // pass the value of guess up
+    handleSubmitGuess(guess);
+  }
+```
+
+- In the parent component, `<Game/>`, you can console.log out the guess to make sure the data is being passed from one component to another.
+
+```JAVASCRIPT
+  // Game.js
+  function handleSubmitGuess(guess) {
+    // Check to see if the data is being passed.
+    console.log(guess);
+  }
+```
