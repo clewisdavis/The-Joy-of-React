@@ -7306,3 +7306,8 @@ export default GuessInput;
     console.log(guess);
   }
 ```
+
+- In the handler, you need to add the new guess that was submitted, into the state, array. `guesses`
+- Call the `setGuesses()` method to push the new guess into the array.
+- Remember the rule, you are not allowed to modify existing arrays or objects.
+- So we have to spread the current guess, and add the new guess,
