@@ -7310,4 +7310,88 @@ export default GuessInput;
 - In the handler, you need to add the new guess that was submitted, into the state, array. `guesses`
 - Call the `setGuesses()` method to push the new guess into the array.
 - Remember the rule, you are not allowed to modify existing arrays or objects.
-- So we have to spread the current guess, and add the new guess,
+- So we have to spread the current guess, and add the new guess
+
+```JAVASCRIPT
+  // Game.js
+  function handleSubmitGuess(guess) {
+    // Set state method, spread syntax, creating an array that includes all the current guesses. And add the new guess. 
+    // Creates a new array, similar to array.push(), instead of modifying an existing
+    setGuesses([...guesses, guess]);
+  }
+```
+
+- JS Primer on the [spread syntax](https://courses.joshwcomeau.com/joy-of-react/10-javascript-primer/12-rest-spread)
+
+- Pass the array of guesses to the `<GuessResults guesses={guesses} />` component, so you can display it.
+- Then we need to map over the guesses.
+
+- Is this a bad pattern, to copy between state? Not in this case, only when you have the exact same information, that is spread across multiple state.
+- But here, we have state in the input, then when you hit enter, it is being transferred to the parent level array, the list.
+- We are transferring the source of truth.
+
+- Now to render the guesses using `map()`, map over the state
+
+```JAVASCRIPT
+  function GuessResults({ guesses }) {
+    return (
+      <div className="guess-results">
+        // map over state
+        {guesses.map(guess => (
+          <p className="guess">{guess}</p>
+        ))}
+      </div>
+    )
+  }
+```
+
+- Now you need to apply a unique key prop to each guess.
+- You can use `index` for key, but be aware, of the re-order issue. Does you application allow for re-order.
+
+```JAVASCRIPT
+  function GuessResults({ guesses }) {
+    return (
+      <div className="guess-results">
+        // add the key, using index
+        {guesses.map((guess, index) => (
+          <p key={index} className="guess">{guess}</p>
+        ))}
+      </div>
+    )
+  }
+```
+
+- What if you cannot use the `index` for the key, if the order changes or swap?
+- You would have to create a unique identifier with each guess. And that happens in your `handleSubmitGuess()` handler.
+
+```JAVASCRIPT
+  // Game.js
+  function handleSubmitGuess(tentativeGuess) {
+
+    // Create an object to hold the value and the unique id
+    const nextGuess = {
+      value: tentativeGuess,
+      id: Math.random(), // set a unique id, 15 digits
+    }
+    // set that in the array for state, so now every item is going to be an object
+    setGuesses([...guesses, nextGuess]);
+  }
+```
+
+- Now in your `<GuessResults />` component.
+- You can deconstruct that `{value, id}` and then use it on the component.
+
+```JAVASCRIPT
+  function GuessResults({ guesses }) {
+    return (
+      <div className="guess-results">
+        // add the key, using index
+        {guesses.map(({value, id}, index) => (
+          <p key={id} className="guess">{value}</p>
+        ))}
+      </div>
+    )
+  }
+```
+
+## Exercise 3: Guess Slots
