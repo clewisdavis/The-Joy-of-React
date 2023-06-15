@@ -7395,3 +7395,50 @@ export default GuessInput;
 ```
 
 ## Exercise 3: Guess Slots
+
+- Hint: You will need to generate a bunch of squares for each guess. This can be done using the provided [range utility](https://courses.joshwcomeau.com/joy-of-react/01-fundamentals/08-range-util).
+
+- In this exercise, we will update our code to display 6 rows of guesses, no matter how many guesses the user has submitted, and each row will consist of 5 cells.
+- As the user submits guesses, their guess will populate the cells:
+
+- Starter markup for the slots
+
+```HTML
+<div class="guess-results">
+  <p class="guess">
+    <span class="cell">F</span>
+    <span class="cell">I</span>
+    <span class="cell">R</span>
+    <span class="cell">S</span>
+    <span class="cell">T</span>
+  </p>
+  <p class="guess">
+    <span class="cell">G</span>
+    <span class="cell">U</span>
+    <span class="cell">E</span>
+    <span class="cell">S</span>
+    <span class="cell">S</span>
+  </p>
+  <p class="guess">
+    <span class="cell"></span>
+    <span class="cell"></span>
+    <span class="cell"></span>
+    <span class="cell"></span>
+    <span class="cell"></span>
+  </p>
+  <p class="guess">
+    <span class="cell"></span>
+    <span class="cell"></span>
+    <span class="cell"></span>
+    <span class="cell"></span>
+    <span class="cell"></span>
+  </p>
+  <p class="guess">
+    <span class="cell"></span>
+    <span class="cell"></span>
+    <span class="cell"></span>
+    <span class="cell"></span>
+    <span class="cell"></span>
+  </p>
+</div>
+```
