@@ -7442,3 +7442,15 @@ export default GuessInput;
   </p>
 </div>
 ```
+
+- Things to know to help with this exercise:
+
+1. You can sue the `range` utility to create array sof a specified length to map over. It's provided in `/src/utils.js`. Check out range utility lesson for more info.
+2. Inside `/src/constants.js`, you find a constant, `NUM_OF_GUESSES_ALLOWED`. You should import and use this constant when generating the set of guesses. This would make it easy for us to change the difficulty of the game later on, bu increasing/decreasing the # of guesses.
+
+- Acceptance Criteria:
+- Create a new `Guess` component. 6 instances should be rendered at all times, no matter how many guesses have been submitted.
+- The `Guess` component should render 5 spans, each with the class of `cell`.
+- Each cell should contain a letter, if the `Guess` instance has been given a value. If not, the cell should be blank.
+- Use the `NUM_OF_GUESSES_ALLOWED` constant, when needed.
+- No `key` warnings in the console.
