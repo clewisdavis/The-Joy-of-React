@@ -7445,12 +7445,35 @@ export default GuessInput;
 
 - Things to know to help with this exercise:
 
-1. You can sue the `range` utility to create array sof a specified length to map over. It's provided in `/src/utils.js`. Check out range utility lesson for more info.
+1. You can use the `range` utility to create array sof a specified length to map over. It's provided in `/src/utils.js`. Check out range utility lesson for more info.
 2. Inside `/src/constants.js`, you find a constant, `NUM_OF_GUESSES_ALLOWED`. You should import and use this constant when generating the set of guesses. This would make it easy for us to change the difficulty of the game later on, bu increasing/decreasing the # of guesses.
 
 - Acceptance Criteria:
-- Create a new `Guess` component. 6 instances should be rendered at all times, no matter how many guesses have been submitted.
-- The `Guess` component should render 5 spans, each with the class of `cell`.
-- Each cell should contain a letter, if the `Guess` instance has been given a value. If not, the cell should be blank.
-- Use the `NUM_OF_GUESSES_ALLOWED` constant, when needed.
-- No `key` warnings in the console.
+  - Create a new `Guess` component. 6 instances should be rendered at all times, no matter how many guesses have been submitted.
+  - The `Guess` component should render 5 spans, each with the class of `cell`.
+  - Each cell should contain a letter, if the `Guess` instance has been given a value. If not, the cell should be blank.
+  - Use the `NUM_OF_GUESSES_ALLOWED` constant, when needed.
+  - No `key` warnings in the console.
+
+- Create a new component, but how do you split up the guesses and put them in each box?
+
+```JAVASCRIPT
+    function Guess({ value }) {
+      return (
+        <>
+          <p className="guess">
+            {
+              // split up the guesses and map through
+              value.split('').map((letter, index)) => (
+                <span key={index} className="cell">
+                  {letter}
+                </span>
+              )
+            }
+          </p>
+        </>
+      )
+    }
+```
+
+## Exercise 4: Game logic
