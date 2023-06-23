@@ -7477,3 +7477,50 @@ export default GuessInput;
 ```
 
 ## Exercise 4: Game logic
+
+- In this exercise, we will add some CSS classes to color the background of each cell, based on the results and the correct answer:
+
+- Inside `/src/game-helpers.js` you will find a helper function, `checkGuess`. As parameters, it takes a single guess, as well as the correct answer. It returns an array that contains the status for each letter.
+
+- For example:
+
+```JAVASCRIPT
+checkGuess('WHALE', 'LEARN');
+/*
+  Returns:
+
+  [
+    { letter: 'W', status: 'incorrect' },
+    { letter: 'H', status: 'incorrect' },
+    { letter: 'A', status: 'correct' },
+    { letter: 'L', status: 'misplaced' },
+    { letter: 'E', status: 'misplaced' },
+  ]
+*/
+```
+
+- There are 3 possible statuses:
+  - correct - this slot is perfect.
+  - misplaced - this letter does exist in the word, but in a different slot.
+  - incorrect - this letter is not found in the word at all.
+
+- In the example above, `W` and `H` are not found in the word `LEARN`, and so they are marked as "incorrect". `A` is correct, since it is in the 3rd slot in each word. The other two letters `L` and `E` are meant to be in other slots.
+
+- These statuses correspond with CSS classes. the `correct` status has a `correct` class name, which will apply the green background when applied to a cell. Same thing for `misplaced` and `incorrect`.
+
+- The task is to use this function to validate the user's guesses, and apply the correct CSS classes. The final output for a given guess should look like this:
+
+```HTML
+<p class="guess">
+  <span class="cell incorrect">W</span>
+  <span class="cell incorrect">H</span>
+  <span class="cell correct">A</span>
+  <span class="cell misplaced">L</span>
+  <span class="cell misplaced">E</span>
+</p>
+```
+
+- Acceptance Criteria:
+  - Import the `checkGuess` function from `/src/game-helpers.js` and use it to validate each of the user's guesses.
+  - When rendering the letter in the `Guess` component, apply the letter's `status` to the `cell` element.
+  - Empty guess slots should have the same markup as before: `<span class="cell"></span>`
