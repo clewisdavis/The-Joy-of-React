@@ -7524,3 +7524,101 @@ checkGuess('WHALE', 'LEARN');
   - Import the `checkGuess` function from `/src/game-helpers.js` and use it to validate each of the user's guesses.
   - When rendering the letter in the `Guess` component, apply the letter's `status` to the `cell` element.
   - Empty guess slots should have the same markup as before: `<span class="cell"></span>`
+
+## Exercise 5: Winning and loosing
+
+- The last thing to do, is to end the game.
+- If the user wins the game, a happy banner should be shown:
+- If the user loses teh game, by contrast, a sad banner should be shown:
+
+- The user wins teh game when their guessed word is identical to the `answer`. They lose the game if they submit six guesses without winning.
+
+- When the game is over, one of these banners should be shown, and the text input should be disabled sot hat no new guesses can be typed or submitted.
+
+**- Acceptance Criteria:**
+
+- If the user wins the game, a happy banner should be shown.
+- If the user loses the game, a sad banner should be shown.
+- When teh game is over, the text input should be disabled.
+- It is up to your to decide hwo to structure the banner. Feel free to create a new component if you think it's warranted.
+
+## Module 3: React Hooks
+
+### Another tool in the Toolbox
+
+- A way to share business logic throughout our app, without having to stack a bunch of components.
+- The tool to solve this, is Hooks.
+- Allow you to reuse logic throughout the application.
+- Use it to manage a event listener, or data request, can now be packed up and re-used.
+- Using Hooks and components together, makes building in React much better.
+
+### The useId Hook
+
+- Reuse, is the main benefit of using react.
+- Try to write, any component re-usable. But is difficult for some parts of the web.
+- React has a new tool, to give a unique identifier to an instance of a component.
+
+```JAVASCRIPT
+const id = React.useId();
+```
+
+- Gives a unique ID, to each instance of a given component. For example; if you have a form, and you want to give a unique id for each text input, label.
+
+- If you console log the `id`, you get a unique id that corresponds with each instance of the component.
+- React knows, how many instances of a given component exist, and it stores that info on the instance.
+- The useId Hook, let's us hook into that internal data and access that id.
+
+- Now you can use that unique id, on a form, and create a unique string.
+
+```JAVASCRIPT
+import React from 'react';
+
+function LoginForm() {
+  const [username, setUsername] = React.useState('');
+  const [password, setPassword] = React.useState('');
+
+  // Pluck this instance's unique ID from React
+  const id = React.useId();
+
+  // Create element IDs using this unique ID
+  const usernameId = `${id}-username`;
+  const passwordId = `${id}-password`;
+  
+  return (
+    <form className="login-form">
+      <div>
+        {/* Apply these IDs to the label and input */}
+        <label htmlFor={usernameId}>
+          Username:
+        </label>
+        <input
+          type="text"
+          id={usernameId}
+          value={username}
+          onChange={event => {
+            setUsername(event.target.value);
+          }}
+        />
+      </div>
+      <div>
+        <label htmlFor={passwordId}>
+          Password:
+        </label>
+        <input
+          type="password"
+          id={passwordId}
+          value={password}
+          onChange={event => {
+            setPassword(event.target.value);
+          }}
+        />
+      </div>
+      <button>
+        Submit
+      </button>
+    </form>
+  );
+}
+
+export default LoginForm;
+```
