@@ -7622,3 +7622,13 @@ function LoginForm() {
 
 export default LoginForm;
 ```
+
+- How about using an alternative to create a unique id, like `Math.random()`
+- But when you enter information into the field, you trigger a state change, and a new number will be created with the `Math.random()`. Notice the `React.useId()` is stable across renders.
+- Because we are hooking into an instance, and the instance doesn't change between renders. But the `Math.random()` does change with each re-render of the component.
+- Whenever we re-render the component, we call the function again, so `Math.random()` will generate a new number.
+- Special thing with Hooks, we are able to pass things along between renders.
+
+### Practice - Toggle Component
+
+- A `Toggle` component, finish it up by adding a unique ID to the button, and connecting it ot the label. You should be able to trigger the toggle by clicking the 'Dark Mode' text.
