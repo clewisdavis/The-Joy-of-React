@@ -7632,3 +7632,125 @@ export default LoginForm;
 ### Practice - Toggle Component
 
 - A `Toggle` component, finish it up by adding a unique ID to the button, and connecting it ot the label. You should be able to trigger the toggle by clicking the 'Dark Mode' text.
+
+- Add the `useId()` method hook. `const id = React.useId();`
+- On the switch element label, add the `htmlFor` attribute, `htmlFor={id}`
+- Then add the associated `id={id}` to the `button`
+
+```JAVASCRIPT
+function Toggle({
+  label,
+  checked,
+  handleToggle,
+  backdropColor = 'white',
+  size = 16,
+}) {
+  const id = React.useId();
+
+  const padding = size * 0.1;
+  const width = size * 2 + padding * 2;
+
+  const wrapperStyle = {
+    width,
+    padding,
+    '--radius': size * 0.25 + 'px',
+    '--backdrop-color': backdropColor,
+  };
+
+  const ballStyle = {
+    width: size,
+    height: size,
+    transform: checked ? `translateX(100%)` : `translateX(0%)`,
+  };
+
+  return (
+    <div className={styles.wrapper}>
+      <label htmlFor={id}>
+        {label}
+      </label>
+      <button
+        id={id}
+        className={styles.toggle}
+        type="button"
+        aria-pressed={checked}
+        style={wrapperStyle}
+        onClick={() => {
+          handleToggle(!checked)
+        }}
+      >
+        <span className={styles.ball} style={ballStyle} />
+      </button>
+    </div>
+  );
+};
+```
+
+### Rules of Hooks
+
+- Hooks are special functions that allow us to "hook" into Rect internals.
+- `useState` allows us to hook into a component instance's state, for example, while `useId` allows us to create and store a unique identifier on the component instance.
+- What happens if we try to call these functions outside of a react context?
+  - You get a warning, stating Hooks can only be called inside a body of a function component. This could happen for one of the following reasons.
+  - 1. You might have mismatching versions of React and teh renderer, such as React DOM
+  - 2. You might be breaking the Rules of Hooks
+  - You might have more than one copy of React in the same app.
+
+- First understand that hooks are plain old JS functions.
+- When we call these functions, they hook into React internals.
+- React expects hook functions to be used in very specific ways, and if we violate those expectations. Base things can happen.
+
+- 📣 There are two Rules of Hooks that we should learn.
+- 1. Hooks have to be called within the scope of a React app. We can't call them outside of our React components.
+- 2. We have to call our hooks at the top level of the component. **This rule trips most people up.**
+
+- Cannot call a hook, if it's in a condition statement, or anything that makes it not at the top level of the component. Order matters.
+- A nice way to look at it, if the hook is indented, will not work.
+
+```JAVASCRIPT
+// will error
+function TextInput({ id, label, type }) {
+  let appliedId = id;
+  if (typeof appliedId === 'undefined') {
+    appliedId = ReactuseId();
+  }
+
+  return (
+    // component markup
+  )
+}
+```
+
+- What if you wanted to use a condition? How would you write that?
+
+```JAVASCRIPT
+import React from 'react';
+
+function TextInput({ id, label, type }) {
+  // Here's the original code, violating the rule:
+  //
+  //   let appliedId = id;
+  //   if (typeof appliedId === 'undefined') {
+  //     appliedId = React.useId();
+  //   }
+  //
+  // ...and here's the fixed code:
+  const generatedId = React.useId();
+  const appliedId = id || generatedId;
+
+  return (
+    <div className="text-input">
+      <label htmlFor={appliedId}>
+        {label}
+      </label>
+      <input
+        id={appliedId}
+        type={type}
+      />
+    </div>
+  );
+}
+
+export default TextInput;
+```
+
+#### Hooks, exercises
