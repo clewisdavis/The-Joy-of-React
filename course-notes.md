@@ -7754,3 +7754,15 @@ export default TextInput;
 ```
 
 #### Hooks, exercises
+
+- Fix the violation
+- We have a search UI with a conditionally rendered text input. Clicking the icon slides a text input into place.
+- The code is a violation of Rules of Hooks! Your mission is to update the code to comply with the rules.
+
+- ACs
+  - No lint warnings should be shown.
+  - Clicking the search button should reveal a search input.
+
+```JAVASCRIPT
+
+```
