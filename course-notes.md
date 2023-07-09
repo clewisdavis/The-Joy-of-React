@@ -7763,6 +7763,141 @@ export default TextInput;
   - No lint warnings should be shown.
   - Clicking the search button should reveal a search input.
 
-```JAVASCRIPT
+- Two possible solutions, first is to make sure the hook is at the correct level on the component.
 
+```JAVASCRIPT
+// Change this code:
+let searchId;
+if (showSearchField) {
+  searchId = React.useId();
+}
+
+// ...to this code:
+const searchId = React.useId();
+```
+
+- Or you can create a new create a new component and conditionally display the search input.
+
+```JAVASCRIPT
+import React from 'react';
+import { X, Search } from 'react-feather';
+
+import VisuallyHidden from './VisuallyHidden';
+
+function App() {
+  const [
+    showSearchField,
+    setShowSearchField,
+  ] = React.useState(false);
+
+  function handleToggleSearch(event) {
+    event.preventDefault();
+    setShowSearchField(!showSearchField);
+  }
+
+  return (
+    <>
+      <form>
+        {showSearchField && <SearchField />}
+        <button
+          className="search-toggle-button"
+          onClick={handleToggleSearch}
+        >
+          {showSearchField ? <X /> : <Search />}
+          <VisuallyHidden>
+            Toggle search field
+          </VisuallyHidden>
+        </button>
+      </form>
+    </>
+  );
+}
+
+// create a new component, and use logical && to show it above
+function SearchField() {
+  const searchId = React.useId();
+
+  return (
+    <div className="search-field-wrapper">
+      <label htmlFor={searchId}>
+        <VisuallyHidden>Search</VisuallyHidden>
+      </label>
+      <input
+        id={searchId}
+        className="search-field"
+      />
+    </div>
+  );
+}
+
+export default App;
+```
+
+#### Exercise, Fix another violation
+
+Fix another violation with a different scenario
+
+- In this exercise, our LoginForm component can either render:
+- A form including email/password fields, if the user isn't logged in.
+- A paragraph, if the user is logged in
+
+You can toggle between these states by submitting the form.
+
+- ACs
+- Update the code below so that it doesn't violate the Rules of Hooks.
+
+- Solution 1. Moving the early return, grouping the hooks together before you return any conditions.
+
+```JAVASCRIPT
+function LoginForm({ isLoggedIn, handleLogin }) {
+  const id = React.useId();
+  const [email, setEmail] = React.useState('');
+  const [password, setPassword] = React.useState('');
+
+  if (isLoggedIn) {
+    return (
+      <p>You're already logged in!</p>
+    );
+  }
+
+  return (
+    /* Same stuff, omitted for brevity */
+  );
+}
+```
+
+- Solution 2. Removing the early return entirely. Move the `isLoggedIn` to the parent component, `App`
+- Use a ternary condition to display the logged in status.
+
+```JAVASCRIPT
+function App() {
+  const [isLoggedIn, setIsLoggedIn] = React.useState(false);
+
+  function handleLogin(event) {
+    // NOTE: In a real application, we'd perform a
+    // network request here, to validate the login.
+    // We'll see how to do this later in this module.
+    event.preventDefault();
+    setIsLoggedIn(true);
+  }
+
+  return (
+    <>
+      {isLoggedIn ? (
+        <>
+          <p>You're already logged in!</p>
+          <button
+            onClick={(event) => {
+              setIsLoggedIn(false);
+            }}
+          >
+            Log Out
+          </button>
+        </>
+      ) : (
+        <LoginForm handleLogin={handleLogin} />
+      )}
+    </>
+  );
+}
 ```
