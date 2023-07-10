@@ -7901,3 +7901,31 @@ function App() {
   );
 }
 ```
+
+### Immutability Revisited
+
+One of the mis-understood things to grasp with React, is immutability, and what it means for state to be immutable.
+
+- Remember, in React, you never want to mutate a piece of state.
+- If you want to change a piece of state, you have to call the `setUser()` function. And provide it with a new object with the properties you want.
+- When you do that, you are actually creating a new object, that lives in a different part of the computers memory.
+- The confusing part, you are not editing the original object, you are creating a new one. And when you create a new one, you are not swapping out the instance, you are just creating a new one.
+
+```JAVASCRIPT
+// setUser, set state
+user: {
+  name: "Ivy"
+}
+```
+
+- And another one
+
+```JAVASCRIPT
+// setUser, set state
+user: {
+  name: "Ava"
+}
+```
+
+- The CORE idea, is when you setUser State, you have two different user variables in memory.
+- 💡 So when we say, we are changing the state, it's more like we are painting a new picture with the new value.
