@@ -7928,4 +7928,39 @@ user: {
 ```
 
 - The CORE idea, is when you setUser State, you have two different user variables in memory.
-- 💡 So when we say, we are changing the state, it's more like we are painting a new picture with the new value.
+- 💡 So when we say, we are changing the state, it's more like we are painting a new picture with the new value. Even if the new value is the exact same.
+
+- The moment you create this new object, it will be stored in memory. Imagine a ram stick, and it stores it in a little square on that ram stick.
+- All that matters to React, is I am changing the object, and for it to use the new object in the next snapshot.
+
+- Now, how does this work when you have multiple state variables.
+- A state variable and an array, these will take up two differ slots in memory.
+
+```JAVASCRIPT
+user : {
+  name: "Ivy"
+}
+
+items: [
+  1
+]
+```
+
+- Imagine you go through the process of calling setUser, with a handful of new objects.
+- Every time I create a new object by calling `setUser`, I get a new object, that is put into a new memory slot in the computers memory.
+
+- But not for the items array, each snapshot of the items array, points to the same spot in the computers memory.
+
+```JAVASCRIPT
+user : {
+  name: "Ivy"
+}
+
+items: [
+  1
+]
+```
+
+- We are still generating a brand new items array in each snapshot, with `const [items, setItems] = React.useState();`.
+- Each of the items is a different locally scoped variable, BUT the all point to the same underlying reference in memory.
+- I only have one array of numbers and it's being threaded through every single snapshot.
