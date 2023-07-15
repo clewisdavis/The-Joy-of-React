@@ -7964,3 +7964,157 @@ items: [
 - We are still generating a brand new items array in each snapshot, with `const [items, setItems] = React.useState();`.
 - Each of the items is a different locally scoped variable, BUT the all point to the same underlying reference in memory.
 - I only have one array of numbers and it's being threaded through every single snapshot.
+
+- Have to understand the difference between two items that are referentially different, vs. the same item being threaded through. 🤔
+- 🤔 The core idea, is how React handles mutability and how data is passed through snapshots.
+
+- **What is a snapshot?**
+
+- A snapshot is the result of performing a render. It's a combination of two things:
+
+1. The specific values of any props/state at the time the render occurred
+2. The React elements return form the component, describing the UI calculated in the render
+
+- What is the difference between snapshots and instances?
+- A component instance, is a JS object that is the source of truth for everything related to a particular instance of a component. It's created when teh component is mounted and it persists until the component is unmounted.
+
+- A snapshot, is not a specific JS object, it refers to the data available at a moment in time.
+- Could say, an instance holds the true value of a piece of sate, **but every time that state change**, we create a snapshot that captures the current value of that state variable.
+
+### Refs
+
+- How might we work with the `<canvas>` element in React?
+- In this case, if you wanted to work with the `<canvas>`, you would have to get a context, a reference to that element.
+- In JS, we do this by, using the `document.querySelector('canvas')` api, to get a reference to that element.
+- But to do this in React, considered a bad practice, to reach around React, and get a reference to an element.
+- This will also lead to bugs, when you have multiple instances of that component.
+
+- To get the context, or reference of an instance, the conventional way is to use the `ref` attribute, hook.
+- Its a little like the `key`, it signals to React we want to do something special.
+- One way, is we can pass it a function, and React will provide us, with the underlying DOM node.
+
+```JAVASCRIPT
+function ArtGallery() {
+  return (
+    <main>
+     <canvas
+       ref={function(canvas) {
+        console.log(canvas)
+       }}
+       width={200}
+       height={200}
+    />
+    </main>
+  )
+}
+```
+
+- In the console,  you get the actual `<canvas>` element, the same thing you would get, if you called `document.querySelector('canvas')`
+- This is one way to get to the underlying DOM node.
+
+- The way `ref` works, it will be called whenever the component renders.
+
+- A hook to use, in these situations, called `React.useRef()`
+- The idea with `useRef()` is that it creates a box, and we can put whatever we want in the box, and React will thread this through every single render, so that I always have access to it.
+
+- By default, `React.useRef()` creates an object, set to `{current: undefined}`
+- Similar to the `React.useState()` hook, you can pass an initial value if you want.
+
+```JAVASCRIPT
+function ArtGallery() {
+  const canvasRef = React.useRef();
+
+  return (
+    <main>
+     <canvas
+       ref={canvasRef}
+       width={200}
+       height={200}
+    />
+    </main>
+  )
+}
+```
+
+- You don't want to re-assign the variable, you want to mutate the `useRef` object.
+- Hold up, aren't you not supposed to mutate object?
+- That the difference, `React.useState()` is supposed to be immutable, BUT `React.useRef()` is intended to be mutated.
+
+- Breakdown what doing:
+- Creating a variable, `canvasRef` that starts as `{current: undefined}`
+- Then you are capturing a reference, to a particular DOM node, by setting the `ref={canvasRef}` within the element, in this case, it's the `<canvas />` DOM node.
+- This sets the `React.useRef()` hook to be set to the element, in this case `{ current: <canvas> }`
+
+- Full Code Sample:
+
+```JAVASCRIPT
+import React from 'react';
+
+function ArtGallery() {
+  // 1. Create a “ref”, a box that holds a value.
+  const canvasRef = React.useRef(); // { current: undefined }
+
+  return (
+    <main>
+      <div className="canvas-wrapper">
+        <canvas
+          // 2. Capture a reference to the <canvas> tag,
+          // and put it in the “canvasRef” box.
+          //
+          // { current: <canvas> }
+          ref={canvasRef}
+          width={200}
+          height={200}
+        />
+      </div>
+
+      <button
+        onClick={() => {
+          // 3. Pluck the <canvas> tag from the box,
+          // and pass it onto our `draw` function.
+          draw(canvasRef.current);
+        }}
+      >
+        Draw!
+      </button>
+    </main>
+  );
+}
+
+function draw(canvas) {
+  const ctx = canvas.getContext('2d');
+
+  ctx.clearRect(0, 0, 200, 200);
+
+  ctx.beginPath();
+  ctx.rect(30, 90, 140, 20);
+  ctx.fillStyle = 'black';
+  ctx.fill();
+  ctx.closePath();
+
+  ctx.beginPath();
+  ctx.arc(100, 97, 75, 1 * Math.PI, 2 * Math.PI);
+  ctx.fillStyle = 'tomato';
+  ctx.fill();
+  ctx.closePath();
+
+  ctx.beginPath();
+  ctx.arc(100, 103, 75, 0, 1 * Math.PI);
+  ctx.fillStyle = 'white';
+  ctx.fill();
+  ctx.closePath();
+  
+  ctx.beginPath();
+  ctx.arc(100, 100, 25, 0, 2 * Math.PI);
+  ctx.fillStyle = 'black';
+  ctx.fill();
+  ctx.closePath();
+  ctx.beginPath();
+  ctx.arc(100, 100, 19, 0, 2 * Math.PI);
+  ctx.fillStyle = 'white';
+  ctx.fill();
+  ctx.closePath();
+}
+
+export default ArtGallery;
+```
