@@ -8118,3 +8118,73 @@ function draw(canvas) {
 
 export default ArtGallery;
 ```
+
+### Exercises, Refs
+
+- Video playback speed - we have a `<VideoPlayer> component that includes a playback speed control. But it doesn't work.
+- For context, in vanilla JS, you can affect the playback speed of a `<video>` element with the following:
+
+```JAVASCRIPT
+const videoElement = document.querySelector('#some-video');
+videoElement.playbackRate = 2; // Play at 2x speed
+```
+
+- AC's
+- When the use changes the "Playback speed" control adn then plays the corresponding video, that video should play at the selected speed.
+- You should use the `useRef` hook to capture a ref tot he `<video>` element.
+
+- My attempt:
+
+```JAVASCRIPT
+import React from 'react';
+
+function VideoPlayer({ src, caption }) {
+  const playbackRateSelectId = React.useId();
+
+  const videoRef = React.useRef(); // {current: undefined}
+  console.log(videoRef);
+  
+  return (
+    <div className="video-player">
+      <figure>
+        <video
+          controls
+          src={src}
+          ref={videoRef}
+        />
+        <figcaption>
+          {caption}
+        </figcaption>
+      </figure>
+      
+      <div className="actions">
+        <label htmlFor={playbackRateSelectId}>
+          Select playback speed:
+        </label>
+        <select
+          id={playbackRateSelectId}
+          defaultValue="1"
+          onChange={(element) => {
+            // grad the reference element
+            const videoElement = videoRef.current;
+            // grab the value of the select
+            const videoRate = element.target.value;
+            console.log(videoRate);
+            // set the playback on the element and set it equal to the value of the select
+            videoElement.playbackRate = videoRate;
+          }}
+        >
+          <option value="0.5">0.5</option>
+          <option value="1">1</option>
+          <option value="1.25">1.25</option>
+          <option value="1.5">1.5</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+        </select>
+      </div>
+    </div>
+  );
+}
+
+export default VideoPlayer;
+```
