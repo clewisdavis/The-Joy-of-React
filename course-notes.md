@@ -8188,3 +8188,39 @@ function VideoPlayer({ src, caption }) {
 
 export default VideoPlayer;
 ```
+
+- Solution video:
+- Same solution, but you could simplify the `onChange` within the select.
+
+```JAVASCRIPT
+onChange={(event) => {
+  videoRef.current.playbackRate = event.target.value;
+}}
+```
+
+- NOTE: Don't forget the `.current` after.
+
+### Exercise, Media Player
+
+- Let's build a media player!
+
+- The UI is ready and we have loaded an audio file, using `<audio>` tag. Our job now is to capture a reference to that element, and to trigger it when the user clicks teh play/pause button.
+
+- For context, here how we solve this problem in vanilla JS:
+
+```JAVASCRIPT
+const audioElement = document.querySelector('#some-audio-element');
+
+// Start playing the song
+audioElement.play();
+
+// Stop paying the song
+audioElement.pause();
+```
+
+- AC's
+- Clicking the "Play" button should start playing the song.
+- Clicking the button again should pause the song.
+- By default, we should render a `<Play>` icon inside the button, but it should flip to a `<Pause>` icon while the song is playing.
+
+- Hint: to keep track whether the song is currently playing or not, you should use React state variable.
