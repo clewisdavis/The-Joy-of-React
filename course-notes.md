@@ -8224,3 +8224,66 @@ audioElement.pause();
 - By default, we should render a `<Play>` icon inside the button, but it should flip to a `<Pause>` icon while the song is playing.
 
 - Hint: to keep track whether the song is currently playing or not, you should use React state variable.
+- In general, if you want some part of the UI to update, you need to use `useState()` hook.
+
+- My attempt:
+
+```JAVASCRIPT
+import React from 'react';
+import { Play, Pause } from 'react-feather';
+
+import VisuallyHidden from './VisuallyHidden';
+
+function MediaPlayer({ src }) {
+
+  // use state to manage flipping the pause / play button
+  const [isPlaying, setIsPlaying] = React.useState(false);
+  
+  const audioRef = React.useRef(); // {current: undefined}
+  
+  return (
+    <div className="wrapper">
+      <div className="media-player">
+        <img
+          alt=""
+          src="https://sandpack-bundler.vercel.app/img/take-it-easy.png"
+        />
+        <div className="summary">
+          <h2>Take It Easy</h2>
+          <p>Bvrnout ft. Mia Vaile</p>
+        </div>
+        <button
+          onClick={() => {
+            // use the state variable, set to false by default
+            if (isPlaying) {
+              audioRef.current.pause();
+            } else {
+              audioRef.current.play();
+            }
+
+            // flip the setState variable from true false or false true with the Logical NOT expression !
+            setIsPlaying(!isPlaying);
+                
+          }}
+        >
+        
+          { // use the isPlaying variable, to show which icon is shown
+          isPlaying ? <Pause /> : <Play/>
+          }
+ 
+          <VisuallyHidden>
+            Toggle playing
+          </VisuallyHidden>
+        </button>
+        
+        <audio 
+          src={src}
+          ref={audioRef}
+        />
+      </div>
+    </div>
+  );
+}
+
+export default MediaPlayer;
+```
