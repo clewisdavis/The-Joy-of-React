@@ -8287,3 +8287,36 @@ function MediaPlayer({ src }) {
 
 export default MediaPlayer;
 ```
+
+- Additional solution: When the song finishes, we need to slip the icon back to the initial state with `onEnded` added to the `<audio>` element.
+
+```JAVASCRIPT
+<audio
+  ref={audioRef}
+  src={src}
+  onEnded={() => {
+    setIsPlaying(false);
+  }}
+/>
+```
+
+## Side Effects
+
+- As we build apps, we often need to synchronize with external systems. Things like.
+  - Making network request
+  - Managing timeouts / intervals
+  - Reading / writing from localStorage
+  - Listening for global events
+
+- React calls all of these things 'side effects'.
+
+### About "Best Practices"
+
+- So, these side effects are hard, one of the hardest things about a modern React app.
+- Should never feel shame for writing code that is not perfect and follow the best practices.
+- Where ever you go, everyone is learning it as you go, and it's more about the journey and growth of learning.
+- You will never be in a place in your career where you are writing/designing perfect code or designs. You are always learning. And if you look back at your code or designs from a couple years ago, and feel embarrassed, that is a good sign. That you are growing and not feeling stagnated.
+
+### The useEffect hook
+
+-
