@@ -8319,4 +8319,92 @@ export default MediaPlayer;
 
 ### The useEffect hook
 
--
+- So far, we have discussed the **CORE React Loop**
+  - Provide React the JSX, a description of the UI you want.
+  - Then React takes those descriptions and produces the real world DOM the user can see and use.
+  - When the use does something, state change for example, React re-runs all the code and give React a new description of the DOM.
+
+- But in web apps, we need to do things outside of this. For example, updating the title of the tab.
+- This falls outside of Reacts normal space. Now we want to change something that exist outside of that container.
+- React has a name for this, Side Effects, this is when you want to do something that is typically outside of Reacts typical job responsibilities. But still needs to be synchronized with the state we are holding in React.
+
+- We want to synchronize this external element, with React state.
+- To do this, we use `React.useEffect()`
+- How it works, we pass it a function. And React will call this function for us at appropriate times.
+
+- Example, update the title tag, to use a count state variable.
+
+```JAVASCRIPT
+// Counter.js
+
+function Counter({ name, initialVal = 0 }) {
+
+  // state management
+  const [count, setCount] = React.useState(initialVal);
+
+  React.useEffect(() => {
+    document.title = `(${count}) - Counter 2.0`;
+  })
+  return (
+    // DOM markup
+  )
+}
+```
+
+- What's going on here, with this function? We are telling React, to immediately run, after every render of this component.
+- Whenever something updates, it will render the JSX, and then call the function inside the `useEffect()`.
+
+- Why do you need `useEffect()`, couldn't you just put the function right in the body and have it render?
+
+```JAVASCRIPT
+// Counter.js
+
+function Counter({ name, initialVal = 0 }) {
+
+  // state management
+  const [count, setCount] = React.useState(initialVal);
+
+  //React.useEffect(() => {
+  //  document.title = `(${count}) - Counter 2.0`;
+  //})
+
+  // Can't you just do this? Not considered good practice. 
+  document.title = `(${count}) - Counter 2.0`;
+
+  return (
+    // DOM markup
+  )
+}
+```
+
+- Has to do with updates, and the re-render of the component. You shouldn't have to run the function everytime the component updates. In this example, only when `${count}` changes.
+
+- The way it works, you specify a second argument as an array of dependencies.
+- The first argument is the function and the second argument is the array of dependencies.
+
+```JAVASCRIPT
+// Counter.js
+
+function Counter({ name, initialVal = 0 }) {
+
+  // state management
+  const [count, setCount] = React.useState(initialVal);
+
+  React.useEffect(
+    // first argument, function
+    () => {
+      document.title = `(${count}) - Counter 2.0`;
+    },
+    // second argument, list of dependencies
+    [count]
+  );
+  return (
+    // DOM markup
+  )
+}
+```
+
+- 🚀 Tells React, to only call the function, when the `count` variable changes.
+
+- So instead of calling it on every single render, it only fires when something is updated in the second argument array, list of dependencies.
+- But, the effect will always execute in the very first render. And the dependency array, will always tell React, how to re-render, when to fire the function.
