@@ -8408,3 +8408,124 @@ function Counter({ name, initialVal = 0 }) {
 
 - So instead of calling it on every single render, it only fires when something is updated in the second argument array, list of dependencies.
 - But, the effect will always execute in the very first render. And the dependency array, will always tell React, how to re-render, when to fire the function.
+
+### Exercises, useEffect
+
+Get some practice with `useEffect` hook.
+
+#### Logging a particular value
+
+- Sign up form with several React state variables.
+- Goal is to add a `console.log` that fires only when the value of "email" changes. We should see teh user's email logged in the console whenever they edit that field.
+
+ACs:
+
+- Whenever the user changes the value of the "email"state variable, the new value should be logged to the console.
+- Nothing should be logged when the user changes their name, city or postal code.
+
+Stretch Goal:
+
+- Update the code so that `name` is also logged whenever it changes.
+
+- Solution Code;
+- TIP: ℹ️ You can have as many `useEffect()` hooks as you need so each only deals with a single concern.
+
+```JAVASCRIPT
+import React from 'react';
+
+function SignupForm() {
+  const [name, setName] = React.useState('');
+  const [email, setEmail] = React.useState('');
+  const [city, setCity] = React.useState('');
+  const [postalCode, setPostalCode] = React.useState(
+    ''
+  );
+
+  React.useEffect(
+    // function
+    () => {
+      console.log({name});
+    },
+    // dependencies
+    [name]
+  );
+
+    React.useEffect(
+    // function
+    () => {
+      console.log({email});
+    },
+    // dependencies
+    [email]
+  );
+
+  return (
+    <form>
+      <Field
+        id="name"
+        label="Preferred Name"
+        value={name}
+        onChange={(event) => {
+          setName(event.target.value);
+        }}
+      />
+      <Field
+        id="email"
+        type="email"
+        label="Email Address"
+        value={email}
+        onChange={(event) => {
+          setEmail(event.target.value);
+        }}
+      />
+      <div className="row">
+        <Field
+          id="city"
+          label="City"
+          grow={2}
+          value={city}
+          onChange={(event) => {
+            setCity(event.target.value);
+          }}
+        />
+        <Field
+          id="postal-code"
+          label="Postal Code"
+          grow={1}
+          value={postalCode}
+          onChange={(event) => {
+            setPostalCode(event.target.value);
+          }}
+        />
+      </div>
+      <button>Sign up</button>
+    </form>
+  );
+}
+
+function Field({
+  id,
+  label,
+  type = 'text',
+  grow,
+  value,
+  onChange,
+}) {
+  return (
+    <div
+      className="field"
+      style={{ '--grow': grow }}
+    >
+      <label htmlFor={id}>{label}</label>
+      <input
+        type={type}
+        id={id}
+        value={value}
+        onChange={onChange}
+      />
+    </div>
+  );
+}
+
+export default SignupForm;
+```
