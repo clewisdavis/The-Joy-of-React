@@ -8529,3 +8529,28 @@ function Field({
 
 export default SignupForm;
 ```
+
+### Exercise, Locally Persisted State
+
+Imagine you are building an app with a "Dark Mode" toggle. It would be annoying if users had to keep toggling their preferred mode every time they load the application.
+
+- Update the code ts that the user's preference is saved in localStorage, and restored when the page reloads.
+- The current value of `isDarkMode` should be "remembered", and usd whn the page is refreshed.
+
+- In plain JS, we can do this with the following code:
+
+```JAVASCRIPT
+// Save the value;
+window.localStorage.setItem('is-dark-mode', true);
+
+// Retrieve the value;
+window.localStorage.getItem('is-dark-mode');
+```
+
+- AC's
+  - The value of `isDarkMode` should be saved in localStorage whenever it changes, using the `useEffect` hook.
+  - The initial value of the `isDarkMode` state variable should be retrieved from localStorage (or set to `false` if no value has been saved).
+  - You can use the string `"is-dark-mode"` for the key.
+  - Note: Items saved to localStorage are always saved as a string. You will need to convert the stored value back to boolean.  You can do this with the `JSON.parse()`.
+
+- ℹ️ Check out the [Local Storage troubleshooting guide](https://courses.joshwcomeau.com/support/local-storage-troubleshooting) from Josh.
