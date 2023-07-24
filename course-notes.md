@@ -8554,3 +8554,92 @@ window.localStorage.getItem('is-dark-mode');
   - Note: Items saved to localStorage are always saved as a string. You will need to convert the stored value back to boolean.  You can do this with the `JSON.parse()`.
 
 - ℹ️ Check out the [Local Storage troubleshooting guide](https://courses.joshwcomeau.com/support/local-storage-troubleshooting) from Josh.
+
+- Set into storage:
+
+```JAVASCRIPT
+function App() {
+  const [isDarkMode, setIsDarkMode] = React.useState(false);
+
+  React.useEffect(
+    () => {
+      // save to local storage
+      window.localStorage.setItem('is-dark-mode', isDarkMode);
+    },
+    [isDarkMode]
+  );
+
+  return (
+    // JSX here
+  )
+```
+
+- Get it from storage:
+- Note: `localStorage` is only capable of storing string, you have to convert it to the type you want.
+
+```JAVASCRIPT
+function App() {
+  
+  // get from localStorage
+  const storedValue = window.localStorage.getItem('is-dark-mode');
+  // convert the localStorage string to a boolean
+  const parsedValue = JSON.parse(storedValue);
+
+  // then use the parsedValue as your initial state
+  const [isDarkMode, setIsDarkMode] = React.useState(parsedValue);
+
+  React.useEffect(
+    () => {
+      // save to local storage
+      window.localStorage.setItem('is-dark-mode', isDarkMode);
+    },
+    [isDarkMode]
+  );
+
+  return (
+    // JSX here
+  )
+```
+
+- But, need to address `null` value when nothing is specified on initial load.
+- Update the `parsedValue` with an OR conditional `||` so it will default to `false`
+
+```JAVASCRIPT
+  const parsedValue = JSON.parse(storedValue) || false;
+```
+
+- One last thing, we don't want to run `window.localStorage` on every single render, it is expensive to interact with local storage.
+- You can use the 'alternative form factor', whatever that means, in the `useState`. Use a callback function inside of state.
+- On initial load, it will use the callback function to figure out what the value should be, but on every render after that, it won't run.
+
+```JAVASCRIPT
+function App() {
+
+  // then use the parsedValue as your initial state
+  const [isDarkMode, setIsDarkMode] = React.useState(
+    // Callback function to determine the initial value on the initial render only.
+    () => {
+      // get from localStorage
+      const storedValue = window.localStorage.getItem('is-dark-mode');
+      // return the value
+      return JSON.parse(storedValue) || false;
+    }
+  );
+
+  React.useEffect(
+    () => {
+      console.log(isDarkMode);
+      // save to local storage
+      window.localStorage.setItem('is-dark-mode', isDarkMode);
+    },
+    [isDarkMode]
+  );
+
+  return (
+    // JSX here
+  )
+```
+
+### Effect Lint Rules
+
+-
