@@ -8642,4 +8642,179 @@ function App() {
 
 ### Effect Lint Rules
 
--
+- A common linting error, when using `useEffect`, is `React Hook React.useEffect has a missing dependency: 'count'. Either include it or remove the dependency array.`
+- Not a good practice to silence the warning, with `// eslint-disable-next-line`, you are not solving the problem, you are just silencing the problem.
+
+- The problem is the state variables are getting out of sync, every time you re-render the component. The snapshots are using different versions of the `count` variable stored in memory.
+- To solve this, make sure to always include the state variable dependency in the `useEffect` dependency array.
+
+- Simple Counter example:
+
+```JAVASCRIPT
+import React from 'react';
+
+function App() {
+  const [count, setCount] = React.useState(0);
+ 
+  // Lint Warning: React Hook React.useEffect has a missing dependency: 'count'. Either include it or remove the dependency array.
+  React.useEffect(() => {
+    console.log(count);
+  }, []);
+
+  return (
+    <>
+      <p>The count is: {count}</p>
+      <button onClick={() => setCount(count + 1)}>
+        Increment
+      </button>
+    </>
+  );
+}
+
+export default App;
+```
+
+- To solve the warning, include the `count` state variable as dependency.
+
+```JAVASCRIPT
+import React from 'react';
+
+function App() {
+  const [count, setCount] = React.useState(0);
+ 
+  // Include the count state variable.
+  React.useEffect(() => {
+    console.log(count);
+  }, [count]);
+
+  return (
+    <>
+      <p>The count is: {count}</p>
+      <button onClick={() => setCount(count + 1)}>
+        Increment
+      </button>
+    </>
+  );
+}
+
+export default App;
+```
+
+### Running on Mount
+
+- Imagine you have a form, and when the page loads, you want focus on the input.
+- How, or when do you call the `focus()` method on the input?
+- The issue is timing, when the component mounts, and when things render.
+
+```JAVASCRIPT
+import React from 'react';
+
+function App() {
+  const [
+    searchTerm,
+    setSearchTerm,
+  ] = React.useState('');
+  
+  // create a reference, { current: undefined}
+  const inputRef = React.useRef();
+  
+  // 🛑 wrong, is undefined because it runs before the JSX below.
+  inputRef.current.focus();
+
+  return (
+    <>
+      <header>
+        <img
+          className="logo"
+          alt="Foobar"
+          src="https://sandpack-bundler.vercel.app/img/foogle.svg"
+        />
+      </header>
+      <main>
+        <form>
+          <input
+            ref={inputRef}
+            value={searchTerm}
+            onChange={(event) => {
+              setSearchTerm(event.target.value);
+            }}
+          />
+          <button>Search</button>
+        </form>
+      </main>
+    </>
+  );
+}
+
+export default App;
+```
+
+- The issue is timing, React needs to render the JSX, to create the input and all the DOM nodes.
+- What you want to do, is wait until React has run the JSX, and then run the `focus()` method.
+- Common in React, if you want to make a network request, or establish a DOM node.
+
+- The established way, is the `useEffect()` Hook.
+
+- But, with this code, effect run after every single render. Which is not exaclty what you want.
+
+```JAVASCRIPT
+React.useEffect(() => {
+  inputRef.current.focus();
+});
+```
+
+- To solve this, add a dependency array to the effect. And leave it empty.
+- 🤔 Telling React, you only want to run when one of these dependencies change, but you haven't specified any dependencies. So nothing changes after the mount.
+- It will always run after that first mount, but will never run again, no matter what state changes happen.
+
+```JAVASCRIPT
+React.useEffect(() => {
+  inputRef.current.focus();
+}, []);
+```
+
+- Full example, search input focus() with useEffect Hook:
+
+```JAVASCRIPT
+import React from 'react';
+
+function App() {
+  const [
+    searchTerm,
+    setSearchTerm,
+  ] = React.useState('');
+
+  const inputRef = React.useRef();
+
+  React.useEffect(() => {
+    // Uncomment me!
+    // inputRef.current.focus()
+  }, []);
+
+  return (
+    <>
+      <header>
+        <img
+          className="logo"
+          alt="Foobar"
+          src="https://sandpack-bundler.vercel.app/img/foogle.svg"
+        />
+      </header>
+      <main>
+        <form>
+          <input
+            ref={inputRef}
+            value={searchTerm}
+            onChange={(event) => {
+              setSearchTerm(event.target.value);
+            }}
+          />
+          <button>Search</button>
+        </form>
+      </main>
+    </>
+  );
+}
+
+export default App;
+```
