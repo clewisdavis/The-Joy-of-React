@@ -8818,3 +8818,125 @@ function App() {
 
 export default App;
 ```
+
+### Subscriptions
+
+- Let's suppose you want to track the user's cursor position. Whenever they move their mouse, we will update some state. We can add `onMouseMove` event handlers to specific DOM nodes like this:
+
+```JAVASCRIPT
+<div
+  onMouseMove={event => {
+    setMousePosition({
+      x: event.clientX,
+      y: event.clientY,
+    });
+  }}
+>
+```
+
+- This will only work while the user is hovering over this particular `<div>` though. What if we want to track their cursor position no matter where the mouse is within the viewport?
+
+- Try the solution, to work on the solution.
+- HINT: To listen to global events, you can use `window.addEventLister`. You want to listen for `mousemove` events. You can get the cursor position using `event.clientX` and `event.clientY`.
+
+- Solution:
+- Create a `useEffect()` hook to manage the global mouse position.
+- And use the set state function and pass it an object, in the same format as the `useState` object.
+
+```JAVASCRIPT
+import React from 'react';
+
+function MouseCoords() {
+  const [
+    mousePosition,
+    setMousePosition
+  ] = React.useState({ x: 0, y: 0 });
+
+  React.useEffect(() => {
+    function handleMouseMove(event) {
+      // state setter, object in same format
+      setMousePosition({
+        x: event.clientX,
+        y: event.clientY,
+      });
+    }
+  })
+  
+  return (
+    <div className="wrapper">
+      <p>
+        {mousePosition.x} / {mousePosition.y}
+      </p>
+    </div>
+  );
+}
+
+export default MouseCoords;
+```
+
+- Set a global event listener, pass in the `mousemove` event, and pass in the `handleMouseMove` callback.
+
+```JAVASCRIPT
+import React from 'react';
+
+function MouseCoords() {
+  const [
+    mousePosition,
+    setMousePosition
+  ] = React.useState({ x: 0, y: 0 });
+
+  React.useEffect(() => {
+    function handleMouseMove(event) {
+      // state setter, object in same format
+      setMousePosition({
+        x: event.clientX,
+        y: event.clientY,
+      });
+    }
+      // set the global event listener
+      window.addEventListener('mousemove', handleMouseMove);
+  })
+
+  return (
+    <div className="wrapper">
+      <p>
+        {mousePosition.x} / {mousePosition.y}
+      </p>
+    </div>
+  );
+}
+
+export default MouseCoords;
+```
+
+- Now, when you move the mouse, you see the numbers update on the DOM.
+- But, a problem with this.
+- We are adding an event listener, but we are never removing the event listener.
+- The problem is, we are adding an event listener, every time we move the mouse. This piles up over time.
+
+- When you call `window.addEventListener()` it is purely a JS thing, happens outside of React.
+- Every time, you move your cursor, it re-runs the component, draws the JSX and runs the `useEffect()` hook again, which includes the `window.addEventListener`.
+- This creates a new event listener every single time.
+
+- Think of this method, `window.addEventListener()` as a subscription, by starting it, you are starting a long running process.
+- 📣 You only want to do that once, when the component mounts 📣
+- And the long running process will handle all the `mousemove` events
+
+- To fix this, add an empty dependency array `[]` to the `useEffect()` hook. Which means, the event listener will only run the first time it renders.
+
+```JAVASCRIPT
+  React.useEffect(() => {
+    function handleMouseMove(event) {
+      // state setter, object in same format
+      setMousePosition({
+        x: event.clientX,
+        y: event.clientY,
+      });
+    }
+      // set the global event listener
+      window.addEventListener('mousemove', handleMouseMove);
+  }, []);
+```
+
+- 📣 This is the way it works with other types of subscription, starting an interval, or starting a web socket connection.
+- You want to start the process once, and then the process takes care of itself. Updating the state as the events happen.
