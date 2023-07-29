@@ -8940,3 +8940,17 @@ export default MouseCoords;
 
 - 📣 This is the way it works with other types of subscription, starting an interval, or starting a web socket connection.
 - You want to start the process once, and then the process takes care of itself. Updating the state as the events happen.
+
+- Diagram, with an empty dependency array.
+- Initial render, that starts the long running process. And for every re-render, it only runs the event.
+
+![Alt text](images/image.png)
+
+- Diagram, With no dependency array
+- Every time we trigger an event, it creates a re-render, but you also start another `Effect`, which they start to pile on top of one another.
+
+![Alt text](images/image-1.png)
+
+- 🤔 This is very common, where you have some sort of subscription or registration that needs to happen immediately after mount. But them we need to make sure it doesn't happen over and over again. **Because the subscription is long running.**
+
+### Exercises, Side Effects
