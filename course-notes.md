@@ -8954,3 +8954,55 @@ export default MouseCoords;
 - 🤔 This is very common, where you have some sort of subscription or registration that needs to happen immediately after mount. But them we need to make sure it doesn't happen over and over again. **Because the subscription is long running.**
 
 ### Exercises, Side Effects
+
+Exercises for side effects
+
+#### Window dimensions
+
+Let's use teh effect hook to track teh window's dimensions over time.
+
+- ACs
+  - As the window is resized, teh number shown in the "Result" tab should update, accurately showing the width and height of the iframe.
+  - Only a single event listener should be registered.
+
+NOTE:  You can test this by dragging the division between teh two tabs. If you are not using a pointer device, you can focus the divider and use the left/right arrow keys.
+
+- My Solution:
+
+```JAVASCRIPT
+import React from 'react';
+
+function WindowSize() {
+  const [
+    windowDimensions,
+    setWindowDimensions,
+  ] = React.useState({
+    width: window.innerWidth,
+    height: window.innerHeight,
+  });
+
+  // Add use effect hook
+  React.useEffect(() => {
+    // Create the callback function and call our set state handler
+    function handleResize() {
+      setWindowDimensions({
+        width: window.innerWidth,
+        height: window.innerHeight,
+      })
+    }
+    // Set the global event listener on resize and call our function
+    window.addEventListener('resize', handleResize);
+    // Add the empty dependency array below, so the listener will only run once
+  }, []);
+  
+  return (
+    <div className="wrapper">
+      <p>
+        {windowDimensions.width} / {windowDimensions.height}
+      </p>
+    </div>
+  );
+}
+
+export default WindowSize;
+```
