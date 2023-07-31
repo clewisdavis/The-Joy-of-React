@@ -9006,3 +9006,119 @@ function WindowSize() {
 
 export default WindowSize;
 ```
+
+#### Exercises, Toasty
+
+- Create a toasty effect, tied to a scroll position. When the user scrolls to a specific point in the page, a message will slide out from the edge of the screen.
+- Lots going on, video for context.
+
+- ACs
+  - As the use scrolls near the bottom of the page, a ghost character should slide in.
+  - This can be accomplished by observing the `styles.wrapper` element, and setting the `isShown` state variable to true/false based on whether it's within the viewport or not.
+  - You shouldn't use `document.querySelector` You can capture a reference to the wrapper element with the `React.useRef` hook.
+
+- ℹ️ Note: This uses the `IntersectionObserver()` API. How it works, you create an intersection observer instance, and then tell it to observe a particular DOM node.
+- Similar to an event listener, that is starts a long running process. `observer.observe(wrapperElement)`
+- Pure JS version:
+
+```JAVASCRIPT
+// Here's how we'd solve this problem using vanilla JS:
+function pureJsVersion() {
+  const wrapperElement = document.querySelector('.toasty-wrapper');
+  
+  const observer = new IntersectionObserver((entries) => {
+    const [entry] = entries;
+
+    if (entry.isIntersecting) {
+      // Show character
+    } else {
+      // Hide character
+    }
+  });
+
+  observer.observe(wrapperElement);
+}
+```
+
+- TODO:
+  - Get the DOM element to reference, `useRef`
+  - Create a `useEffect` hook, with callback function for observer
+
+- My Attempt: But not working
+
+```JAVASCRIPT
+import React from 'react';
+
+import styles from './Toasty.module.css';
+
+// Here's how we'd solve this problem using vanilla JS:
+// function pureJsVersion() {
+//   const wrapperElement = document.querySelector('.toasty-wrapper');
+  
+//   const observer = new IntersectionObserver((entries) => {
+//     const [entry] = entries;
+
+//     if (entry.isIntersecting) {
+//       // Show character
+//     } else {
+//       // Hide character
+//     }
+//   });
+
+//   observer.observe(wrapperElement);
+// }
+
+function Toasty() {
+  // Your goal is to update the `isShown` state variable,
+  // based on the user's scroll position, using
+  // IntersectionObserver.
+  const [isShown, setIsShown] = React.useState(false);
+
+  // Get the reference
+  const wrapperRef = React.useRef();
+  console.log(wrapperRef); // {current: undefined
+
+  // Create a useEffect hook to call the Intersection Observer
+  React.useEffect(() => {
+    function handleObserver() {
+      //console.log(wrapperRef);
+      // Put the intersection observer in the callback
+        const observer = new IntersectionObserver((entries) => {
+          const [entry] = entries;
+          console.log(observer);
+      
+          if (entry.isIntersecting) {
+            // Show character
+            console.log('show')
+          } else {
+            // Hide character
+            console.log('hide')
+          }
+        }); 
+      // Listen for the scroll position using the useRef hook
+      observer.observe(wrapperRef);
+    }
+  }, []);
+   
+  // This CSS value will control whether the ghost is
+  // visible or not.
+  const translateX = isShown
+    ? '0%'
+    : '100%';
+  
+  return (
+    <div ref={wrapperRef} className={styles.wrapper}>
+      <div
+        className={styles.character}
+        style={{
+          transform: `translateX(${translateX})`,
+        }}
+      >
+        👻
+      </div>
+    </div>
+  );
+}
+
+export default Toasty;
+```
