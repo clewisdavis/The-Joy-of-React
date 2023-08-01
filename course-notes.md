@@ -9044,9 +9044,10 @@ function pureJsVersion() {
   - Get the DOM element to reference, `useRef`
   - Create a `useEffect` hook, with callback function for observer
 
-- My Attempt: But not working
+- Solution:
 
 ```JAVASCRIPT
+// Toasty.js
 import React from 'react';
 
 import styles from './Toasty.module.css';
@@ -9080,24 +9081,26 @@ function Toasty() {
 
   // Create a useEffect hook to call the Intersection Observer
   React.useEffect(() => {
-    function handleObserver() {
-      //console.log(wrapperRef);
-      // Put the intersection observer in the callback
-        const observer = new IntersectionObserver((entries) => {
-          const [entry] = entries;
-          console.log(observer);
+
+    const observer = new IntersectionObserver((entries) => {
+      const [entry] = entries;
+      console.log({entry});
+      console.log(entry.isIntersecting)
       
-          if (entry.isIntersecting) {
-            // Show character
-            console.log('show')
-          } else {
-            // Hide character
-            console.log('hide')
-          }
-        }); 
-      // Listen for the scroll position using the useRef hook
-      observer.observe(wrapperRef);
-    }
+      // if (entry.isIntersecting) {
+      //   // Show character
+      //   setIsShown(true)
+      // } else {
+      //   // Hide character
+      //   setIsShown(false)
+      // }
+
+      // set the state variable directly
+      setIsShown(entry.isIntersecting);
+    }); 
+
+    // Listen for the scroll position using the useRef hook
+    observer.observe(wrapperRef.current);
   }, []);
    
   // This CSS value will control whether the ghost is
