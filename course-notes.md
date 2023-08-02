@@ -9125,3 +9125,13 @@ function Toasty() {
 
 export default Toasty;
 ```
+
+- Why are we not getting any dependency warnings, for using `wrapperRef`, or `setIsShown`? These things are declared outside of the effect.
+- A state variable can grow stale over time, but the set state function `setIsShown`, is the same function every single time. We get this from React every single time.
+- Same thing with `const wrapperRef = React.useRef()`, is it always the same object over time, the object is the same each time, but the values inside the object update over time. There are not multiple copies of the object for every single snapshot. Share the same object across renders.
+
+- So that means, the values cannot become stale, and no issues with using them in an effect.
+
+- Bonus: [See video](https://courses.joshwcomeau.com/joy-of-react/03-hooks/05.05-on-mount-exercises) for how the CSS works on this effect.
+
+#### Cleanup
