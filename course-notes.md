@@ -9133,5 +9133,120 @@ export default Toasty;
 - So that means, the values cannot become stale, and no issues with using them in an effect.
 
 - Bonus: [See video](https://courses.joshwcomeau.com/joy-of-react/03-hooks/05.05-on-mount-exercises) for how the CSS works on this effect.
+- ☝️ Good example of conditionally trigger some CSS from an event.
 
 #### Cleanup
+
+- All the solutions so far, with the subscriptions, are incomplete.
+- When React mounts a component, all the subscriptions / logic or long running processes with that component are started.
+- When you unmount a component, shouldn't the opposite happen? It would stop or remove any long running process?
+- No, it doesn't, even when you unmount a component instance, the event lister is still running in the background.
+- And ever time you mount and unmount a component with a subscription (listener) you are stacking them on top of one another.
+- 📣 They are never being cleaned up. 📣
+
+- We say that when we un-mount the component, we delete the instance. We don't actually delete the instance, we just remove references to it. It's just out there floating in memory.
+
+- The JS garbage collector 🤔 cannot clean it up, if there are still references to it. If a event listener or subscription is still running.
+
+- If the subscription is still running, that means the component instance can not be cleaned up, deleted, destroyed.
+- So you end up with new ones, being stacked up in memory over time.
+
+- The reason it doesn't get cleaned up, in the `useEffect()` hook, the subscription, or event listener is not part of React. It is part of vanilla JS.
+
+```JAVASCRIPT
+  React.useEffect(() => {
+    // Effect logic:
+    function handleMouseMove(event) {
+      console.log('move');
+      setMousePosition({
+        x: event.clientX,
+        y: event.clientY,
+      });
+    }
+
+    // Part of vanilla JS, will not get cleaned up in React:
+    window.addEventListener('mousemove', handleMouseMove);
+
+    // Add a Cleanup function to remove:
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+    };
+  }, []);
+```
+
+- And actually, when we call a `useEffect()`, React doesn't have any idea what is inside that effect. It just calls it.
+- It just says, hey React, here is a function that I would like you to run, when this component mounts. And here are the dependencies, for when this effect should re-run.
+- 🤔 We are giving React a chunk of code, and when it should run.
+- React has no idea, you are starting an event listener, when you mount the component, or when it runs the `useEffect`
+
+- You have two independent systems, React and Vanilla JS, that are going about, doing their own thing.
+- 🚀 It is up to us, to make sure these things are synchronized. When the component unmounts, **we remove the ongoing events**. 🚀
+
+- In vanilla JS, you can use the `removeEventListener()`, you want to run this, right before the component unmounts.
+- The `useEffect()` hooks comes with a tool for this. The way it works, is you give it a `return()` function and put anything in it you want to clean up.
+
+- React now has two different things it can do at different times.
+- When the component mounts, it will run the effect logic
+
+```JAVASCRIPT
+    // Effect logic:
+    function handleMouseMove(event) {
+      console.log('move');
+      setMousePosition({
+        x: event.clientX,
+        y: event.clientY,
+      });
+    }
+```
+
+- Then it will return a function, and React is going to hand on to this function.
+- 🤔 React will evoke this function at the right time, right before the component un-mounts.
+- Which will remove the ongoing event listener.
+
+```JAVASCRIPT
+    // Add a Cleanup function to remove:
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+    };
+```
+
+- 🚀 When you are dealing with any ongoing subscription, this is the format. You set it up, and then return a function to manage the clean up. 🚀
+
+- Full example of Mouse tracker
+
+```JAVASCRIPT
+import React from 'react';
+
+function MouseTracker() {
+  const [mousePosition, setMousePosition] = React.useState({
+    x: 0,
+    y: 0,
+  });
+
+  React.useEffect(() => {
+    // Effect logic:
+    function handleMouseMove(event) {
+      console.log('move');
+      setMousePosition({
+        x: event.clientX,
+        y: event.clientY,
+      });
+    }
+
+    window.addEventListener('mousemove', handleMouseMove);
+
+    // Cleanup function:
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+    };
+  }, []);
+
+  return (
+    <p>
+      {mousePosition.x} / {mousePosition.y}
+    </p>
+  );
+}
+
+export default MouseTracker;
+```
