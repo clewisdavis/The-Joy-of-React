@@ -9250,3 +9250,67 @@ function MouseTracker() {
 
 export default MouseTracker;
 ```
+
+- 😬 Functions that return functions 😬
+- This is a confusing idea. A function that all it does, it return another function.
+
+```JAVASCRIPT
+function doSomething() {
+  const hi = 5;
+
+  return function() {
+    return hi * 2;
+  };
+}
+```
+
+- A similar thing is happening with the `useEffect()` cleanup API. Our main effect function is returning a function:
+- The good news, this is just an implementation detail.
+- The most important thing to remember, We give React two functions, an effect function and a cleanup function. And React calls these functions for us at the appropriate time.
+
+#### Cleanup with dependencies
+
+- What happens when we do have dependencies, and we want the code to re-run sometimes?
+- On rule, like the other hooks, you can NOT apply the `useEffect()` hook conditionally.
+- So you cannot wrap a condition around the entire `useEffect()` hook.
+
+```JAVASCRIPT
+// 🛑 Will not work
+
+// apply state
+const [isEnabled, setIsEnabled] = React.useState(true);
+
+// Condition around the effect, Error
+if (isEnabled) {
+  React.useEffect(() => {
+    // Effect function here
+
+    // Cleanup function here
+  }, []);
+}
+```
+
+- The idea, is a good one, what if you move the condition, inside the `useEffect()`, and then pass in the state variable for the condition.
+
+```JAVASCRIPT
+React.useEffect(() => {
+  // Conditionally
+  if (isEnabled) {
+    function handleMouseMove(event) {
+      setMousePosition({
+        x: event.clientX,
+        y: event.clientY,
+      });
+    }
+
+    window.addEventListener('mousemove', handleMouseMove);
+
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+    };
+  }
+  // Include as a dependency
+}, [isEnabled]);
+```
+
+- Now, this conditionally runs the effect based on the state.
