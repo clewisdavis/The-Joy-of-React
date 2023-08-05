@@ -9270,32 +9270,11 @@ function doSomething() {
 
 #### Cleanup with dependencies
 
-- What happens when we do have dependencies, and we want the code to re-run sometimes?
-- On rule, like the other hooks, you can NOT apply the `useEffect()` hook conditionally.
-- So you cannot wrap a condition around the entire `useEffect()` hook.
+- So far, in the examples, we have learned how to start a long running process the moment the component mounts, and we have learned how to clean it up.
+- We don't include a dependency in the dependency array and that tells React, to not re-run this code.
 
 ```JAVASCRIPT
-// 🛑 Will not work
-
-// apply state
-const [isEnabled, setIsEnabled] = React.useState(true);
-
-// Condition around the effect, Error
-if (isEnabled) {
   React.useEffect(() => {
-    // Effect function here
-
-    // Cleanup function here
-  }, []);
-}
-```
-
-- The idea, is a good one, what if you move the condition, inside the `useEffect()`, and then pass in the state variable for the condition.
-
-```JAVASCRIPT
-React.useEffect(() => {
-  // Conditionally
-  if (isEnabled) {
     function handleMouseMove(event) {
       setMousePosition({
         x: event.clientX,
@@ -9308,9 +9287,137 @@ React.useEffect(() => {
     return () => {
       window.removeEventListener('mousemove', handleMouseMove);
     };
-  }
-  // Include as a dependency
-}, [isEnabled]);
+  }, []);
 ```
 
-- Now, this conditionally runs the effect based on the state.
+- What happens when we do have dependencies, and we want the code to re-run sometimes?
+- Want to use a state variable `isEnabled` to start and stop the event listener.
+
+```JAVASCRIPT
+const [isEnabled, setIsEnabled] = React.useState(true);
+```
+
+- Cannot wrap in a conditional, even though this may seem like the intuitive way.
+- ✋ React will not allow you to call `useEffect()` hook conditionally.
+
+```JAVASCRIPT
+  const [isEnabled, setIsEnabled] = React.useState(true);
+
+  // 🛑 Will not work, wrapping conditionally
+  if (isEnabled) {
+    React.useEffect(() => {
+      function handleMouseMove(event) {
+        setMousePosition({
+          x: event.clientX,
+          y: event.clientY,
+        });
+      }
+
+      window.addEventListener('mousemove', handleMouseMove);
+
+      return () => {
+        window.removeEventListener('mousemove', handleMouseMove);
+      };
+    }, []);
+  }
+
+```
+
+- But the idea, is a good one. 🤔 You can move the condition to be just inside the `useEffect()`.
+- So the entire body of the effect, including the clean up function, are wrapped in a condition.
+
+```JAVASCRIPT
+  const [isEnabled, setIsEnabled] = React.useState(true);
+
+  // 👍 Will work, condition inside the effect, but you need to include the dependency
+  React.useEffect(() => {
+    if (isEnabled) {
+      React.useEffect(() => {
+        function handleMouseMove(event) {
+          setMousePosition({
+            x: event.clientX,
+            y: event.clientY,
+          });
+        }
+
+        window.addEventListener('mousemove', handleMouseMove);
+
+        return () => {
+          window.removeEventListener('mousemove', handleMouseMove);
+        };
+      }, [isEnabled]);    
+    }
+```
+
+- Now, our mouse tracker works, and I can start and stop the tracking process.
+- But how is this working?
+
+1. Refresh the page, the component mounts for the first time. And we run the `useEffect`
+2. The state variable is set to true, `isEnabled`. so we run the `handleMouseMove` event to start the listener. And also hand React the cleanup function `return` for later.
+3. All the tracking happens as the user move mouse around. No dependencies updated.
+4. Then the user clicks the button, and it updates the dependency, `isEnabled` to be `false` which triggers a re-run of the effect.
+5. But before it can do that, it has to invoke the clean up function. React always wants to clean up, what was done previously, before it starts a new effect. So it removes that event listener, `window.removeEventListener()`, in the return function.
+6. Then React re-runs the effect, except now, `isEnabled` is false, and it skips over all the code inside the body of the effect. Like commenting out everything inside the `if(isEnabled) {}` condition.
+7. Now, we have no mouse tracking, until the user clicks the button again, and runs the effect and everything starts over again.
+
+- Full code example, mouse tracker, with cleanup dependency.
+
+```JAVASCRIPT
+import React from 'react';
+
+function MouseTracker() {
+  const [mousePosition, setMousePosition] = React.useState({
+    x: 0,
+    y: 0,
+  });
+  const [isEnabled, setIsEnabled] = React.useState(true);
+
+  React.useEffect(() => {
+    if (isEnabled) {
+      function handleMouseMove(event) {
+        setMousePosition({
+          x: event.clientX,
+          y: event.clientY,
+        });
+      }
+
+      window.addEventListener('mousemove', handleMouseMove);
+
+      return () => {
+        window.removeEventListener('mousemove', handleMouseMove);
+      };
+    }
+  }, [isEnabled]);
+
+  function toggleMouseTracking() {
+    setIsEnabled(!isEnabled);
+  }
+
+  return (
+    <>
+      <button onClick={toggleMouseTracking}>
+        Mouse Tracking: {isEnabled ? 'On' : 'Off'}
+      </button>
+      <p>
+        {mousePosition.x} / {mousePosition.y}
+      </p>
+    </>
+  );
+}
+
+export default MouseTracker;
+```
+
+- Graph examples:
+
+- The order of operations:
+
+![Alt text](images/image-2.png)
+
+- A view of snapshots and cleanup:
+
+![Alt text](images/image-3.png)
+
+- Cleanup functions aren't always provided:
+
+![Alt text](images/image-4.png)
