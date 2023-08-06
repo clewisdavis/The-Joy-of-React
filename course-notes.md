@@ -9410,14 +9410,28 @@ export default MouseTracker;
 
 - Graph examples:
 
-- The order of operations:
+- The order of operations: Shows what effects are scheduled based on what render it is.
+- Effects always run after the first render.
+- No cleanup, haven't done anything yet. **If a cleanup function is provided, it will hang on to it.**
 
 ![Alt text](images/image-2.png)
 
-- A view of snapshots and cleanup:
+- A view of individual snapshots and cleanup:
+- You want to stop running the effect from the first render, before you start something else.
+- On each subsequent re-render, the cleanup function is invoked before running the effect again, and when the component is un-mounted.
 
 ![Alt text](images/image-3.png)
 
 - Cleanup functions aren't always provided:
+- You don't always have to provide a cleanup, if there is nothing to clean up, no subscription or event listener running.
+- Like the conditional example above, if `isEnabled` is false, none of the code inside the effect runs. So, there is nothing to clean up.
 
 ![Alt text](images/image-4.png)
+
+- The big idea 🤔, you want to provide a cleanup function, if the effect starts any sort of ongoing process. For events, intersection observer, timeout, or an interval. 📣 You want to make sure you provide a way to stop the subscription, so they don't stake up.
+
+#### Exercises, Cleanup Subscriptions
+
+- Practice some cleanup subscriptions with useEffect Hook.
+
+##### Fixing Previous exercises
