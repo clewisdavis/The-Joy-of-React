@@ -9435,3 +9435,120 @@ export default MouseTracker;
 - Practice some cleanup subscriptions with useEffect Hook.
 
 ##### Fixing Previous exercises
+
+**Window dimensions:**
+
+- Update the solution to the "Window dimensions" exercise so that the event listener is cleaned up.
+
+AC's
+
+- The "resize" event listener should be removed inside a cleanup function.
+
+Solution:
+
+```JAVASCRIPT
+import React from 'react';
+
+function WindowSize() {
+  const [
+    windowDimensions,
+    setWindowDimensions,
+  ] = React.useState({
+    width: window.innerWidth,
+    height: window.innerHeight,
+  });
+
+  React.useEffect(() => {
+    function handleResize() {
+      console.log('resize');
+      
+      setWindowDimensions({
+        width: window.innerWidth,
+        height: window.innerHeight,
+      });
+    }
+
+    window.addEventListener('resize', handleResize);
+
+    // Add the cleanup function to remove the event listener
+    return() => {
+      window.removeEventListener('resize', handleResize);
+    }
+  }, []);
+
+  return (
+    <div className="wrapper">
+      <p>
+        {windowDimensions.width} / {windowDimensions.height}
+      </p>
+    </div>
+  );
+}
+
+export default WindowSize;
+```
+
+**Toasty!**
+
+- In the Toasty exercise, we implemented a animation using the IntersectionObserver, but we never cancel the process.
+- Here is the code to stop the IntersectionObserver. `observer.disconnect()`
+
+AC's
+
+- The IntersectionObserver should be disconnected within the effect's cleanup function.
+
+Solution:
+
+```JAVASCRIPT
+/*
+
+To stop an IntersectionObserver, you can run:
+  observer.disconnect();
+
+*/
+import React from 'react';
+
+import styles from './Toasty.module.css';
+
+function Toasty() {
+  const [isShown, setIsShown] = React.useState(false);
+
+  const wrapperRef = React.useRef();
+
+  React.useEffect(() => {
+    const observer = new IntersectionObserver((entries) => {
+      const [entry] = entries;
+
+      setIsShown(entry.isIntersecting);
+    });
+
+    observer.observe(wrapperRef.current);
+
+    // Cleanup function to remove the observer, no good way to test this though
+    return() => {
+      observer.disconnect();
+    }
+  }, []);
+
+  const translateX = isShown ? '0%' : '100%';
+
+  return (
+    <div ref={wrapperRef} className={styles.wrapper}>
+      <div
+        className={styles.character}
+        style={{
+          transform: `translateX(${translateX})`,
+        }}
+      >
+        👻
+      </div>
+    </div>
+  );
+}
+
+export default Toasty;
+```
+
+##### Digital Clock
+
+Build a digital clock in React!
