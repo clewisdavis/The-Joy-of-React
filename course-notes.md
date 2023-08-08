@@ -9551,4 +9551,93 @@ export default Toasty;
 
 ##### Digital Clock
 
-Build a digital clock in React!
+Build a digital clock in React! We have a clock starter code but the value doesn't update. Update the code so that the clock shows the correct time:
+
+AC's
+
+- The clock should update once per second, to show the current time.
+- There should be no memory leaks, no ongoing processes that outlive the `Clock` instance.
+
+Hint: Brush up on your JS, "[Intervals and Timeouts](https://courses.joshwcomeau.com/joy-of-react/10-javascript-primer/13-intervals-and-timeouts)"
+
+```JAVASCRIPT
+// Clock.js, Starter Code
+import React from 'react';
+import format from 'date-fns/format';
+
+function Clock() {
+  const [time, setTime] = React.useState(new Date());
+
+  return (
+    <p className="clock">
+      {format(time, 'hh:mm:ss a')}
+    </p>
+  );
+}
+
+export default Clock;
+```
+
+```JAVASCRIPT
+// App.js, to toggle the clock on and off, mount and unmount the Clock.js component
+import React from 'react';
+import format from 'date-fns/format';
+
+function Clock() {
+  const [time, setTime] = React.useState(new Date());
+
+  React.useEffect(() => {
+    // effect function
+    const clockInterval = window.setInterval(() => {
+      console.log('tick');
+      setTime(new Date());
+    }, 1000);
+
+    // cleanup
+    return() => {
+      window.clearInterval(clockInterval);
+      console.log('cleanup');
+    }
+  }, [time]);
+  return (
+    <p className="clock">
+      {format(time, 'hh:mm:ss a')}
+    </p>
+  );
+}
+
+export default Clock;
+```
+
+- Solution:
+- Use the `setInterval` method to call the `setTime` state setter.
+
+```JAVASCRIPT
+import React from 'react';
+import format from 'date-fns/format';
+
+function Clock() {
+  const [time, setTime] = React.useState(new Date());
+
+  React.useEffect(() => {
+    // effect function
+    const clockInterval = window.setInterval(() => {
+      console.log('tick');
+      setTime(new Date());
+    }, 1000);
+
+    // cleanup
+    return() => {
+      window.clearInterval(clockInterval);
+      console.log('cleanup');
+    }
+  }, []);
+  return (
+    <p className="clock">
+      {format(time, 'hh:mm:ss a')}
+    </p>
+  );
+}
+
+export default Clock;
+```
