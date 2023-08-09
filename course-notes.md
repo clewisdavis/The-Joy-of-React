@@ -9641,3 +9641,62 @@ function Clock() {
 
 export default Clock;
 ```
+
+- 🤔 Think of the interval inside of an effect, like an event listener, it is just a long running process. Where we are starting a process in the `setInterval` and then ending it with the `clearInterval`. And there is some sort of even that happens in between. Where that's mouse move events or intersections, here it's the interval firing once per second.
+
+#### Useless Machine
+
+Useless machines, small boxes are built with a single switch on them, when you flip the switch, the box flips back. Let's build something similar.
+
+We will create a checkbox that automatically ticks itself, whenever it's unticked.
+
+AC's
+
+- When the user unticks the checkbox, it should become re-ticked automatically after half a second. This can be done with a `setTimeout`.
+- If the user toggles it off and on really quickly, the timeout should be canceled, since the machine has been left in an "on" state.
+- If the user clicks it a bunch of times in rapid succession, the machine should wait a full 500ms from the final click before ticking itself back on.
+
+Notes:
+
+- When you have a situation where you want to change state or something after a specific amount of time, but you don't want it to keep doing it over and over again. You don't want to use `setInterval`, use `setTimeout` instead.
+- Start with adding your `useEffect` dependency, only want to start this `timeout` when the `isOn` state variable changes.
+
+```JAVASCRIPT
+// state hook
+const [isOn, setIsOn] = React.useState(true);
+
+React.useEffect(() => {
+  window.setTimeout(() => {
+    // run this code every second, call the state setter and set to true
+    setIsOn(true);
+  }, 1000)
+}, [isOn])
+}
+```
+
+- How do you handle, if user clicks the checkbox on and off really quickly? You can add a condition at the beginning of the `useEffect`, to check the value of the state variable `isOn === true`. If the value is true, the `return` statement, will "bail early" and not run any of the code under it.
+- This mean, we will only schedule a timeout, if the user toggles it off.
+- ℹ️ See more info on [Early Returns](https://courses.joshwcomeau.com/joy-of-react/03-hooks/05.07-cleanup-exercises).
+
+```JAVASCRIPT
+  React.useEffect(() => {
+    // condition to check value of isOn, to bail out of the effect early and not run the timeout code. 
+    if (isOn === true) {
+      return;
+    }
+    // function will only run, if isOn is false
+    const timeoutId = window.setTimeout(
+      () => {
+        console.log('clicked')
+        setIsOn(true);
+      },
+      500 // half second
+    )
+
+    // cleanup
+    return() => {
+      window.clearTimeout(timeoutId); 
+      console.log('cleanup');
+    }
+  }, [isOn]);
+```
