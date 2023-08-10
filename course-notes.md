@@ -9682,7 +9682,7 @@ React.useEffect(() => {
   React.useEffect(() => {
     // condition to check value of isOn, to bail out of the effect early and not run the timeout code. 
     if (isOn === true) {
-      return;
+      return; // early return, this will bail out and prevent any code after the return to not run.
     }
     // function will only run, if isOn is false
     const timeoutId = window.setTimeout(
@@ -9700,3 +9700,62 @@ React.useEffect(() => {
     }
   }, [isOn]);
 ```
+
+- Full Code Example;
+
+```JAVASCRIPT
+import React from 'react';
+
+import VisuallyHidden from './VisuallyHidden';
+
+function UselessMachine() {
+  const id = React.useId();
+  const [isOn, setIsOn] = React.useState(true);
+
+  React.useEffect(() => {
+    // Ignore renders that happen because the
+    // checkbox is flipped on. We only want to
+    // respond when it's flipped *off*.
+    if (isOn) {
+      return;
+    }
+
+    // Flip the checkbox back on in 500ms...
+    const timeoutId = window.setTimeout(() => {
+      setIsOn(true);
+    }, 500);
+
+    return () => {
+      // ...Unless the 'isOn' property changes
+      // before that time has elapsed, OR the
+      // component happens to unmount:
+      window.clearTimeout(timeoutId);
+    };
+  }, [isOn]);
+
+  return (
+    <>
+      <input
+        id={id}
+        type="checkbox"
+        checked={isOn}
+        onChange={(event) => {
+          setIsOn(event.target.checked);
+        }}
+      />
+      <VisuallyHidden>
+        <label htmlFor={id}>Toggle checkbox</label>
+      </VisuallyHidden>
+    </>
+  );
+}
+
+export default UselessMachine;
+```
+
+### Stale Values
+
+- The media player example, from a previous exercise. One thing all media players have in common, the space bar key will play or pause the currently selected song.
+- Update the media player  to include the space bar shortcut.
+
+- ℹ️ Hint: You will want to register the `keydown` event listener. If they pressed the space bar, `event.code` will be equal to the string "Space".
