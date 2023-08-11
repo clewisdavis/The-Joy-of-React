@@ -9759,3 +9759,86 @@ export default UselessMachine;
 - Update the media player  to include the space bar shortcut.
 
 - ℹ️ Hint: You will want to register the `keydown` event listener. If they pressed the space bar, `event.code` will be equal to the string "Space".
+
+- 🤔 To solve this problem, use multiple `useEffect` hooks, to keep the internal audio sync, `play()`, `pause()`, in sync with the `isPlaying` state variable.
+- The alternative would be to just create a function to handle the playing logic.
+- Better approach to handle in a effect, so you have a single source of truth for the state variable `isPlaying`
+
+```JAVASCRIPT
+// MediaPlayer.js Component
+import React from 'react';
+import { Play, Pause } from 'react-feather';
+
+import VisuallyHidden from './VisuallyHidden';
+
+function MediaPlayer({ src }) {
+  const [isPlaying, setIsPlaying] = React.useState(false);
+
+  const audioRef = React.useRef();
+
+  React.useEffect(() => {
+    // function
+    function handleKeyDown(event) {
+      if (event.code === 'Space') {
+        // Todo: play or pause
+        // use the state setter function to update the state variable
+        setIsPlaying(!isPlaying);
+      }
+    }
+
+    // Set the event listener
+    window.addEventListener('keydown', handleKeyDown);
+
+    // Cleanup
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    }
+  }, [isPlaying]);
+
+  // Add a second useEffect hook to sync the audio and the state variable isPlaying
+  // The one place, to manage the connection between the audio and the state variable
+  React.useEffect(() => {
+    if (isPlaying) {
+      audioRef.current.play();
+    } else {
+      audioRef.current.pause();
+    } 
+  }, [isPlaying])
+
+  return (
+    <div className="wrapper">
+      <div className="media-player">
+        <img alt="" src="https://sandpack-bundler.vercel.app/img/take-it-easy.png" />
+        <div className="summary">
+          <h2>Take It Easy</h2>
+          <p>Bvrnout ft. Mia Vaile</p>
+        </div>
+        <button
+          onClick={() => {
+            if (isPlaying) {
+              audioRef.current.pause();
+            } else {
+              audioRef.current.play();
+            }
+
+            setIsPlaying(!isPlaying);
+          }}
+        >
+          {isPlaying ? <Pause /> : <Play />}
+          <VisuallyHidden>Toggle playing</VisuallyHidden>
+        </button>
+
+        <audio
+          ref={audioRef}
+          src={src}
+          onEnded={() => {
+            setIsPlaying(false);
+          }}
+        />
+      </div>
+    </div>
+  );
+}
+
+export default MediaPlayer;
+```
