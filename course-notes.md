@@ -9764,6 +9764,10 @@ export default UselessMachine;
 - The alternative would be to just create a function to handle the playing logic.
 - Better approach to handle in a effect, so you have a single source of truth for the state variable `isPlaying`
 
+- **Solving with `isPlaying` as a dependency**
+
+![Alt text](images/image-5.png)
+
 ```JAVASCRIPT
 // MediaPlayer.js Component
 import React from 'react';
@@ -9842,3 +9846,143 @@ function MediaPlayer({ src }) {
 
 export default MediaPlayer;
 ```
+
+- **Solving with callback function:**
+
+- Alternative approach to the dependency and adding and removing the event listener every time.
+- In the effect, `handleKeyDown` function we call the state setter function `setIsPlaying` to switch the value of the state so the audio will play.
+
+```JAVASCRIPT
+  React.useEffect(() => {
+    function handleKeyDown(event) {
+      if (event.code === 'Space') {
+        // Todo: play or pause
+        // use the state setter function to update the state variable
+        setIsPlaying(!isPlaying);
+      }
+    }
+
+    // rest of useEffect code
+  }
+```
+
+- But you can also pass a function, and return a value, it's equivalent to calling the setter function with that value.
+
+```JAVASCRIPT
+// pass a function with the value, this will return and set it to 5
+setIsPlaying(() => {
+  return 5
+})
+
+// equivalent to this
+setIsPlaying(5)
+```
+
+- React will call this function for us and whatever you return, becomes the new state variable.
+- Why is this useful, because we can set a parameter, and the parameter is the value of whatever the state value is.
+
+```JAVASCRIPT
+SetIsPlaying((currentIsPlaying) => {
+  return
+})
+```
+
+- Instead of trying to read the state variable from the snapshot, **which could be stale**, you can instead pass React a function
+- 🚀 And ask React, you tell me what the current value is, and then I will do something with that value.
+- 📣 I will do something with that value, I will manipulate it in some way, to calculate the next state.
+
+- In this case, to flip the value of the state variable to start and stop the audio player
+
+```JAVASCRIPT
+SetIsPlaying((currentIsPlaying) => {
+  return !currentIsPlaying;
+})
+```
+
+- **Solving using a callback function:**
+
+![Alt text](images/image-6.png)
+
+```JAVASCRIPT
+import React from 'react';
+import { Play, Pause } from 'react-feather';
+
+import VisuallyHidden from './VisuallyHidden';
+
+function MediaPlayer({ src }) {
+  const [isPlaying, setIsPlaying] = React.useState(false);
+
+  const audioRef = React.useRef();
+
+  React.useEffect(() => {
+    // function
+    function handleKeyDown(event) {
+      if (event.code === 'Space') {
+        // Todo: play or pause
+        // use the state setter function to update the state variable
+        // pass a function in the state setter to get the current value of the state variable, then do something with it
+        // flip the value
+        setIsPlaying((currentIsPlaying) =>{
+          return !currentIsPlaying;
+        });
+      }
+    }
+
+    // Set the event listener
+    window.addEventListener('keydown', handleKeyDown);
+
+    // Cleanup
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    }
+  }, [isPlaying]);
+
+  // Add a second useEffect hook to sync the audio and the state variable isPlaying
+  // The one place, to manage the connection between the audio and the state variable
+  React.useEffect(() => {
+    if (isPlaying) {
+      audioRef.current.play();
+    } else {
+      audioRef.current.pause();
+    } 
+  }, [isPlaying])
+
+  return (
+    <div className="wrapper">
+      <div className="media-player">
+        <img alt="" src="https://sandpack-bundler.vercel.app/img/take-it-easy.png" />
+        <div className="summary">
+          <h2>Take It Easy</h2>
+          <p>Bvrnout ft. Mia Vaile</p>
+        </div>
+        <button
+          onClick={() => {
+            if (isPlaying) {
+              audioRef.current.pause();
+            } else {
+              audioRef.current.play();
+            }
+
+            setIsPlaying(!isPlaying);
+          }}
+        >
+          {isPlaying ? <Pause /> : <Play />}
+          <VisuallyHidden>Toggle playing</VisuallyHidden>
+        </button>
+
+        <audio
+          ref={audioRef}
+          src={src}
+          onEnded={() => {
+            setIsPlaying(false);
+          }}
+        />
+      </div>
+    </div>
+  );
+}
+
+export default MediaPlayer;
+```
+
+#### The state setter callback
