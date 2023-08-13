@@ -9986,3 +9986,99 @@ export default MediaPlayer;
 ```
 
 #### The state setter callback
+
+- An important concept, a new way to set React state is the state-setter callback.
+- So far in the course, we have been calling the state-setter functions with teh new value:
+
+```JAVASCRIPT
+const [count, setCount] = React.useState(0);
+
+// sets 'count' to '100'
+setCount(100);
+```
+
+- There is an alternative syntax for state updates. We can pass a callback, and React wil invoke that function for us:
+
+```JAVASCRIPT
+const [count, setCount] = React.useState(0);
+
+// sets 'count' to '100'
+setCount(() => {
+  return 100;
+});
+```
+
+- Whatever we return form this function becomes the new value for teh state, as if we had passed that value directly.
+- This is useful because React provides the current value:
+
+```JAVASCRIPT
+setCount((currentCount) => {
+  return currentCount + 1;
+});
+```
+
+- 🤔 In most cases, this isn't necessary, since we already have access to the `count` variable. But, when working with effects, it becomes possible for us to lose access to the **freshest version** of a state variable.
+
+- In the exercise above, video player with keyboard, we saw an example of how this alternative syntax can be useful:
+
+```JAVASCRIPT
+// Audio Keyboard example
+const [isPlaying, setIsPlaying] = React.useState(false);
+
+React.useEffect(() => {
+  function handleKeyDown(event) {
+    if (event.code === 'Space') {
+      setIsPlaying((currentIsPlaying) => {
+        return !currentIsPlaying;
+      });
+    }
+  }
+
+  window.addEventListener('keydown', handleKeyDown);
+
+  return () => {
+    window.removeEventListener('keydown', handleKeyDown);
+  };
+
+  // No dependency on `isPlaying`!
+}, []);
+```
+
+- If we try to access `isPlaying` inside the `handleKeyDown` callback, that value will be stale, since this effect only runs after the very first mount.
+- 📣 By passing a callback function, we pluck the freshest value for this state variable, directly from the component instance.
+
+##### When to use teh callback syntax
+
+- Most of the time, we don't' need to use the callback syntax.
+- Only necessary when it's possible for state variables to grow stale.
+
+- Stale state variables aren't stricly a `useEfftct` thing. Can happen with other hooks tha thave dependency arrays, like `useMemo` and `useCallback`. Learn about later in module.
+
+- In practice, most of the time a callback syntax is used is because of this situation: need to access a state variable inside an effect, but I don't want to add it to the dependency array.
+
+ℹ️ Why not always use the callback syntax?
+
+For example; a simple counter app:
+
+```JAVASCRIPT
+function Counter() {
+  const [count, setCount] = React.useState(0);
+
+  return (
+    <button
+      onClick={() => {
+        setCount((currentCount) => currentCount + 1);
+      }}
+    >
+      {count}
+    </button>
+  )
+}
+```
+
+- A callback function works fine, why not use it all the time?
+- This is sort of a crutch, by doing this callback function, you don't have to worry about thsi tricky "stale values" stuff. Not recommended to do it this way.
+- Recommend, use the default non-callback by default. If you run into bugs, you can try the callback syntax to see if that helps. If it does, try to figure out why. Practice is the only way to get comfortable.
+-
+
+#### Exercises, Side Effects
