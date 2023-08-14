@@ -10047,7 +10047,7 @@ React.useEffect(() => {
 - If we try to access `isPlaying` inside the `handleKeyDown` callback, that value will be stale, since this effect only runs after the very first mount.
 - 📣 By passing a callback function, we pluck the freshest value for this state variable, directly from the component instance.
 
-##### When to use teh callback syntax
+##### When to use the callback syntax
 
 - Most of the time, we don't' need to use the callback syntax.
 - Only necessary when it's possible for state variables to grow stale.
@@ -10082,3 +10082,113 @@ function Counter() {
 -
 
 #### Exercises, Side Effects
+
+- **Interval counter**
+
+- In this component we want to count how many seonds have elapsed since the component mounted: But the solution has a bug, stops counting at 1 🤔
+- Fix the bug so that the number keeps inprementing past 1.
+
+- ACs
+- The UI should accurately show the # of seconds since mount.
+- There should be no lint warnings, and no `esling-disable` comments.
+
+```JAVASCRIPT
+// starter code
+import React from 'react';
+
+function Timer() {
+  const [count, setCount] = React.useState(0);
+
+  React.useEffect(() => {
+    const intervalId = window.setInterval(() => {
+      setCount(count + 1);
+    }, 1000);
+
+    return () => {
+      window.clearInterval(intervalId);
+    };
+    // eslint-disable-next-line
+  }, []);
+
+  return (
+    <div className="timer">
+      <h1>Seconds since load:</h1>
+      <p>{count}</p>
+    </div>
+  );
+}
+
+export default Timer;
+```
+
+- **Solution 1:**
+- Remove the eslint disable line
+- Add the state to the useEffect dependency array
+- Semantically, more appropriate to use `setTimeout` since it is mounting and unmounting
+
+```JAVASCRIPT
+import React from 'react';
+
+function Timer() {
+  const [count, setCount] = React.useState(0);
+
+  React.useEffect(() => {
+    const intervalId = window.setTimeout(() => {
+      setCount(count + 1);
+    }, 1000);
+
+    return () => {
+      window.clearTimeout(intervalId);
+    };
+    
+  }, [count]);
+
+  return (
+    <div className="timer">
+      <h1>Seconds since load:</h1>
+      <p>{count}</p>
+    </div>
+  );
+}
+
+export default Timer;
+```
+
+- **Solution 2:**
+- Use the function callback approach, to get the freshest state variable.
+- Also remove the eslint comment
+
+```JAVASCRIPT
+import React from 'react';
+
+function Timer() {
+  const [count, setCount] = React.useState(0);
+
+  React.useEffect(() => {
+    const intervalId = window.setInterval(() => {
+      // use a callback function to get the freshest state value
+      setCount((currentCount) => {
+        return currentCount + 1
+        });
+    }, 1000);
+
+    return () => {
+      window.clearInterval(intervalId);
+    };
+    
+  }, []);
+
+  return (
+    <div className="timer">
+      <h1>Seconds since load:</h1>
+      <p>{count}</p>
+    </div>
+  );
+}
+
+export default Timer;
+```
+
+#### Strick Mode
+
+-
