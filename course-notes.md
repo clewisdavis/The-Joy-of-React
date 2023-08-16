@@ -10189,6 +10189,153 @@ function Timer() {
 export default Timer;
 ```
 
-#### Strick Mode
+#### Strict Mode
 
--
+- When you create a new react app using the [boilerplate / meta-framework](https://courses.joshwcomeau.com/joy-of-react/11-tools-of-the-trade/08-boilerplates-and-meta-frameworks) like create-react-app, you will notice something different.
+
+- When we render our app, we wrap it in a `React.StrictMode` element.
+
+```JAVASCRIPT
+root.render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>
+);
+```
+
+- This element flips a switch inside React, adding in a bunch of restrictions and safeguards designed to improve teh robustness of our app.
+
+- The most confusing part of Strict Mode, is how it impact the `useEffect()` hook.
+- It will change how our effects are run. Normally, Component Mounts > Runs the Effect > Add your Event Listener.
+- But in Strict Mode, Component Mounts > Run the Effect > Call Cleanup Function > Re-Run the Effect.
+- One after the other, almost instantanously, calling it twice.  
+
+- Runs the Effect and calls the function inside the effect. Adds any event listeners then will return any cleanup. Then, it re-runs the Effect function.
+- Mount > Run Effect > Run Cleanup > Re-run Effect
+
+- This seems very wasteful, will this make the app twice as slow? Yes, but, it only does this for us developers.
+- React has differ modes, development mode, and production mode.
+- But when you bundle and build your app for production, Strict mode and any lint warnings are removed.
+
+- Will use Strict Mode from this point on in the course.
+- It can be frustrating to use Strict Mode, because it runs the effect twice, can break things.
+- 📣 But that's the point, it is highlighting that something is broken. **It can take a subtle bug and highlight to be obvious.**
+
+- If you search on Stack Overflow, Why is my effect running twice, the accepted answer is to remove `<React.StrictMode>` from your index.js
+
+```JAVASCRIPT
+root.render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>
+)
+```
+
+- But this isn't solving the problem, like removing/disabling eslint warnings. You are just pushing the problem down the line.
+
+- Summary:
+- In Normal mode, the sequence of operations:
+  - ➡️ Mount
+  - ➡️ Run effect
+
+- In Strict Mode, the sequence is:
+  - ➡️ Mount
+  - ➡️ Run effect
+  - ➡️ Run cleanup
+  - ➡️ Re-run effect
+
+- Sandbox code example for strict mode:
+
+```JAVASCRIPT
+// index.js
+import React from "react";
+import { createRoot } from 'react-dom/client';
+import "./reset.css";
+import "./styles.css";
+import App from "./App";
+
+const container = document.getElementById('root');
+const root = createRoot(container);
+
+root.render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>
+);
+```
+
+```JAVASCRIPT
+// mediaPlayer.js
+import React from 'react';
+import { Play, Pause } from 'react-feather';
+
+import VisuallyHidden from './VisuallyHidden';
+
+function MediaPlayer({ src }) {
+  const [isPlaying, setIsPlaying] = React.useState(false);
+
+  const audioRef = React.useRef();
+
+  React.useEffect(() => {
+    function handleKeyDown(event) {
+      if (event.code === 'Space') {
+        setIsPlaying((currentIsPlaying) => !currentIsPlaying);
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      // The cleanup work is disabled.
+      // Because Strict Mode is enabled (in /index.js),
+      // our keyboard shortcut shouldn't work.
+      // window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, []);
+
+  React.useEffect(() => {
+    if (isPlaying) {
+      audioRef.current.play();
+    } else {
+      audioRef.current.pause();
+    }
+  }, [isPlaying]);
+
+  return (
+    <div className="wrapper">
+      <div className="media-player">
+        <img alt="" src="https://sandpack-bundler.vercel.app/img/take-it-easy.png" />
+        <div className="summary">
+          <h2>Take It Easy</h2>
+          <p>Bvrnout ft. Mia Vaile</p>
+        </div>
+        <button
+          onClick={() => {
+            setIsPlaying(!isPlaying);
+          }}
+        >
+          {isPlaying ? <Pause /> : <Play />}
+          <VisuallyHidden>Toggle playing</VisuallyHidden>
+        </button>
+
+        <audio
+          ref={audioRef}
+          src={src}
+          onEnded={() => {
+            setIsPlaying(false);
+          }}
+        />
+      </div>
+    </div>
+  );
+}
+
+export default MediaPlayer;
+```
+
+#### More information about Strict Mode
+
+- In addition to re-running effects, Strict Mode changes other things. Breaks down to two categories:
+
+1. Safegaurds designed to amplify potential issues
+2. Warnings about deprecated APIs
