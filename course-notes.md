@@ -10339,3 +10339,25 @@ export default MediaPlayer;
 
 1. Safegaurds designed to amplify potential issues
 2. Warnings about deprecated APIs
+
+- If you are running a legacy codebase, you may run into deprecatoin warnings.
+- All the safeguards follow the same pattern: **running things twice**.
+
+- You can see a full list of Strict Mode changes in the [official documentation](https://react.dev/reference/react/StrictMode).
+
+#### The new default
+
+- Becoming the standard way to use React. Most boiler plate frameworks use Strict Mode by default.
+
+### Custom Hooks
+
+- React supports custom hooks. You can use the hooks that come along with React, `useState`, `useEffect`
+- And we can create our own hooks, like `useInterval` and `useOnScroll`.
+
+- Custom hooks re the best thing about React hooks. That's why everyone like hooks!
+
+#### Not as scary as it sounds
+
+- First thing to understand, not really inveneting our own hooks.
+
+- Sounds scary and only for advaced power users / developers. But think of them as custom hook combos.
