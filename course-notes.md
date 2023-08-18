@@ -10361,3 +10361,59 @@ export default MediaPlayer;
 - First thing to understand, not really inveneting our own hooks.
 
 - Sounds scary and only for advaced power users / developers. But think of them as custom hook combos.
+- Video Summary:
+- The idea, is you can bundle hooks into a custom hook and you can return whatever you want from a custom hook.
+- What do you actually need from JSX, what does the component use? That's what you return from the custom hook to make it work.
+- In the example below, we need to know the `time` because that's that gets rendered.
+- Then insidde the component, you specify `time` to use the custom hook `useTime`
+
+```JAVASCRIPT
+import React from 'react';
+import format from 'date-fns/format';
+
+function Clock() {
+  // Specify to use the custom useTime hook
+  const time = useTime();
+  
+  return (
+    <p className="clock">
+      {format(time, 'hh:mm:ss a')}
+    </p>
+  );
+}
+
+// Define the custom hook
+function useTime() {
+  const [time, setTime] = React.useState(
+    new Date()
+  );
+  
+  React.useEffect(() => {
+    // Effect logic
+    const intervalId = window.setInterval(() => {
+      setTime(new Date());
+    }, 1000);
+    
+    return () => {
+      // Cleanup logic
+      window.clearInterval(intervalId);
+    };
+  }, []);
+  // Return the state variable used in the JSX
+  return time;
+}
+
+export default Clock;
+```
+
+- Two advantages to Custom Hooks:
+  - Code organization, you can structure stuff however you want.
+  - You can share this behaviour between components. You can use the same code `const time = useTime();` The ability to package up React logic and re-use it between components.
+
+📣 A rule we need to follow: Custom Hooks have to start with the word, `use`, so `useTime` or `useInterval` etc.
+
+- React will expect you to start your custom hooks with `use`, and give you eslint warnings.
+
+### Exercises, Custom Hooks
+
+#### useMousePosition
