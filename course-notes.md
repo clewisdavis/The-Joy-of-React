@@ -10417,3 +10417,73 @@ export default Clock;
 ### Exercises, Custom Hooks
 
 #### useMousePosition
+
+- In an earlier exercise, we tracked the user's mouse position to display it in a `MouseCoords` component.
+- Pull this logic into a generic, reusable hook called `useMousePosition`
+
+- Set up a new file, `use-mouse-poistion.js` and put the custom hook into
+- Make sure you `return` the state variable
+- And don't forget to `export` and `import` your file, via ES6 modules.
+
+```JAVASCRIPT
+// App.js
+import React from 'react';
+
+// Import the custom hook
+import useMousePosition from './hooks/use-mouse-position.js';
+
+// TODO: Pull the mouse-position logic into
+// the use-mouse-position.js file!
+
+function App() {
+ // Assign the state variable to the hook
+ const mousePosition = useMousePosition();
+
+  return (
+    <div className="wrapper">
+      <p>
+        {mousePosition.x} / {mousePosition.y}
+      </p>
+    </div>
+  );
+}
+
+export default App;
+```
+
+- The seperate file
+
+```JAVASCRIPT
+import React from 'react';
+
+function useMousePosition() {
+  // TODO
+  const [mousePosition, setMousePosition] = React.useState({
+    x: 0,
+    y: 0,
+  });
+  
+  React.useEffect(() => {
+    function handleMouseMove(event) {
+      setMousePosition({
+        x: event.clientX,
+        y: event.clientY,
+      });
+    }
+
+    window.addEventListener('mousemove', handleMouseMove);
+
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+    };
+  }, []);
+
+  return mousePosition
+}
+
+export default useMousePosition;
+```
+
+#### useToggle
+
+- In the Digital Clock exercise, we could click a button to toggle the clock off and on:
