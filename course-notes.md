@@ -10487,3 +10487,69 @@ export default useMousePosition;
 #### useToggle
 
 - In the Digital Clock exercise, we could click a button to toggle the clock off and on:
+- Create a `useToggle` hook to update the `showClock` state, but instead of taking a new value, it automatically "flips" to the opposite boolean value.
+
+- **Acceptance Criteria:**
+
+- The `useToggle` hook should use `useState`  internally, to create and manage a state variable.
+- We should be able to specify an initial value for the state variable.
+- It should return an array containing two items:
+  - The state variable
+  - A funtion that flips the state variable between `true` and `false`
+- Clicking the button should toggle the clock off and on.
+
+- Setup the `use-toggle.js` custom hook
+
+```JAVASCRIPT
+import React from 'react';
+
+function useToggle() {
+  // Create a generic state hook
+  const [value, setValue] = React.useState();
+
+  // define toggle function
+  function toggleValue() {
+    // call setValue and pass NOT value as argument
+    // set from true to false or false to true
+    setValue(!value);
+  }
+
+  // Return an array
+  return [
+    // return value
+    value,
+    // toggle function
+    toggleValue
+  ]
+}
+
+export default useToggle;
+```
+
+- Start to use this in `App.js`, update the hook to `useToggle`
+
+```JAVASCRIPT
+function App() {
+  // TODO: Replace this with “useToggle”!
+  const [
+    showClock,
+    setShowClock
+  ] = React.useState(true);
+
+  // rest of component...
+}
+```
+
+- Add custom hook, `useToggle`
+
+```JAVASCRIPT
+function App() {
+  // TODO: Replace this with “useToggle”!
+  const [
+    showClock,
+    setShowClock
+  ] = React.useState(true);
+
+  // rest of component...
+}
+```
