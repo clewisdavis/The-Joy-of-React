@@ -10540,16 +10540,116 @@ function App() {
 }
 ```
 
-- Add custom hook, `useToggle`
+- Add custom hook, `useToggle`, don't forget to remove the `React.` since it's a custom hook.
 
 ```JAVASCRIPT
 function App() {
   // TODO: Replace this with “useToggle”!
   const [
     showClock,
-    setShowClock
-  ] = React.useState(true);
+    toggleClock,
+  ] = useToggle(true);
 
   // rest of component...
 }
 ```
+
+- Update the `onClick` to use the `toggleClock` function.
+
+```JAVASCRIPT
+  return (
+    <>
+      <button
+        className="clock-toggle"
+        onClick={() => toggleClock()}
+      >
+        {showClock ? 'Clock ON' : 'Clock OFF'}
+      </button>
+      
+      {showClock && <Clock />}
+    </>
+  );
+```
+
+- Alternative syntax, you can pass the function directly to the `onClick`, passing just the function.
+
+```JAVASCRIPT
+  onClick={toggleClock}
+```
+
+- Couple more things, set an intial value for the `useToggle` function, and check the typeof value.
+
+```JAVASCRIPT
+  // Check the type of for initial value
+  if (typeof initialValue !== 'boolean') {
+    console.warn('Invalid type for useToggle');
+  }
+```
+
+- Last thing, update the function to use a callback function to get the most recent value.
+
+```JAVASCRIPT
+  function toggleValue() {
+    // update to use callback function to always get the fresh value of the state variable and then flip it with logical NOT operator !
+    setValue((currentValue) => !currentValue);
+  }
+```
+
+- Full code example, `useToggle`, custom hook
+
+```JAVASCRIPT
+// use-toggle.js
+import React from 'react';
+
+function useToggle(initialValue = false) {
+  if (
+    typeof initialValue !== 'boolean' &&
+    typeof initialValue !== 'function'
+  ) {
+    console.warn('Invalid type for useToggle');
+  }
+
+  const [value, setValue] = React.useState(
+    initialValue
+  );
+
+  function toggleValue() {
+    setValue((currentValue) => !currentValue);
+  }
+
+  return [value, toggleValue];
+}
+
+export default useToggle;
+```
+
+```JAVASCRIPT
+// App.js
+import React from 'react';
+
+import useToggle from './hooks/use-toggle'
+import Clock from './Clock'
+
+function App() {
+  const [
+    showClock,
+    toggleClock,
+  ] = useToggle(true);
+
+  return (
+    <>
+      {showClock && <Clock />}
+      <button
+        className="clock-toggle"
+        onClick={toggleClock}
+      >
+        Toggle clock
+      </button>
+    </>
+  );
+}
+
+export default App;
+```
+
+#### Exercise, uselsOnscreen
