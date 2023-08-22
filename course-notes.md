@@ -10652,4 +10652,14 @@ function App() {
 export default App;
 ```
 
-#### Exercise, uselsOnscreen
+#### Exercise, useIsOnscreen
+
+- Similar to the toasty exercise, using the `IntersectionObserver` to trigger a state change when an element enters/exits the viewport. Let's generalize that solution.
+
+- In the solution below, see a large red square that can be scrolled into view. Your job is to fil in the `useIsOnscreen` hook so that we track this element.
+
+- ACs
+  - When the red sqaure is in the viewport, we should see the word "YES" in the top right corner.
+  - Whent he red square is not in the viewport, we should se the word "NO" instead.
+  - We shouldn't use `document.querySelector`.
+  - No lint warnings.
