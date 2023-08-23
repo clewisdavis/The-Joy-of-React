@@ -10663,3 +10663,96 @@ export default App;
   - Whent he red square is not in the viewport, we should se the word "NO" instead.
   - We shouldn't use `document.querySelector`.
   - No lint warnings.
+
+- First Solution:
+
+```JAVASCRIPT
+// App.js
+import React from 'react';
+
+import useIsOnscreen from './hooks/use-is-onscreen.js';
+
+function App() {
+
+  // Reference to the red box
+  const wrapperRef = React.useRef();
+  // Pass it as a param to the hook
+  const isOnscreen = useIsOnscreen(wrapperRef);
+
+  return (
+    <>
+      <header>
+        Red box visible: {isOnscreen ? 'YES' : 'NO'}
+      </header>
+      <div className="wrapper">
+        <div ref={wrapperRef} className="red box" />
+      </div>
+    </>
+  );
+}
+
+export default App;
+```
+
+```JAVASCRIPT
+// hook, use-is-onscreen.js
+import React from 'react';
+
+/*
+Here's the “pure JS” version once again:
+
+  function pureJsVersion() {
+    const wrapperElement =
+      document.querySelector('.some-class');
+  
+    const observer = new IntersectionObserver((entries) => {
+      const [entry] = entries;
+  
+      // `entry.isIntersecting` will be true if the
+      // element is in the viewport, false if not.
+    });
+  
+    observer.observe(wrapperElement);
+  }
+
+To unsubscribe, you can call:
+
+  observer.disconnect();
+*/
+
+// Pass in the ref DOM node as a param from App.js
+function useIsOnscreen(wrapperRef) {
+
+  // Create a state hook
+  const [isOnScreen, setIsOnscreen] = React.useState(false);
+
+  // Setup an effect
+  React.useEffect(() => {
+    
+    // Function, set up the intersection observer
+    const observer = new IntersectionObserver((entries) => {
+      const [entry] = entries;
+
+      // update the state when called
+      // `entry.isIntersecting` will be true if the
+      // element is in the viewport, false if not.
+      setIsOnscreen(entry.isIntersecting);
+  
+    });
+
+    // specify the ref, DOM node to watch
+    observer.observe(wrapperRef.current);
+    
+    // Cleanup function, remove the observer
+    return () => {
+      observer.disconnect();
+    }
+    
+  }, [wrapperRef])
+  
+  // return the state variable
+  return isOnScreen;
+}
+
+export default useIsOnscreen;
+```
