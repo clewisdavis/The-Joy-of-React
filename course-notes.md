@@ -10664,6 +10664,32 @@ export default App;
   - We shouldn't use `document.querySelector`.
   - No lint warnings.
 
+- ℹ️ Pure JS version for the intersection observer:
+
+```JAVASCRIPT
+
+Here's the “pure JS” version once again:
+
+  function pureJsVersion() {
+    const wrapperElement =
+      document.querySelector('.some-class');
+  
+    const observer = new IntersectionObserver((entries) => {
+      const [entry] = entries;
+  
+      // `entry.isIntersecting` will be true if the
+      // element is in the viewport, false if not.
+    });
+  
+    observer.observe(wrapperElement);
+  }
+
+To unsubscribe, you can call:
+
+  observer.disconnect();
+
+```
+
 - First Solution:
 
 ```JAVASCRIPT
@@ -10697,28 +10723,6 @@ export default App;
 ```JAVASCRIPT
 // hook, use-is-onscreen.js
 import React from 'react';
-
-/*
-Here's the “pure JS” version once again:
-
-  function pureJsVersion() {
-    const wrapperElement =
-      document.querySelector('.some-class');
-  
-    const observer = new IntersectionObserver((entries) => {
-      const [entry] = entries;
-  
-      // `entry.isIntersecting` will be true if the
-      // element is in the viewport, false if not.
-    });
-  
-    observer.observe(wrapperElement);
-  }
-
-To unsubscribe, you can call:
-
-  observer.disconnect();
-*/
 
 // Pass in the ref DOM node as a param from App.js
 function useIsOnscreen(wrapperRef) {
@@ -10755,4 +10759,130 @@ function useIsOnscreen(wrapperRef) {
 }
 
 export default useIsOnscreen;
+```
+
+- An alternate version, is who owns the `ref`, should it be in the `app.js` or the `use-is-onscreen.js` hook?
+- If you define it in the hook, you will have to define it in the hook, and then return it, so `App.js` can use it.
+- In the return, package them up in a array and return.
+
+```JAVASCRIPT
+// use-is-onscreen.js
+function useIsOnscreen() {
+  // Define the ref
+  const elementRef = React.useRef();
+  
+  // Rest of function code
+  
+  // Package up in array and return both
+  return [isOnscreen, elementRef]
+}
+```
+
+- Then in the `App.js` file, desctructure the array, and call the custom hook.
+- Both solution are similar, the only difference, is who owns the ref, in this version, it's owned by the hook, and we pass it along to the `App.js`
+
+- Full Solution:
+
+```JAVASCRIPT
+import React from 'react';
+
+import useIsOnscreen from './hooks/use-is-onscreen.js';
+
+function App() {
+
+  // Desctructure the array and call the custom hook
+  const [isOnscreen, elementRef] = useIsOnscreen();
+
+  return (
+    <>
+      <header>
+        Red box visible: {isOnscreen ? 'YES' : 'NO'}
+      </header>
+      <div className="wrapper">
+        <div ref={elementRef} className="red box" />
+      </div>
+    </>
+  );
+}
+
+export default App;
+```
+
+- Custom Hook:
+
+```JAVASCRIPT
+// use-is-onscreen.js
+import React from 'react';
+
+// Pass in the ref DOM node as a param from App.js
+function useIsOnscreen() {
+
+  // Create a state hook
+  const [isOnScreen, setIsOnscreen] = React.useState(false);
+
+  const elementRef = React.useRef();
+
+  // Setup an effect
+  React.useEffect(() => {
+    
+    // Function, set up the intersection observer
+    const observer = new IntersectionObserver((entries) => {
+      const [entry] = entries;
+
+      // update the state when called
+      // `entry.isIntersecting` will be true if the
+      // element is in the viewport, false if not.
+      setIsOnscreen(entry.isIntersecting);
+  
+    });
+
+    // specify the ref, DOM node to watch
+    observer.observe(elementRef.current);
+    
+    // Cleanup function, remove the observer
+    return () => {
+      observer.disconnect();
+    }
+    
+  }, [elementRef])
+  
+  // return the state variable
+  return [isOnScreen, elementRef];
+}
+
+export default useIsOnscreen;
+```
+
+- What if you want to track multiple things in the DOM? That's why we use an array to desctructure, much easier to rename.
+
+```JAVASCRIPT
+// App.js
+import React from 'react';
+
+import useIsOnscreen from './hooks/use-is-onscreen.js';
+
+function App() {
+
+  // Desctructure the array and call the custom hook
+  // Using an array to destructure, allows to rename them to whatever you want
+  // Now you can track multiple things using the same hook
+  const [isRedOnscreen, redElementRef] = useIsOnscreen();
+  const [isPurpleOnscreen, purpleElementRef] = useIsOnscreen();
+
+  return (
+    <>
+      <header>
+        Red box visible: {isRedOnscreen ? 'YES' : 'NO'}
+        <br />
+        Purple box visible: {isPurpleOnscreen ? 'YES' : 'NO'}
+      </header>
+      <div className="wrapper">
+        <div ref={redElementRef} className="red box" />
+        <div ref={purpleElementRef} className="purple box" />
+      </div>
+    </>
+  );
+}
+
+export default App;
 ```
