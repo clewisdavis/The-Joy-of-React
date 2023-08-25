@@ -10886,3 +10886,26 @@ function App() {
 
 export default App;
 ```
+
+### Data Fetching
+
+- These lessons focus on how to use Fetch in a React context. A fair amount of "assumed" knowledge here.
+
+- Some Primers:
+- [Synchronous vs. Asynchronous code](https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Asynchronous/Introducing)
+- [Promises](https://web.dev/promises/)
+- [Async / Await](https://courses.joshwcomeau.com/joy-of-react/10-javascript-primer/15-async-await)
+- [HTTP Methods](https://courses.joshwcomeau.com/joy-of-react/10-javascript-primer/16-http-methods)
+- [Fetch Basics](https://courses.joshwcomeau.com/joy-of-react/10-javascript-primer/17-fetch)
+
+#### Test API
+
+- A sample back-end API for learning about network requests.
+- A cheatsheet about this sample API:
+  - All request are artificially slowed by 1-2 seconds, to give su the time to check loading states.
+  - We can simulate errors by passing a query parameter, `simmulatedError=true`
+  - For endpionts that return data, that data will often be randomized / faked.
+
+#### Fetching an Event
+
+- A contact form, let's see how to implement one:
