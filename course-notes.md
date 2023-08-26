@@ -10909,3 +10909,186 @@ export default App;
 #### Fetching an Event
 
 - A contact form, let's see how to implement one:
+
+- The starter form, the page does a full page refresh, not exaclty what we want to do.
+- We want to direct the submit, to a specific endpiont, the sample one above.
+
+- On the form, the first thing we need to do is create a `onSubmit={handleSubmit}` function on the form
+
+```JAVASCRIPT
+function handleSubmit(event) {
+  // prevent the default refresh
+  event.preventDefault();
+}
+```
+
+- Now, using the `fetch` method, we can make a request. The endpoint is provided `ENDPOINT`
+
+```JAVASCRIPT
+function handleSubmit(event) {
+  // prevent the default refresh
+  event.preventDefault();
+
+  // fetch request the endpoint
+  fetch(ENDPOINT, {
+    // supply the http method for the endpoint
+    method: 'POST'
+  })
+}
+```
+
+- Supply the data to the endpoint, and use `JSON.stringify()` to send the data accross network.
+
+```JAVASCRIPT
+    fetch(ENDPOINT, {
+      // supply the http method, defined in the endpoint
+      method: 'POST',
+      // supply the data, email and message
+      // gatcha, you cannot send objects accross the network
+      // you have to use JSON.stringify and pass the object
+      body: JSON.stringify({
+        email,
+        message,
+      })
+    })
+```
+
+- When you run the code above, it makes the request, `fetch` is Promise based.
+- You want to use the `async`, `await` keywords to the `fetch` request.
+- And create a `response` variable.
+
+```JAVASCRIPT
+  // make a async function
+  async function handleSubmit(event) {
+    event.preventDefault();
+
+    // await the fetch, and capture in a response variable
+    const response = await fetch(ENDPOINT, {
+      // supply the http method, defined in the endpoint
+      method: 'POST',
+      // supply the data, email and message
+      // gatcha, you cannot send objects accross the network
+      // you have to use JSON.stringify and pass the object
+      body: JSON.stringify({
+        email,
+        message,
+      })
+    })
+  }
+```
+
+- Then to get the body of the response, use `response.json()`, which you also have to `await`.
+- Why do you have to await the response? The raw json could come in parts, or streaming, make sure you have that covered.
+
+```JSON
+    // get the response of the json, and also await
+    // why await? we don't know if we have the raw content, it could be streaming, comes over multiple parts.
+    const json = await response.json();
+    console.log(json);
+```
+
+- Console.log the response when you submit the form.
+- The full `handleSubmit` function to submit the data from the form to an API endpiont.
+
+```JAVASCRIPT
+  // make a async function
+  async function handleSubmit(event) {
+    event.preventDefault();
+
+    // await the fetch, and capture in a response variable
+    const response = await fetch(ENDPOINT, {
+      // supply the http method, defined in the endpoint
+      method: 'POST',
+      // supply the data, email and message
+      // gatcha, you cannot send objects accross the network
+      // you have to use JSON.stringify and pass the object
+      body: JSON.stringify({
+        email,
+        message,
+      })
+    })
+    // get the response of the json, and also await
+    // why await? we don't know if we have the raw content, it could be streaming, comes over multiple parts.
+    const json = await response.json();
+    console.log(json);
+  }
+```
+
+- Full form component:
+
+```JAVASCRIPT
+import React from 'react';
+
+const ENDPOINT =
+  'https://jor-test-api.vercel.app/api/contact';
+
+function ContactForm() {
+  const [email, setEmail] = React.useState('');
+  const [message, setMessage] = React.useState('');
+
+  const id = React.useId();
+  const emailId = `${id}-email`;
+  const messageId = `${id}-message`;
+
+  // make a async function
+  async function handleSubmit(event) {
+    event.preventDefault();
+
+    // await the fetch, and capture in a response variable
+    const response = await fetch(ENDPOINT, {
+      // supply the http method, defined in the endpoint
+      method: 'POST',
+      // supply the data, email and message
+      // gatcha, you cannot send objects accross the network
+      // you have to use JSON.stringify and pass the object
+      body: JSON.stringify({
+        email,
+        message,
+      })
+    })
+    // get the response of the json, and also await
+    // why await? we don't know if we have the raw content, it could be streaming, comes over multiple parts.
+    const json = await response.json();
+    console.log(json);
+  }
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <div className="row">
+        <label htmlFor={emailId}>Email</label>
+        <input
+          required={true}
+          id={emailId}
+          type="email"
+          value={email}
+          onChange={(event) => {
+            setEmail(event.target.value);
+          }}
+        />
+      </div>
+      <div className="row">
+        <label htmlFor={messageId}>Message</label>
+        <textarea
+          required={true}
+          id={messageId}
+          value={message}
+          onChange={(event) => {
+            setMessage(event.target.value);
+          }}
+        />
+      </div>
+      <div className="button-row">
+        <span className="button-spacer" />
+        <button>Submit</button>
+      </div>
+    </form>
+  );
+}
+
+export default ContactForm;
+```
+
+- The next part, is to improve the UX, and make the form more user friendly.
+
+- Four differnt status, at any given time
+idle | loading | success | error
