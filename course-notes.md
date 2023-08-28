@@ -11015,6 +11015,7 @@ function handleSubmit(event) {
 ```
 
 - Full form component:
+- Sent data to our backend API using `fetch`. We saw how to send a POST request, how to stringify the body, and how to validate we received teh correct response from the server.
 
 ```JAVASCRIPT
 import React from 'react';
@@ -11090,5 +11091,73 @@ export default ContactForm;
 
 - The next part, is to improve the UX, and make the form more user friendly.
 
-- Four differnt status, at any given time
+##### Loading, success, and error statuses
+
+When submitting network request, we want to update the UI to indicate 3 different status:
+
+➡️ Loading
+➡️ Success
+➡️ Error
+
+- and Four differnt status, at any given time
 idle | loading | success | error
+
+- Here is how to update the form, to work with these statuses.
+
+- 1. Create a new status variable, to tell us how things are going for every snapshot that we render for the form component.
+
+And Four differnt status, at any given time, they cover most network request.
+idle | loading | success | error
+
+```JAVASCRIPT
+  // Create a status hook
+  // idle | loading | success | error
+  const [status, setStatus] = React.useState('idle');
+```
+
+- 2. In the handle submit function, set the status to loading
+
+```JAVASCRIPT
+  async function handleSubmit(event) {
+    event.preventDefault();
+
+    // onSubmit, set status to loading
+    setStatus('loading');
+
+  }
+```
+
+- 3. How do you check the status, the response you get back from the server?
+
+- You can use `response.status`:
+  - `200` if went well
+  - `400` if client error
+  - `500` if a server error
+  - `300` series error
+
+- Good idea in theory, but in practice, should check the response itself. The data that we receive from the server.
+- When you submit the form, you can get a preview of the data, in the console.log
+
+```JAVASCRIPT
+{
+  ok: true, 
+  dataReceived: {
+    email: "hello@hello.com", 
+    message: "this is a hello world"
+    }
+}
+```
+
+- We are going to use the `ok` property, to determine if the response is valid or not.
+- In the `useEffect` hook, write a conditional to check the status of `json.ok`
+
+```JAVASCRIPT
+  // check the status response
+  if (json.ok) {
+    setStatus('success');
+  } else {
+    setStatus('error');
+  }
+```
+
+- 📣 Now we can start using this `status` variable in our UI.
