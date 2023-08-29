@@ -11161,3 +11161,188 @@ idle | loading | success | error
 ```
 
 - 📣 Now we can start using this `status` variable in our UI.
+
+- First thing, add `disabled={status === 'loading'}` to the form fields, input and the button.
+- This will disable the form, on submit, and once the response is complete, everythign becomes back to idle state.
+- ℹ️ Preferred to disable the form, because it stops the user form accidentely double clicking the button and doing multiple submissions. It also means they cannot edit the fields while in process of submitting it. Any edits they make will not be received by the backend.
+
+- But this isn't enough on it's own, to just disable. We can also changs the text in the button.
+- The button will change to 'Submitting...' onSubmit.
+
+![Form loading](images/image-7.png)
+
+```JAVASCRIPT
+  <button 
+    disabled={status === 'loading'}>
+    {status === 'loading' ? 'Submitting...' : 'Submit'}
+  </button>
+```
+
+- What about the loading state? If the request resolves successfully? You can render something else, like, 'Message sent!' or something more informational.
+- Add the logic to the component, just before the `return` the JSX for the form component.
+
+![Message Sent](images/image-8.png)
+
+```JAVASCRIPT
+  // if success, you can return a message
+  if (status === 'success') {
+    return <p>Message sent!</p>
+  }
+```
+
+- But what is user wants to send multiple messages, you can add the message to the component.
+
+![Alt text](images/image-9.png)
+
+```JAVASCRIPT
+return (
+  <form onSubmit={handleSubmit}>
+    /* contact form JSX here */
+
+    {status === 'success' && <p>Message sent!</p>}
+  </form>
+)
+```
+
+- And you should clear out the message field, you can do this when you check the status, `setMessage('')`.
+
+![Clear out message](images/image-10.png)
+
+```JAVASCRIPT
+    // check the status response
+    if (json.ok) {
+      setStatus('success');
+      // clear the form
+      setMessage('');
+    } else {
+      setStatus('error');
+    }
+```
+
+- What about error states? The test API, supports passign a qeury parameter, you can set to true, you get an error state
+
+```JAVASCRIPT
+const ENDPOINT =
+  'https://jor-test-api.vercel.app/api/contact?simulatedError=true';
+```
+
+- Open up dev tools, and network tab. Submit it again, and you will see the request throw an 500 error
+
+![500 error](images/image-11.png)
+
+- Check the error status, and display a message.
+
+![Error message](images/image-12.png)
+
+```JAVASCRIPT
+return (
+  <form onSubmit={handleSubmit}>
+    /* contact form JSX here */
+
+    {status === 'success' && <p>Message sent!</p>}
+    {status === 'error' && <p>Something went wrong!</p>}
+  </form>
+)
+```
+
+- For form validation, you can rely on the native validation for form elements.
+- Full Code Sample:
+
+```JAVASCRIPT
+// contact form
+import React from 'react';
+
+const ENDPOINT =
+  'https://jor-test-api.vercel.app/api/contact?simulatedError=true';
+
+function ContactForm() {
+  const [email, setEmail] = React.useState('');
+  const [message, setMessage] = React.useState('');
+
+  // Create a status hook
+  // idle | loading | success | error
+  const [status, setStatus] = React.useState('idle');
+
+  const id = React.useId();
+  const emailId = `${id}-email`;
+  const messageId = `${id}-message`;
+
+  // make a async function
+  async function handleSubmit(event) {
+    event.preventDefault();
+
+    // onSubmit, set status to loading
+    setStatus('loading');
+
+    // await the fetch, and capture in a response variable
+    const response = await fetch(ENDPOINT, {
+      // supply the http method, defined in the endpoint
+      method: 'POST',
+      // supply the data, email and message
+      // gatcha, you cannot send objects accross the network
+      // you have to use JSON.stringify and pass the object
+      body: JSON.stringify({
+        email,
+        message,
+      })
+    })
+    // get the response of the json, and also await
+    // why await? we don't know if we have the raw content, it could be streaming, comes over multiple parts.
+    const json = await response.json();
+    console.log(json);
+
+    // check the status response
+    if (json.ok) {
+      setStatus('success');
+      // clear the form
+      setMessage('');
+    } else {
+      setStatus('error');
+    }
+
+  }
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <div className="row">
+        <label htmlFor={emailId}>Email</label>
+        <input
+          required={true}
+          disabled={status === 'loading'}
+          id={emailId}
+          type="email"
+          value={email}
+          onChange={(event) => {
+            setEmail(event.target.value);
+          }}
+        />
+      </div>
+      <div className="row">
+        <label htmlFor={messageId}>Message</label>
+        <textarea
+          required={true}
+          disabled={status === 'loading'}
+          id={messageId}
+          value={message}
+          onChange={(event) => {
+            setMessage(event.target.value);
+          }}
+        />
+      </div>
+      <div className="button-row">
+        <span className="button-spacer" />
+        <button 
+          disabled={status === 'loading'}>
+          {status === 'loading' ? 'Submitting...' : 'Submit'}
+        </button>
+      </div>
+      {status === 'success' && <p>Message sent!</p>}
+      {status === 'error' && <p>Something went wrong!</p>}
+    </form>
+  );
+}
+
+export default ContactForm;
+```
+
+#### Fetchign on Mount
