@@ -11345,4 +11345,65 @@ function ContactForm() {
 export default ContactForm;
 ```
 
-#### Fetchign on Mount
+#### Fetching on Mount
+
+In the previous lesson, we made a network request in response to an event, like submitting a form. But what about the initial view?
+
+In this example, let's suppose we are buidling a weather app. We want to show the user what hte current temperature in their area:
+
+![Weather App](images/image-13.png)
+
+- We want to show the temperature immediately, righ when the component mounts.
+- This is a thorny problem, might seem like a slight difference, fetchign on mount instead of fetching on event, but it opens up a whole can of worms.
+
+- It's tricky, in order to fetch on mount, we generlly use the `useEffect` hook, and there are some gotchase around using async/await in an effect, as well as dealing with Strict Mode.
+
+- But also, i fwe want to solve this problem in a robust, production ready way, there are all sorts of concerns we nee dto worry about:
+  - Caching the response so that it can be reused by mulitple compoennts across the app.
+  - revalidating the data so that it never becomes to stale.
+
+- 🕳️ This is a rabit hole 😬
+
+- As a result it has become standard in the community to use a tool to help wtih all this.
+- The React docs, suggest using a package like [React Query](https://tanstack.com/query/v4/?from=reactQueryV3&original=https://react-query-v3.tanstack.com/) or [SWR](https://swr.vercel.app).
+
+##### Intro to SWR
+
+- Below is an MVP implementation of the weather app using SWR.
+
+```JAVASCRIPT
+import React from 'react';
+import useSWR from 'swr';
+
+const ENDPOINT =
+  'https://jor-test-api.vercel.app/api/get-temperature';
+
+async function fetcher(endpoint) {
+  const response = await fetch(endpoint);
+  const json = await response.json();
+  
+  return json;
+}
+
+function App() {
+  const { data, error } = useSWR(ENDPOINT, fetcher);
+  
+  console.log(data, error);
+  
+  return (
+    <p>
+      Current temperature:
+      {typeof data?.temperature === 'number' && (
+        <span className="temperature">
+          {data.temperature}°C
+        </span>
+      )}
+    </p>
+  );
+}
+
+export default App;
+```
+
+- Explanation of the code above.
+- SWR - Stale While Revalidate
