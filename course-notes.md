@@ -11406,4 +11406,46 @@ export default App;
 ```
 
 - Explanation of the code above.
-- SWR - Stale While Revalidate
+- So how does this work?
+- You can import 3rd party hooks, and use in your application.
+- First thing to do, is to import, the `swr` hook into the app.
+
+```JAVASCRIPT
+  import useSWR from 'swr';
+```
+
+- The way it works, is we call the `useSWR()` hook and we give it two things:
+
+- First, they key, unique identifier for the API route going to use, the endpoint itself, the location you want to make the network request to.
+
+```JAVASCRIPT
+  const ENDPOINT = 'https://jor-test-api.vercel.app/api/get-temperature';
+
+  function App() {
+    // swr hook
+    const { data, error } = useSWR(ENDPOINT, fetcher);
+  }
+```
+
+- Second, a fetcher function, tools like `swr` are meant to be agnostic when it comes to fetching data over a network. Here we are packaging it up in a function and we are passing this function to the library. The hook, `useSWR` is going to decide when to call this function, and what to do with the returned value.
+
+```JAVASCRIPT
+  const ENDPOINT = 'https://jor-test-api.vercel.app/api/get-temperature';
+
+  // fetcher function
+  async function fetcher(endpoint) {
+  // making a request to endpoint
+  const response = await fetch(endpoint);
+  // getting it as json
+  const json = await response.json();
+  // and returning it
+  return json;
+}
+
+  function App() {
+    // swr hook
+    const { data, error } = useSWR(ENDPOINT, fetcher);
+  }
+```
+
+- Whatever you return from the `fetcher` function, will be stored in the `data` variable, when we call the `useSWR` hook.
