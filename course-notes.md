@@ -11449,3 +11449,101 @@ export default App;
 ```
 
 - Whatever you return from the `fetcher` function, will be stored in the `data` variable, when we call the `useSWR` hook.
+- Once we get that data, we are gettign it from the `data`variable, from inside `useSWR` hook.
+- And we are using it to control the rendered output, JSX.
+
+```JAVASCRIPT
+  return (
+    <p>
+      Current temperature:
+      {typeof data?.temperature === 'number' && (
+        <span className="temperature">
+          {data.temperature}°C
+        </span>
+      )}
+    </p>
+  );
+```
+
+- The entire flow:
+- Component mounts, we call the `useSWR()` hook, with a unique key `ENDPOINT`, and a function `fetcher`.
+
+```JAVASCRIPT
+  const { data, error } = useSWR(ENDPOINT, fetcher);
+```
+
+- SWR, is going to call the function, and provide the key as the first paramerter. `ENDPOINT`, and the paramater `endpoint` are the same, the reason we call it `endpoint`, is to keep the function generic, so you can reuse.
+
+```JAVASCRIPT
+  const ENDPOINT =
+  'https://jor-test-api.vercel.app/api/get-temperature';
+
+  async function fetcher(endpoint) {
+  // making a request to endpoint
+  const response = await fetch(endpoint);
+  // getting it as json
+  const json = await response.json();
+  // and returning it
+  return json;
+}
+
+  function App() {
+    const { data, error } = useSWR(ENDPOINT, fetcher);
+  }
+```
+
+- The data returned from the `return json`, is populated in the `data` variable.
+- Then you can use it, inside your JSX, to control the render.
+
+- 🤔 Seems like a lot, what are the benefits here?
+- SWR, **Stale While Revalidate**, it's a http caching strategy
+- The idea, is the information on the page, may grow stale if you spend any length of time on the page.
+- If you change tabs, and come back, it's a good idea to fetch new data.
+- The act of swithing tabs, and coming back, that triggered the revalidation.
+- 🤔 Notice we don't see a loading spinner or anything, *because it chooses to show, the stale data.*
+  - *We are revalidating the data, but while we are diong that, we are keeping the stale data. The UI always shows something*
+
+- Trying to do this on your own is very hard. Why use a library. But the library makes all this configurable, can choose when you want this to happen.
+
+- Full weather compoennt:
+
+```JAVASCRIPT
+import React from 'react';
+// Import swr hook
+import useSWR from 'swr';
+
+const ENDPOINT =
+  'https://jor-test-api.vercel.app/api/get-temperature';
+
+async function fetcher(endpoint) {
+  // making a request to endpoint
+  const response = await fetch(endpoint);
+  // getting it as json
+  const json = await response.json();
+  // and returning it
+  return json;
+}
+
+function App() {
+  const { data, error } = useSWR(ENDPOINT, fetcher);
+  
+  console.log(data, error);
+  
+  return (
+    <p>
+      Current temperature:
+      {typeof data?.temperature === 'number' && (
+        <span className="temperature">
+          {data.temperature}°C
+        </span>
+      )}
+    </p>
+  );
+}
+
+export default App;
+```
+
+##### Loading and error states
+
+Our MVP above doesn't include any loading or error states. How can we implement them with SWR.
