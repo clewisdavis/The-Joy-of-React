@@ -11496,6 +11496,8 @@ export default App;
 - The data returned from the `return json`, is populated in the `data` variable.
 - Then you can use it, inside your JSX, to control the render.
 
+---
+
 - 🤔 Seems like a lot, what are the benefits here?
 - SWR, **Stale While Revalidate**, it's a http caching strategy
 - The idea, is the information on the page, may grow stale if you spend any length of time on the page.
