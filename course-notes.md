@@ -11465,7 +11465,8 @@ export default App;
   );
 ```
 
-- The entire flow:
+##### The entire flow
+
 - Component mounts, we call the `useSWR()` hook, with a unique key `ENDPOINT`, and a function `fetcher`.
 
 ```JAVASCRIPT
