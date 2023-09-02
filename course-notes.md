@@ -11547,6 +11547,159 @@ function App() {
 export default App;
 ```
 
-##### Loading and error states
+#### Loading and error states
 
 Our MVP above doesn't include any loading or error states. How can we implement them with SWR.
+
+##### Loading
+
+- In addtition to providing a `data` value, the `useSWR` hook also tells su where or not the request is curretly loading. We can pull out the `isLoading` key:
+
+```JAVASCRIPT
+  const { data, isLoading } = useSWR(ENDPIONT, fetcher);
+```
+
+- `isLoading` is a boolean value. The initial value is `true`, and it flips to `false` once the fetch reqeust has completed.
+- We can use tha tvalue to confidtionally render a loading UI like this:
+
+```JAVASCRIPT
+  // return a loading conditionally
+  function App() {
+    const { data, is Loading } = useSWR(ENDPOINT, fetcher);
+ 
+    // conditionally return if loading
+    if (isLoading) {
+      return (
+        <p>Loading</p>
+      );
+    }
+
+    return (
+    <p>
+      Current temperature:
+      {typeof data.temperature === 'number' && (
+        <span className="temperature">
+          {data.temperature}°C
+        </span>
+      )}
+    </p>
+  );
+  }
+```
+
+##### Error
+
+- To simulate the error, we can add a query parameter to the `ENDPOINT`:
+
+```JAVASCRIPT
+  const ENDPOINT =
+  'https://jor-test-api.vercel.app/api/get-temperature?simulatedError=true';
+```
+
+- This will cause the server to return a 500 status code, instead of a 200. It will also return the following JSON:
+
+```JAVASCRIPT
+{
+  "error": "This request returns an error, because the “simulatedError” query parameter was specified."
+}
+```
+
+- 👀 [See JS Primer on HTTP Status codes](https://courses.joshwcomeau.com/joy-of-react/10-javascript-primer/18-http-status-codes)
+
+``` JSON
+200 — Everything went smoothly!
+401 - You're not allowed to access this resource
+404 - The server can't find the resource you requested
+500 - Something unexpected gone wrong with the server (eg. it's on fire)
+```
+
+- With SWR, hoever, neighe rof these thigns is sufficient to mark this as an error.
+- Remember: we manage the network request! Our `fetcher` function is responsible for retrieving the data, and passign it along to SWR.
+- If we want this to count as an error, we need to throw it:
+
+```JAVASCRIPT
+  async function fetcher(endpiont) {
+    const responce = await fetch(endpoint);
+    const json = await response.json();
+
+    if(!json.ok) {
+      throw json
+    }
+
+    return json;
+  }
+```
+
+- With this change done, `data` will be undefined, and `error` will be the object we got back from the server.
+
+---
+
+##### ℹ️ Throwing an object?
+
+It's conventional in JS to throw an Error like this:
+
+```JAVASCRIPT
+  if (!json.ok) {
+    throw new Error('Some sort of error message');
+  }
+```
+
+- When working with SWR, however, I prefer to throw the JSON object.
+
+```JAVASCRIPT
+  if (!json.ok) {
+    throw json;
+  }
+```
+
+- It's equally valid, and it means that `error` will be an object rathe rthan being an `Error` instance. This is easier to work with, can access the data associated with the error.
+
+- Final implementation with loading and error states:
+
+```JAVASCRIPT
+// weather app, SWR, with loading and error states
+import React from 'react';
+import useSWR from 'swr';
+
+// Remove "?simulatedError=true" to see the success state:
+const ENDPOINT =
+  'https://jor-test-api.vercel.app/api/get-temperature?simulatedError=true';
+
+async function fetcher(endpoint) {
+  const response = await fetch(endpoint);
+  const json = await response.json();
+
+  if (!json.ok) {
+    throw json;
+  }
+
+  return json;
+}
+
+function App() {
+  const { data, isLoading, error } = useSWR(ENDPOINT, fetcher);
+
+  if (isLoading) {
+    return <p>Loading…</p>;
+  }
+
+  if (error) {
+    return <p>Something's gone wrong</p>;
+  }
+
+  return (
+    <p>
+      Current temperature:
+      {typeof data?.temperature === 'number' && (
+        <span className="temperature">
+          {data.temperature}°C
+        </span>
+      )}
+    </p>
+  );
+}
+
+export default App;
+```
+
+#### Exercises, Data Fetching
