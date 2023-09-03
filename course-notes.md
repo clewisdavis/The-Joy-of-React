@@ -11702,4 +11702,55 @@ function App() {
 export default App;
 ```
 
+---
+
 #### Exercises, Data Fetching
+
+##### Book Search
+
+Suppose we are building a Good reds-type site, a place for users to discover new books. Our job is to implement a search feature:
+
+In the sandbox, you will find you have a `<SearchResult>` component ready to b used to display the results. Your mission 'if you choose it' is to wire up the search form so that the results are fetched from our backend API. An endpoint has been provided.
+
+Example request/response:
+
+```JAVASCRIPT
+// REQUEST:
+GET '/api/book-search?searchTerm=winter'
+
+// RESPONSE:
+{
+  "ok": true,
+  "results": [
+    {
+      "isbn": "1234567890123",
+      "name": "Winter's Orbit",
+      "author": "Everina Maxwell",
+      "coverSrc": "/image-path/cover.png",
+      "abstract": "While the Iskat Empire has long dominated the system…"
+    }
+  ]
+}
+```
+
+**Acceptance Criteria:**
+
+- Subitting the form should make a GET request to the supplied API endpoint, passing along `searchTerm` as a query parameter.
+- If there are search results, we should map over them, renderin ga `SearchResults>` element for each one.
+- We should show the text "Searching..." while the search is in progress.
+- Before the user has searched, we should show a paragraph containing teh text "Welcome to Book Search!"
+- If there are no matching results, we should show a paragraph containing the text "No results".
+- If teh API returns an error, we should show a paragraphy containing the text "Something went wrong!"
+  - You can simulate an error by passing `simulatedErro=true` as a query parameter.
+- There should be no key warning in the console.
+
+ℹ️ You don't have to usr SWR for this. SWR is primarily useful when fetching data on mount.
+
+ℹ️ How to test:
+
+- The backend API has a very small sample librry of about 20 books. Most commons search queries will return 0 results.
+- Use these terms:
+  - fifth - 1 result
+  - a - 18 results
+  - becky - 4 results
+  - hello - 0 results
