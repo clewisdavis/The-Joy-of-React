@@ -11736,12 +11736,12 @@ GET '/api/book-search?searchTerm=winter'
 **Acceptance Criteria:**
 
 - Subitting the form should make a GET request to the supplied API endpoint, passing along `searchTerm` as a query parameter.
-- If there are search results, we should map over them, renderin ga `SearchResults>` element for each one.
+- If there are search results, we should map over them, rendering a `<SearchResults>` element for each one.
 - We should show the text "Searching..." while the search is in progress.
 - Before the user has searched, we should show a paragraph containing teh text "Welcome to Book Search!"
 - If there are no matching results, we should show a paragraph containing the text "No results".
 - If teh API returns an error, we should show a paragraphy containing the text "Something went wrong!"
-  - You can simulate an error by passing `simulatedErro=true` as a query parameter.
+  - You can simulate an error by passing `simulatedError=true` as a query parameter.
 - There should be no key warning in the console.
 
 ℹ️ You don't have to usr SWR for this. SWR is primarily useful when fetching data on mount.
