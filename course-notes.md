@@ -11754,3 +11754,45 @@ GET '/api/book-search?searchTerm=winter'
   - a - 18 results
   - becky - 4 results
   - hello - 0 results
+
+- Setup the handle function
+
+```JAVASCRIPT
+  //set up a handle function
+  async function handleSearch(event) {
+    // turn off defualt browser bahavior
+    event.preventDefault();
+
+    // create a new url variable
+    const url = `${ENDPOINT}?searchTerm=${searchTerm}`
+
+    const response = await fetch(url);
+    // use the results
+    const json = await response.json();
+
+    // pass the results to state
+    setSearchResults(json.results);
+    
+  }
+```
+
+- Map over the results
+
+```JAVASCRIPT
+    {
+      // map over the results
+      // add the ?, optional chaining operator, if searchResults is null or undefined
+      // iT doesn't go any further
+      searchResults?.map(result => (
+        <SearchResult result={result} />
+      ))
+    }
+```
+
+- Set up new state for `idle` | `success` | `loading` | `error`
+
+```JAVASCRIPT
+  // state for the differ states
+  // idle | success | loading | error
+  const [status, setStatus] = React.useState('idle');
+```
