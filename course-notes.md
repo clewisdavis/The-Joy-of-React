@@ -11796,3 +11796,113 @@ GET '/api/book-search?searchTerm=winter'
   // idle | success | loading | error
   const [status, setStatus] = React.useState('idle');
 ```
+
+- In the `handleSearch`, add the logic for the `loading`, `success` and `error` cases.
+
+```JAVASCRIPT
+  //set up a handle function
+  async function handleSearch(event) {
+    event.preventDefault();
+
+    // Set the status to loading when we submit the search
+    setStatus('loading');
+
+    // create a new url variable
+    const url = `${ENDPOINT}?searchTerm=${searchTerm}`
+
+    const response = await fetch(url);
+    // use the results
+    const json = await response.json();
+
+    // check if the json has been successfuly parsed
+    // json.ok, if truthy then it's a succcess
+    if (json.ok) {
+      // pass results to state
+      setSearchResults(json.results);
+      // also set status to success
+      setStatus('success');
+    } else {
+      // otherwise, set to error
+      setStatus('error');
+    }
+  }
+```
+
+- Look at the JSX, what we are rendering, should only be shown in the success case.
+
+```JAVASCRIPT
+      <main>
+        {
+          // only be shown in the success case
+          status === 'success' && (
+            <div className="search-results">
+              <h2>Search Results:</h2>
+              {
+                // map over the results
+                searchResults?.map(result => (
+                  <SearchResult result={result} />
+                ))
+              }
+            </div>           
+          )
+        }
+      </main>
+```
+
+- This allows us to add other branches for the other status's, `idle`, `error`
+
+```JAVASCRIPT
+      <main>
+        {
+          // idle state
+          status === 'idle' && (
+            <p>Welcome to Book Search</p>
+          )
+        }
+        {
+          // loading state
+          status === 'loading' && (
+            <p>Searching...</p>
+          )
+        }
+        {
+          // error state
+          status === 'error' && (
+            <p>Something went wrong!</p>
+          )
+        }
+        {
+          // only be shown in the success case
+          status === 'success' && (
+            <div className="search-results">
+              <h2>Search Results:</h2>
+              {
+                // map over the results
+                searchResults?.map(result => (
+                  <SearchResult result={result} />
+                ))
+              }
+            </div>           
+          )
+        }
+      </main>
+```
+
+- Don't forget to add the key to the `<SearchResult/>` component. You can use the `isbn` value from the result object. ISBN is just a unique identifier for books, which works for this case.
+
+```JAVASCRIPT
+<SearchResult 
+  result={result}
+  key={result.isbn}
+/>
+```
+
+- And we need to test the error state. You can do this, by adding the query parameter to the `ENDPOINT`, `&simulatedError=true`
+
+![Error Status](images/image-14.png)
+
+```JAVASCRIPT
+  const url = `${ENDPOINT}?searchTerm=${searchTerm}&simulatedError=true`;
+```
+
+- What about the case, when no results are found?
