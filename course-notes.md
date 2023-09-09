@@ -12141,8 +12141,8 @@ Your mission, if you choose it, is to fetch the data from the endpoint provided,
 AC's:
 
 - You should use the provided `useSWR` hook to perform the request.
-- While the request is running, a spinner shoul dbe shown. A `Spinner` component has been provided for this purpose.
-- IF the request succeeds, the `<UserCard>` component should eb shown, populated with the data from the request.
+- While the request is running, a spinner should be shown. A `Spinner` component has been provided for this purpose.
+- If the request succeeds, the `<UserCard>` component should be shown, populated with the data from the request.
 - If the request fails, you can show an error message ( a standard paragraph with "Something went wrong" will do).
   - You can simulate the error by passing `simulatedError=true` as a query parameter.
 
