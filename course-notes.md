@@ -11849,7 +11849,7 @@ GET '/api/book-search?searchTerm=winter'
       </main>
 ```
 
-- This allows us to add other branches for the other status's, `idle`, `error`
+- This allows us to add other branches for the other status's, `idle`, `error`, `loading`.
 
 ```JAVASCRIPT
       <main>
@@ -11905,4 +11905,277 @@ GET '/api/book-search?searchTerm=winter'
   const url = `${ENDPOINT}?searchTerm=${searchTerm}&simulatedError=true`;
 ```
 
+##### No results found
+
 - What about the case, when no results are found?
+
+- When you have nested logic, it's really difficult to figure out, what is going on.
+- Instead, you can create a new component for the search result list.
+- A different way to structure the code, you have the standard, global 4 status's always use, `idle`, `loading`, `error`, `success`.
+- And in the `success` variant, you have a component, that handles the 'no results' case.
+
+- **Success branch logic:**
+
+```JAVASCRIPT
+    {
+      // only be shown in the success case
+      status === 'success' && (
+        // now just render the SearchResultList
+        <SearchResultList
+          searchResults={searchResults}
+        />
+      )
+    }
+```
+
+- The `SearchResultList` component:
+
+```JAVASCRIPT
+// Component for the Search Result List, pass in the searchResult as a prop
+function SearchResultList({ searchResults }) {
+  // check if not results and do an early return
+  if (searchResults.length === 0) {
+    return <p>No results</p>;
+  }
+  
+  // if do have resutls, return our search results
+  return (  
+      // markup for the search results
+      <div className="search-results">
+          <h2>Search Results:</h2>
+              {
+                // map over the results
+                searchResults?.map(result => (
+                  <SearchResult 
+                    result={result}
+                    key={result.isbn}
+                  />
+                ))
+              }
+      </div>    
+  )
+}
+```
+
+- If this were a real app, would break apart and manage components in differ files.
+
+---
+
+- **Full App() component:**
+
+```JAVASCRIPT
+// App.js Book search app
+import React from 'react';
+
+import TextInput from './TextInput.js';
+import SearchResult from './SearchResult.js';
+
+/*
+  API INSTRUCTIONS
+  
+  This endpoint expects a GET request,
+  with a query parameter of `searchTerm`.
+  Eg. `/api/book-search?searchTerm=winter`
+  
+  To simulate an error, attach the following
+  query parameter: `simulatedError=true`
+  
+  To test the results, here are some suggested
+  search terms:
+  
+    • `fifth` — 1 result
+    • `a` — 18 results
+    • `becky` — 4 results
+    • `hello` — 0 results
+*/
+
+const ENDPOINT =
+  'https://jor-test-api.vercel.app/api/book-search';
+
+function App() {
+  
+  const [
+    searchTerm,
+    setSearchTerm,
+  ] = React.useState('');
+  
+  const [
+    searchResults,
+    setSearchResults,
+  ] = React.useState(null);
+  
+  // state for the differ states
+  // idle | success | loading | error
+  const [status, setStatus] = React.useState('idle');
+
+  //set up a handle function
+  async function handleSearch(event) {
+    event.preventDefault();
+
+    // Set the status to loading when we submit the search
+    setStatus('loading');
+
+    // create a new url variable
+    const url = `${ENDPOINT}?searchTerm=${searchTerm}`
+
+    const response = await fetch(url);
+    // use the results
+    const json = await response.json();
+
+    // check if the json has been successfuly parsed
+    // json.ok, if truthy then it's a succcess
+    if (json.ok) {
+      // pass results to state
+      setSearchResults(json.results);
+      // also set status to success
+      setStatus('success');
+    } else {
+      // otherwise, set to error
+      setStatus('error');
+    }
+    
+  }
+
+  return (
+    <>
+      <header>
+        <form onSubmit={handleSearch}>
+          <TextInput
+            required={true}
+            label="Search"
+            placeholder="The Fifth Season"
+            value={searchTerm}
+            onChange={(event) => {
+              setSearchTerm(event.target.value);
+            }}
+          />
+          <button>Go!</button>
+        </form>
+      </header>
+
+      <main>
+        {
+          // idle state
+          status === 'idle' && (
+            <p>Welcome to Book Search</p>
+          )
+        }
+        {
+          // loading state
+          status === 'loading' && (
+            <p>Searching...</p>
+          )
+        }
+        {
+          // error state
+          status === 'error' && (
+            <p>Something went wrong!</p>
+          )
+        }
+        {
+          // only be shown in the success case
+          status === 'success' && (
+            // now just render the SearchResultList
+            <SearchResultList
+              searchResults={searchResults}
+            />
+          )
+        }
+      </main>
+    </>
+  );
+}
+
+// Component for the Search Result List
+function SearchResultList({ searchResults }) {
+  // check if not results and do an early return
+  if (searchResults.length === 0) {
+    return <p>No results</p>;
+  }
+  
+  // if do have resutls, return our search results
+  return (  
+      // markup for the search results
+      <div className="search-results">
+          <h2>Search Results:</h2>
+              {
+                // map over the results
+                searchResults?.map(result => (
+                  <SearchResult 
+                    result={result}
+                    key={result.isbn}
+                  />
+                ))
+              }
+      </div>    
+  )
+}
+
+const EXAMPLE = {
+  isbn: '9781473621442',
+  name: 'A Closed and Common Orbit',
+  author: 'Becky Chambers',
+  coverSrc: 'https://sandpack-bundler.vercel.app/img/book-covers/common-orbit.jpg',
+  abstract:
+    "Lovelace was once merely a ship's artificial intelligence. When she wakes up in an new body, following a total system shut-down and reboot, she has no memory of what came before. As Lovelace learns to negotiate the universe and discover who she is, she makes friends with Pepper, an excitable engineer, who's determined to help her learn and grow.",
+};
+
+export default App;
+```
+
+#### Fetching the current user
+
+In the sandbox, you are given starter code to an API endpoint that returns data about a user, like this:
+
+```JAVASCRIPT
+{
+  "user": {
+    "name": "Ahmed",
+    "email": "me@ahmed1234.com",
+  }
+}
+```
+
+Your mission, if you choose it, is to fetch the data from the endpoint provided, and to manage both laoding and error states.
+
+AC's:
+
+- You should use the provided `useSWR` hook to perform the request.
+- While the request is running, a spinner shoul dbe shown. A `Spinner` component has been provided for this purpose.
+- IF the request succeeds, the `<UserCard>` component should eb shown, populated with the data from the request.
+- If the request fails, you can show an error message ( a standard paragraph with "Something went wrong" will do).
+  - You can simulate the error by passing `simulatedError=true` as a query parameter.
+
+- ℹ️ Youc an refer to the final sandbox from the previous lesson as a template for making reqeust with the `useSWR` hook
+
+##### AC 1, Make the request via SWR
+
+- Set up the SWR hook in the component.
+
+```JAVASCRIPT
+function App() {
+  // SWR Hook, Stale While Rendering
+  const { data, error } = useSWR(ENDPOINT, fetcher);
+
+  // rest of code here..
+}
+```
+
+- Create the `fetcher` fuction to call the endpoint.
+
+```JAVASCRIPT
+const ENDPOINT =
+  'https://jor-test-api.vercel.app/api/get-current-user';
+
+// fetcher async function
+async function fetcher(endpoint) {
+  // make request, store it
+  const response = await fetch(endpoint);
+  // getting it as json
+  const json = await response.json();
+  // return it
+  return json;
+}
+```
+
+- console.log the `data` to see what you get back.
