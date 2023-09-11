@@ -12140,10 +12140,10 @@ Your mission, if you choose it, is to fetch the data from the endpoint provided,
 
 AC's:
 
-- You should use the provided `useSWR` hook to perform the request.
-- While the request is running, a spinner should be shown. A `Spinner` component has been provided for this purpose.
-- If the request succeeds, the `<UserCard>` component should be shown, populated with the data from the request.
-- If the request fails, you can show an error message ( a standard paragraph with "Something went wrong" will do).
+- 1. You should use the provided `useSWR` hook to perform the request.
+- 2. While the request is running, a spinner should be shown. A `Spinner` component has been provided for this purpose.
+- 3. If the request succeeds, the `<UserCard>` component should be shown, populated with the data from the request.
+- 4. If the request fails, you can show an error message ( a standard paragraph with "Something went wrong" will do).
   - You can simulate the error by passing `simulatedError=true` as a query parameter.
 
 - ℹ️ Youc an refer to the final sandbox from the previous lesson as a template for making reqeust with the `useSWR` hook
@@ -12178,4 +12178,51 @@ async function fetcher(endpoint) {
 }
 ```
 
-- console.log the `data` to see what you get back.
+- `console.log` the `data` to see what you get back.
+
+##### AC 2, Set up the spinner
+
+- Add `isLoading` to the `useSWR` hook.
+
+```JAVASCRIPT
+  const { data, isLoading, error } = useSWR(ENDPOINT, fetcher);
+```
+
+- Create the condition, to check if loading.
+
+```JAVASCRIPT
+function App() {
+
+  // SWR Hook, Stale While Rendering
+  const { data, isLoading, error } = useSWR(ENDPOINT, fetcher);
+  console.log(data);
+
+  // check if loading, display Spinner component
+  if (isLoading) {
+    return <Spinner />;
+  }
+
+  // if an error, show error text
+  if (error) {
+    return <p>Something went wrong</p>
+  }
+  
+  return (
+    <UserCard name="Name here" email='Email' />
+  );
+}
+```
+
+##### AC 3, Show the data in the Card
+
+- Update the `<UseCard />` component with the data, if successful.
+
+```JAVASCRIPT
+  return (
+    <UserCard name={data.user.name} email={data.user.email} />
+  );
+```
+
+##### AC 4, If the reqeust fails, show error message
+
+- You can simulate the error by passing `?simulatedError=true` as a query parameter.
