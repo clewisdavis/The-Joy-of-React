@@ -12226,3 +12226,99 @@ function App() {
 ##### AC 4, If the reqeust fails, show error message
 
 - You can simulate the error by passing `?simulatedError=true` as a query parameter.
+- In the `fetcher` funciton, add a condition to check if the json is NOT ok. Then use `throw` statement, to terminate the function.
+
+```JAVASCRIPT
+const ENDPOINT =
+  'https://jor-test-api.vercel.app/api/get-current-user?simulatedError=true';
+
+// fetcher async function
+async function fetcher(endpoint) {
+  // make request, store it
+  const response = await fetch(endpoint);
+  // getting it as json
+  const json = await response.json();
+  // check the response ok
+  if (!json.ok) {
+    throw json;
+  }
+  // return it
+  return json;
+}
+```
+
+- Add the condition to the JSX, to check `error` and display a message.
+
+```JAVASCRIPT
+  // if an error, show error text
+  if (error) {
+    return <p>Something went wrong!</p>;
+  }
+```
+
+- Full App solution for fetching user data.
+
+```JAVASCRIPT
+// App.js
+import React from 'react';
+import useSWR from 'swr';
+
+import UserCard from './UserCard.js';
+import Spinner from './Spinner.js';
+
+/*
+  API INSTRUCTIONS
+  
+  This endpoint expects a GET request.
+  
+  To simulate an error, attach the following
+  query parameter: `simulatedError=true`
+*/
+
+const ENDPOINT =
+  'https://jor-test-api.vercel.app/api/get-current-user';
+
+// fetcher async function
+async function fetcher(endpoint) {
+  // make request, store it
+  const response = await fetch(endpoint);
+  // getting it as json
+  const json = await response.json();
+  // check the response ok
+  if (!json.ok) {
+    throw json;
+  }
+  // return it
+  return json;
+}
+
+function App() {
+
+  // SWR Hook, Stale While Rendering
+  const { data, isLoading, error } = useSWR(ENDPOINT, fetcher);
+  console.log(data);
+
+  // check if loading, display Spinner component
+  if (isLoading) {
+    return <Spinner />;
+  }
+
+  // if an error, show error text
+  if (error) {
+    return <p>Something went wrong!</p>;
+  }
+  
+  // check if you have data
+  if (data?.user) {
+    return (
+      <UserCard name={data.user.name} email={data.user.email} />
+    );    
+  }
+}
+
+export default App;
+```
+
+#### Async Effect Gotcha
+
+-
