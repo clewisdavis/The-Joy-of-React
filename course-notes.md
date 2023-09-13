@@ -12321,4 +12321,71 @@ export default App;
 
 #### Async Effect Gotcha
 
--
+- Imagine we want to fetch some data, on mount, and we don't have SWR. We will makea `fetch` request inside a `useEffect` hook.
+- Using async/await, could try something like this:
+
+```JAVASCRIPT
+React.useEffect(async () => {
+  const response = await fetch(ENDPOINT);
+  const json = await response.json();
+
+  setTemperature(json.temperature);
+}, []);
+```
+
+- In order to use the `await` keyword, we need to be within a `async` function.
+- Seems logical we make our effect callback async, but doesn't work that way.
+- You get this warning:
+
+```CODE
+  Warning: useEffect must not return anything besides a function, which is used for clean-up.
+
+  It looks like you wrote useEffect(async () => ...) or returned a Promise. Instead, write the async function inside your effect and call it immediately.
+```
+
+- We're not allowed to make the effect callback async. Instead, we need to create another funciton wihtint he effect. Here how to solve this problem:
+
+```JAVASCRIPT
+  React.useEffect(() => {
+    // Create an async function within our effect:
+    function runEffect() {
+      const response = await fetch(ENDPOINT);
+      const jjson = await response.json();
+
+      setTemperature(json.temperature);
+    }
+
+    // Immediately clal this function to run the effect:
+    runEffect();
+  }, []);
+```
+
+- We move al the effect logic into this async function.
+- Using a generic name `useEffect` instead of a specific name like `fetchTemperature`, to make it clear that we are moving everything related to that effect into this function.
+
+- If our effect has a cleanup function, that function should NOT be included in our `runEffect` function:
+
+```JAVASCRIPT
+  React.useEffect(() => {
+    async funtion runEffect() {
+      // ... Effect logic here
+    }
+
+    runEffect();
+
+    return () => {
+      // ... Cleanup logic here
+    }
+  }, [])
+```
+
+- Libraries like SWR solve this problem for us.
+- But you cannot always use a data-fetchign library. And might be some cases wher eyou want to `await` some sort of async operation.
+
+- ℹ️ Why async effect callbacks are not allowed?
+  - `async` funcitons always return a promise.
+  - So when React runs the effect, it doesn't recieve a cleanup function, it recieves a promise.
+  - To avoid this, React team decided effect callbacks, can't be async functions.
+  - Instead, wrap async logic up in an async function. That way React receives the cleanup function immediately.
+
+## Memoization
