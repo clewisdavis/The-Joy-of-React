@@ -12389,3 +12389,90 @@ React.useEffect(async () => {
   - Instead, wrap async logic up in an async function. That way React receives the cleanup function immediately.
 
 ## Memoization
+
+- In large React apps, re-render can happen a lot.
+- Can lead to some performance issues over time.
+- Dig deeper into why React components re-render. And look at React tools to optimize this.
+
+- The `React.memo` component wrapper
+- The `useCallback` hook
+- The `useMemo` hook
+
+### Why React Re-Renders
+
+- First, get comfortable with the React render cycle.
+- We've seen how we can call a state setter function (`setCount`, `setUser`) to trigger a re-render.
+- React captures a snapshot of what the UI should look like given this new value for a state variable.
+
+- ℹ️ Rendering vs. Painting - Not the sme thing
+  - Re-render, React process where it figures out what needs to change (reconciliation, spot the difference)
+  - Painting, whenever a DOM node is edited, the browser will re-paint, redrawing the UI.
+
+#### The basic rule
+
+- The fundamental truch: **Every re-render in React starts with a state change.**
+- It's the trigger in React for a comoponent to re-render.
+- But, don't component re-render when their props change?
+
+- Here's the thing, when a component re-renders, **it also re-render all of its decendants.**
+
+- Let's look at an example; Counter app.
+
+```JAVASCRIPT
+// counter app example, React Re-Render
+import React from 'react';
+
+function App() {
+  return (
+    <>
+      <Counter />
+      <footer>
+        <p>Copyright 2022 Big Count Inc.</p>
+      </footer>
+    </>
+  );
+}
+
+function Counter() {
+  const [count, setCount] = React.useState(0);
+  
+  return (
+    <main>
+      <BigCountNumber count={count} />
+      <button onClick={() => setCount(count + 1)}>
+        Increment
+      </button>
+    </main>
+  );
+}
+
+function BigCountNumber({ count }) {
+  return (
+    <p>
+      <span className="prefix">Count:</span>
+      {count}
+    </p>
+  );
+}
+
+export default App;
+```
+
+- In this example, we have 3 components, `App` at the top, which renders `Counter`, which renders `BigCountNumber`.
+- In React, every state variable is attached to a particular component instance.
+- In this example, we have a single piece of state, `count`, which is associated with the `Counter` component.
+- Whenever thsi state change, `Counter` re-renders. And because `BigCountNumber` is being rendered by `Counter`, it will re-render as well.
+
+- Graph of what is happening:
+
+![Alt text](images/image-15.png)
+
+- 📣 Big Misocnception #1 - **The entire app re-renders whenever a state variable changes.**
+
+- Some believe, that every state cahnge in React forces an application wide render. **This isn't true.**
+- Re-renders only affect the component that owns the state + it decendants (if any).
+- In the above example, `App` component doesn't have to re-render when the count state variable changes.
+
+- React "main job" it so keep the application UI in sync with teh react state. The point of a re-render is to **figure out what needs to change**.
+
+-
