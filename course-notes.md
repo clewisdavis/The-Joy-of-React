@@ -12408,9 +12408,9 @@ React.useEffect(async () => {
   - Re-render, React process where it figures out what needs to change (reconciliation, spot the difference)
   - Painting, whenever a DOM node is edited, the browser will re-paint, redrawing the UI.
 
-#### The basic rule
+#### The Basic Rule - Re-Renders - Core React Loop
 
-- The fundamental truch: **Every re-render in React starts with a state change.**
+- The fundamental truth: **Every re-render in React starts with a state change.**
 - It's the trigger in React for a comoponent to re-render.
 - But, don't component re-render when their props change?
 
@@ -12475,4 +12475,127 @@ export default App;
 
 - React "main job" it so keep the application UI in sync with teh react state. The point of a re-render is to **figure out what needs to change**.
 
--
+- Consider the "Counter" example above. When the application first mounts, React renders all of our component and comes up with the following sketch for what the DOM should look like.
+
+```JAVASCRIPT
+    <main>
+      <p>
+        <span class="prefix">Count:</span>
+        0
+      </p>
+      <button>
+        Increment
+      </button>
+    </main>
+    <footer>
+      <p>Copyright 2022 Big Count Inc.</p>
+    </footer>
+```
+
+- When the user clicks on the button, the `count` state variable flips from `0` to `1`. How does this affect the UI?
+- That's what we hope to learn from doing another render!
+
+- Rect re-runs code for the `Counter` and `BigCountNumber` compoennts, and we generate a new picture of the DOM we want:
+
+```JAVASCRIPT
+<main>
+  <p>
+    <span class="prefix">Count:</span>
+    1
+  </p>
+  <button>
+    Increment
+  </button>
+</main>
+<footer>
+  <p>Copyright 2022 Big Count Inc.</p>
+</footer>
+```
+
+- 📣 **As we've learned, each render is like a snapshot,** a photo that tells us what the UI should look like, based on the current application state.
+
+- React then plays a "find the differences" game to figure out what's changed between snapshots.
+- I this case, it seems our paragraph has a text node that changed from `0` to `1`, and so it edits the text node to match the snapshot.
+- Satisfied tha tits work is done, React settles back and waits for the next state change.
+- 📣 **This is what we have called the core React loop.**
+
+- Render Graph:
+
+![Render Graph](images/image-16.png)
+
+- Our `count` state is associated with the `Counter` component. Because data can't flow "up" in a React application, we know that this state change can't possibly affect `<App />`. And so we dont' need to re-render hat component.
+
+- But we do need to re-render `Counter`'s child, BigCountNumber.
+- This is the compoennt that actaully displays the `count` state.
+- If we don't render it, we won't knwo that our paragraph's text node should change from `0` to `1`.
+- We ened to include thsi component in our sketch.  
+
+- 📣 The point of a re-render is to figure out how a state change should affect the user UI. And we need to re-render all potentailly-affected components, to get an accurate snapshot. 📣
+
+#### It's not about the props
+
+- Now, big misconception #2: **A component will re-render because its props change.**
+
+- An updated example:
+- In the code below, our "Counter" app has been given a brand new component, `Decoration`
+
+```JAVASCRIPT
+import React from 'react';
+
+import Decoration from './Decoration';
+import BigCountNumber from './BigCountNumber';
+
+function Counter() {
+  const [count, setCount] = React.useState(0);
+  
+  return (
+    <main>
+      <BigCountNumber count={count} />
+      <button onClick={() => setCount(count + 1)}>
+        Increment
+      </button>
+      
+      {/* 👇 This fella is new 👇 */}
+      <Decoration />
+    </main>
+  );
+}
+
+export default Counter;
+```
+
+- Our counter now has a `Decoration` component. It doesn't depend on `count`, so it probably won't re-render when `count` changes, right? Not quite.
+
+![re-render](images/image-17.png)
+
+- When a compoennt re-renders, it trie dto re-render al descendants, regardless of whether they being passed a particular state varuable through props or not.
+
+- Counter-intuitive, if we are not passing `count` as a prop to `<Decoration>`, why would it need to re-render?
+- The answer: it's hard for React to know, with 100% certainty, whether `<Decoration>` depends, directly or indirectly, on the `count` state variable.
+
+- In an ideal world, React components would always be pure. Always produces the same UI when given the same props.
+
+- In the real world, many of our components are impure. For example;
+
+```JAVASCRIPT
+function CurrentTime() {
+  const now = new Date();
+
+  return (
+    <p>It is currently {now.toString()}</p>
+  );
+}
+```
+
+- This component will display a different value whenever it's rendered, since it relies on the current time `Date()`.
+- **React's #1 goal** is to amke sure that the UI the user sees is kept "in sync" with the application state.
+- So, Rect will err on the side of to many renders. It doesn't want to risk showing the user a stale UI.
+
+- Going back to the misconception: props have nothing to do wtih re-renders.
+- `<BigCountNumber>` component is't re-rendering because the count prop changed.
+
+- 📣 When a component re-renders, because one of tis state variables has been updated, *that re-render will casecade all the way down teh tree*, in order for Freac tto figure out hwhat the new snapshot should look like.
+
+- Saying that, we can optimize the process.
+
+### Pure Components
