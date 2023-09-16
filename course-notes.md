@@ -12516,7 +12516,7 @@ export default App;
 
 - React then plays a "find the differences" game to figure out what's changed between snapshots.
 - I this case, it seems our paragraph has a text node that changed from `0` to `1`, and so it edits the text node to match the snapshot.
-- Satisfied tha tits work is done, React settles back and waits for the next state change.
+- Satisfied that its work is done, React settles back and waits for the next state change.
 - 📣 **This is what we have called the core React loop.**
 
 - Render Graph:
