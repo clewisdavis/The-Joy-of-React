@@ -12528,7 +12528,7 @@ export default App;
 - But we do need to re-render `Counter`'s child, BigCountNumber.
 - This is the compoennt that actaully displays the `count` state.
 - If we don't render it, we won't knwo that our paragraph's text node should change from `0` to `1`.
-- We ened to include thsi component in our sketch.  
+- We ened to include this component in our sketch.  
 
 - 📣 The point of a re-render is to figure out how a state change should affect the user UI. And we need to re-render all potentailly-affected components, to get an accurate snapshot. 📣
 
@@ -12568,7 +12568,7 @@ export default Counter;
 
 ![re-render](images/image-17.png)
 
-- When a compoennt re-renders, it trie dto re-render al descendants, regardless of whether they being passed a particular state varuable through props or not.
+- When a compoennt re-renders, it tried to re-render al descendants, regardless of whether they being passed a particular state varuable through props or not.
 
 - Counter-intuitive, if we are not passing `count` as a prop to `<Decoration>`, why would it need to re-render?
 - The answer: it's hard for React to know, with 100% certainty, whether `<Decoration>` depends, directly or indirectly, on the `count` state variable.
@@ -12588,14 +12588,70 @@ function CurrentTime() {
 ```
 
 - This component will display a different value whenever it's rendered, since it relies on the current time `Date()`.
-- **React's #1 goal** is to amke sure that the UI the user sees is kept "in sync" with the application state.
-- So, Rect will err on the side of to many renders. It doesn't want to risk showing the user a stale UI.
+- **React's #1 goal** is to make sure that the UI the user sees is kept "in sync" with the application state.
+- So, React will err on the side of to many renders. It doesn't want to risk showing the user a stale UI.
 
-- Going back to the misconception: props have nothing to do wtih re-renders.
-- `<BigCountNumber>` component is't re-rendering because the count prop changed.
+- Going back to the misconception: props have nothing to do with re-renders.
+- `<BigCountNumber>` component is not re-rendering because the count prop changed.
 
-- 📣 When a component re-renders, because one of tis state variables has been updated, *that re-render will casecade all the way down teh tree*, in order for Freac tto figure out hwhat the new snapshot should look like.
+- 📣 When a component re-renders, because one of tis state variables has been updated, *that re-render will casecade all the way down the tree*, in order for React to figure out what the new snapshot should look like.
 
 - Saying that, we can optimize the process.
 
 ### Pure Components
+
+- In the last lesson, we saw how a component will automatically re-render when its parent re-renders, regardless of whether or not its props have changed.
+
+- In larger apps, this can lead to performance issues. A single state change might re-render dozens or even hundres of components, even if only a small fraction of them actaully need to re-render.
+
+- React provides an escape hatch we can use: the `React.memo` utility.
+
+```JAVASCRIPT
+  function Decotation() {
+    return (
+      <div className="decoration">
+        🍰
+      </div>
+    );
+  }
+
+  const PureDecoration = React.memo(Decoration);
+
+  export default PureDecoration;
+```
+
+- React.memo is a utility that lets us tell React: "Hey, this component is pure! It doesn't need to re-render unless its props or state changes. It will always return the exact same UI when given the same props + state".
+
+- It takes a component as an argument (`Decoration`) and augments it, giving it a new super power: **it can selectively ignore re-renders that don't affect it.**
+
+- When the parent component re-renders, React will try to re-render the child `PureDecoration`, but `PureDecoration` steps in and says "None of my props ahve changed, and so I won't be re-rendering this time"
+
+- 📣 This uses a technique known as **memoization**.
+
+- It's missing the R, but think of it as "momorization". The idea React will remember the previosu snapshot.
+- If none of the props have chnaged, rec will re-use that stale snapshot rather than going through the trouble of generating a brand new one.
+
+- Let's suppose I wrap both `BigCountNumber` and `Decoration` with the `React.memo` helper.
+- Here is how would affect the renders:
+
+![Alt text](images/image-18.png)
+
+- When count changes, we re-render Counter, and React will try to render both descendant components.
+
+- Because `BigCountNumber` takes `count` as a prop, and because that prop has changed, `BigCountNumber` is re-rendered.
+- But because Decorations's props haven't changed (doesn't have any) the original snapshot is used.
+
+- Pretend that React.memo is like a lazy photographer. If you ask it to take 5 photos of the exact same thing, will take 1 photo and give you 5 copies of it. The photographer will only snap a new picture when your instructions change.
+
+- [Live code example; Use Memo](https://codesandbox.io/s/ynbfuv?file=/Counter.js&utm_medium=sandpack)
+
+- To summerize:
+
+- The only way to re-render anythign in react si to update a state variable by calling a state-setter function (eg. `setCount`).
+- When a component re-renders, it automatically re-renders all of its descendants, even if none of their props have changed.
+- We can wearp our component with React.memo to optimize it, so that it only re-renders if at least 1 of its props have changed since the last render.
+
+- ℹ️ Why isn't this the default behaviour?
+- Easy to overestimate how expensive re-renders are. In teh case of our `Decoration` component, re-renders are lighting quick.
+- If a component has a bunch of props and not a lot of descendants, it can actaully be slower to check if any of the props have changed compared to re-rendering the component.
+- The official recommendation is to use React.memo as-needed, when trying to fix a perfomance issue. No need to apply pre-emptively.
