@@ -12655,3 +12655,5 @@ function CurrentTime() {
 - Easy to overestimate how expensive re-renders are. In teh case of our `Decoration` component, re-renders are lighting quick.
 - If a component has a bunch of props and not a lot of descendants, it can actaully be slower to check if any of the props have changed compared to re-rendering the component.
 - The official recommendation is to use React.memo as-needed, when trying to fix a perfomance issue. No need to apply pre-emptively.
+
+### The useMemo Hook
