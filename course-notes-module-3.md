@@ -5117,3 +5117,129 @@ function CurrentTime() {
 - The official recommendation is to use React.memo as-needed, when trying to fix a perfomance issue. No need to apply pre-emptively.
 
 ### The useMemo Hook
+
+- In the last lesson we saw how `React.memo` helper let sus memoize a component, so that it only re-renders when its props/state changes.
+
+- In this sesion, we are going to look at another tools that les us do a different sort of memoization: the `useMemo` hook.
+
+- The fundamental idea with the `useMemo` is that is allow sus to "remember" a computed value between renders.
+
+- Generally use this hook for performance optimaizations. It can be used in two seperate but related ways:
+
+1. Can reduce the amount of work that need to be done in a given render.
+2. Can reduce the number of times taht a component is re-rendered.
+
+#### Use case 1: Heavy computations
+
+- Building a tool to help users find all of the prime numbers between 0 and `selectedNum`, where `selectedNum` is a user-supplied value. A prime number is a number hat can only be divided by 1 and itself, like 17.
+
+- [Solution, Code Playground](https://codesandbox.io/s/h7j2m9?file=/App.js&utm_medium=sandpack)
+
+```JAVASCRIPT
+import React from 'react';
+
+function App() {
+  // We hold the user's selected number in state.
+  const [selectedNum, setSelectedNum] = React.useState(100);
+  
+  // We calculate all of the prime numbers between 0 and the
+  // user's chosen number, `selectedNum`:
+  const allPrimes = [];
+  for (let counter = 2; counter < selectedNum; counter++) {
+    if (isPrime(counter)) {
+      allPrimes.push(counter);
+    }
+  }
+  
+  return (
+    <>
+      <form>
+        <label htmlFor="num">Your number:</label>
+        <input
+          id="num"
+          type="number"
+          value={selectedNum}
+          onChange={(event) => {
+            // To prevent computers from exploding,
+            // we'll max out at 100k
+            const num = Math.min(
+              100_000,
+              Number(event.target.value)
+            );
+            
+            setSelectedNum(num);
+          }}
+        />
+      </form>
+      <p>
+        There are {allPrimes.length} prime(s) between 1 and {selectedNum}:
+        {' '}
+        <span className="prime-list">
+          {allPrimes.join(', ')}
+        </span>
+      </p>
+    </>
+  );
+}
+
+// Helper function that calculates whether a given
+// number is prime or not.
+function isPrime(n){
+  const max = Math.ceil(Math.sqrt(n));
+  
+  if (n === 2) {
+    return true;
+  }
+  
+  for (let counter = 2; counter <= max; counter++) {
+    if (n % counter === 0) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+export default App;
+```
+
+- In this example, we have a single piece of state, `selectedNum`. Using a for loop, we manually calculate all the prime numbers between 0 and `selectedNum`. the user can cahnge `selectedNum` by editing a controlled number input.
+
+- This code requires a significant amount of computation. If user picks a large `selectedNum`, have to go through tens of thousand of numbers, checking each one is prime.
+
+- We need to do this work atleast once, and again whenever the user picks a new number.
+
+- Another example, suppose we add a digital clock, using the `useTime` hook we created.
+
+- [Code Example, Prime Number and Timer](https://codesandbox.io/s/k4jpss?file=/App.js&utm_medium=sandpack)
+
+- Now, our application now has two pieces of state, `selectedNum` and `time`.
+- Once per second, the `time` variable is updated to reflect the current time and that value is used to render a digital clock in the top right corner.
+
+- Here is the issue: whenever either of these state varibales change, the component re-renders adn we re-run all these expsnsive computatoins.
+- And because time changes once per second, it means we are constantly re-generating a list of primes, even when the user number has not changed.
+
+![Prime Number](images/image-19.png)
+
+- In JS, we only have one main thred, and we are keeping it super busy by running thsi code over and over, every single second.
+- Application will feel sluggish as user tries to do other things, especially on lower end devices.
+
+- **What if we could skip these calculations?** If we already have a list of primes for a given number, why not re-use that value instead of calculating it from scratch every time?
+
+- This is precisely what useMemo allows us to do. Here's what it looks like:
+
+```JAVASCRIPT
+const allPrimes = React.useMemo(() => {
+  const result = [];
+
+  for (let counter = 2; counter < selectedNum; counter++) {
+    if (isPrime(counter)) {
+      result.push(counter);
+    }
+  }
+
+  return result;
+}, [selectedNum]);
+```
+
+- useMemo takes two argumants:
