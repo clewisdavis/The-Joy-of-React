@@ -5242,4 +5242,182 @@ const allPrimes = React.useMemo(() => {
 }, [selectedNum]);
 ```
 
-- useMemo takes two argumants:
+- `useMemo` takes two argumants:
+
+1. A chunk of work to be performed, wrapped in a callback function
+2. A lsit of dependencies
+
+During mount, when this component is rendered for the very first time, Rect will invoke this function to run all of this logic, calculating all of the primes. Whatever we return from this funcitno is assinged to the `allPrimes` variable.
+
+For every subsequent render, react ha sa choice to make. Should it:
+
+1. Invoke the function again, to re-calcualte the value, or
+2. Re-use the data it already has, from the last ime it did this work.
+
+To answer this, React looks to the supplied list of dependencies. Have any of them changed since the previous render?
+If so, react will rerun the supplied funciton, to calcualte a new value. Otherwise, it will skip all that work and reuse the previously-calculated value.
+
+🤔 Similar to other stuff
+The structure of `useMemo` is a lot like the structure for `useEffect`. They both take a callback funciton and a dependency array.
+
+- The main difference, is that `useMemo` is used to calculate a value **during render.**
+- Effects, meanwhile, invoke the callback function after the render, **to synchronize React state wtih some sort of external system.**
+
+- You might have also noticed: the `useMemo` hook as a similar name to the `React.memo` helper we saw in the previous lesson.
+
+➡️ `React.memo`, memoizes the result of rendering a component, only re-running when the props change.
+➡️ `React.useMemo`, memoizes the result of a computation, only re-running when the dependencies change.
+
+- Solution using the `useMemo` hook: [Code Playground](https://codesandbox.io/s/knjmwx?file=/App.js&utm_medium=sandpack)
+
+```JAVASCRIPT
+import React from 'react';
+import format from 'date-fns/format';
+
+import useTime from './use-time';
+
+function App() {
+  const [selectedNum, setSelectedNum] = React.useState(100);
+  const time = useTime();
+  
+  const allPrimes = React.useMemo(() => {
+    const result = [];
+    
+    for (let counter = 2; counter < selectedNum; counter++) {
+      if (isPrime(counter)) {
+        result.push(counter);
+      }
+    }
+    
+    return result;
+  }, [selectedNum]);
+  
+  return (
+    <>
+      <p className="clock">
+        {format(time, 'hh:mm:ss a')}
+      </p>
+      <form>
+        <label htmlFor="num">Your number:</label>
+        <input
+          id="num"
+          type="number"
+          value={selectedNum}
+          onChange={(event) => {
+            // To prevent computers from exploding,
+            // we'll max out at 100k
+            let num = Math.min(100_000, Number(event.target.value));
+            
+            setSelectedNum(num);
+          }}
+        />
+      </form>
+      <p>
+        There are {allPrimes.length} prime(s) between 1 and {selectedNum}:
+        {' '}
+        <span className="prime-list">
+          {allPrimes.join(', ')}
+        </span>
+      </p>
+    </>
+  );
+}
+
+function isPrime(n){
+  const max = Math.ceil(Math.sqrt(n));
+  
+  if (n === 2) {
+    return true;
+  }
+  
+  for (let counter = 2; counter <= max; counter++) {
+    if (n % counter === 0) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+export default App;
+```
+
+### Use case 2: Preserved references
+
+- We have seen how `useMemo` can help improve performance by caching expensive calculations. This is one way this hook can be used. But not the only way. Another use case.
+
+- In the example below, we have a Boxes component. It displays a set of colorful boxes, to be used for some sort of decorative purpose. It also has a bit of unrelated state, the user's name.
+
+- [Code Playground:](https://codesandbox.io/s/r64v7p?file=/App.js&utm_medium=sandpack)
+
+```JAVASCRIPT
+import React from 'react';
+
+import Boxes from './Boxes';
+
+const PureBoxes = React.memo(Boxes);
+
+function App() {
+  const [name, setName] = React.useState('');
+  const [boxWidth, setBoxWidth] = React.useState(1);
+  
+  const id = React.useId();
+  
+  // Try changing some of these values!
+  const boxes = [
+    { flex: boxWidth, background: 'hsl(345deg 100% 50%)' },
+    { flex: 3, background: 'hsl(260deg 100% 80%)' },
+    { flex: 1, background: 'hsl(50deg 100% 60%)' },
+  ];
+  
+  return (
+    <>
+      <PureBoxes boxes={boxes} />
+      
+      <section>
+        <label htmlFor={`${id}-name`}>
+          Name:
+        </label>
+        <input
+          id={`${id}-name`}
+          type="text"
+          value={name}
+          onChange={(event) => {
+            setName(event.target.value);
+          }}
+        />
+        <label htmlFor={`${id}-box-width`}>
+          First box width:
+        </label>
+        <input
+          id={`${id}-box-width`}
+          type="range"
+          min={1}
+          max={5}
+          step={0.01}
+          value={boxWidth}
+          onChange={(event) => {
+            setBoxWidth(Number(event.target.value));
+          }}
+        />
+      </section>
+    </>
+  );
+}
+
+export default App;
+```
+
+- Our Boxes component has been made pure by `React.memo()`. This means that it should only re-render whenever its props change.
+- And yet, wheneve rthe user changes their name, PureBoxes re-renders as well.
+
+![Alt text](images/image-20.png)
+
+- What's going on? Why isn't our React.memo() force field protecting this?
+
+- The PureBoxes compoennt only has 1 prop, boxes, and it appears as though we are giving it hte exact saem data on every render.
+- It is always the same thing. We do have a `boxWidth` stae variable that affects the boxes array, but we are not changing it.
+
+- Here's the problem, evertime React re-renders, we are producing a brand new array. **They are equivalent in terms of value, but not in terms of reference.**
+
+- Forget about React for a moment and talk about vanilla JS.
