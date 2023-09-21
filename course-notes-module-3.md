@@ -5421,3 +5421,76 @@ export default App;
 - Here's the problem, evertime React re-renders, we are producing a brand new array. **They are equivalent in terms of value, but not in terms of reference.**
 
 - Forget about React for a moment and talk about vanilla JS.
+
+```JAVASCRIPT
+function getNumbers() {
+    return [1,2,3];
+}
+
+const firstResult = getNumbers();
+const secondResult = getNumbers();
+
+console.log(firstResult === secondResult);
+```
+
+- What do you think the value of the console log is? `true` or `false`?
+- In a way, they are both equal, the values are equal. But that isn't what `===` operator is checking.
+
+- Instead, the `===` is checking whether the two experessoins are the same thing.
+
+- Covered in the "Immutability Revisited" lesson. When it comes to objects and arrays, it is not enough for them to look the same.
+- They have to be the same. Both variables need to point to the same entity held in the computer's memory.
+
+- Every time we invoke the `getNumbers` function, we create a brand-new array.
+- A distict thing held in the computer's meemory.
+- If we invoke it multiple times, we will store multiple copies of this array in-memory.
+
+- ℹ️ Note that simple data types - things like `strings`, `numbers`, and `boolean` values - can be compared by value.
+- But when it comes to `arrays` and `objects`, they are only compared by reference.
+
+- Check out the [visual guide to references in JS](https://daveceddia.com/javascript-references/).
+
+- Takign this back to React: Our PureBoxes React copoennt is also a JS function. When we render it, we invoke that function.
+
+```JAVASCRIPT
+// Every time we render this component, we call this function...
+function App() {
+  // ...and wind up creating a brand new array...
+  const boxes = [
+    { flex: boxWidth, background: 'hsl(345deg 100% 50%)' },
+    { flex: 3, background: 'hsl(260deg 100% 40%)' },
+    { flex: 1, background: 'hsl(50deg 100% 60%)' },
+  ];
+
+  // ...which is then passed as a prop to this component!
+  return (
+    <PureBoxes boxes={boxes} />
+  );
+}
+```
+
+- When the `name` state changes, our `App` component re-renders, which re-runs all of the code. We construct a brand-new `boxes` array and pass it onto our `PureBoxes` component.
+
+- **And PureBoxes re-renders, because we gave ti a brand new array!**
+
+- The structure of the boxes array hasn't changed between renders, but that isn't relevant.
+- All React knows, is that the `boxes` prop has received a freshly-created, never-before-seen array.
+
+- To solve this problem, we can use the `useMemo` hook:
+
+```JAVASCRIPT
+const boxes = React.useMemo(() => {
+    return [
+    { flex: boxWidth, background: 'hsl(345deg 100% 50%)' },
+    { flex: 3, background: 'hsl(260deg 100% 40%)' },
+    { flex: 1, background: 'hsl(50deg 100% 60%)' },
+    ];
+}, [boxWidth]);
+```
+
+- Unlike the example we saw earlier, with the prime numbers, we are not worried about a compuationally expensive calculation here.
+- Our only goal si to preserve a reference to a particulat array.
+
+- We list `boxWidth` as a dependency, because we do want the `PureBoxes` component to re-render when the user tweaks the width of the red box.
+
+-
