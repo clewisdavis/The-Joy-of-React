@@ -5493,4 +5493,122 @@ const boxes = React.useMemo(() => {
 
 - We list `boxWidth` as a dependency, because we do want the `PureBoxes` component to re-render when the user tweaks the width of the red box.
 
--
+- Before, does not use `useMemo`, and craetes a brand new array each time everytime a new snapshot is created.
+
+![Alt text](images/image-21.png)
+
+- After, with `useMemo`, we are re-using a previously created `boxes` array:
+
+![Alt text](images/image-22.png)
+
+- 📣 By preserving the same reference accross multiple renders, we allow pure components to function the way we wnat them to, ignoring renders that do not effect the UI.
+
+- [An updated sand box with the useMemo fix.](https://codesandbox.io/s/3jm2gt?file=/App.js&utm_medium=sandpack)
+
+```JAVASCRIPT
+import React from 'react';
+
+import Boxes from './Boxes';
+
+const PureBoxes = React.memo(Boxes);
+
+function App() {
+  const [name, setName] = React.useState('');
+  const [boxWidth, setBoxWidth] = React.useState(1);
+  
+  const id = React.useId();
+  
+  const boxes = React.useMemo(() => {
+    return [
+      { flex: boxWidth, background: 'hsl(345deg 100% 50%)' },
+      { flex: 3, background: 'hsl(260deg 100% 40%)' },
+      { flex: 1, background: 'hsl(50deg 100% 60%)' },
+    ];
+  }, [boxWidth]);
+  
+  return (
+    <>
+      <PureBoxes boxes={boxes} />
+      
+      <section>
+        <label htmlFor={`${id}-name`}>
+          Name:
+        </label>
+        <input
+          id={`${id}-name`}
+          type="text"
+          value={name}
+          onChange={(event) => {
+            setName(event.target.value);
+          }}
+        />
+        <label htmlFor={`${id}-box-width`}>
+          First box width:
+        </label>
+        <input
+          id={`${id}-box-width`}
+          type="range"
+          min={1}
+          max={5}
+          step={0.01}
+          value={boxWidth}
+          onChange={(event) => {
+            setBoxWidth(Number(event.target.value));
+          }}
+        />
+      </section>
+    </>
+  );
+}
+
+export default App;
+```
+
+### The useCallback Hook
+
+- How is `useCallback` any different than `useMemo`?
+
+- 🤔 It solves the same "preserved references" problem as `useMemo`, but for functions in stead of arrays and objects.
+
+- Similar to arrays and objects, functions are compared by reference, not by value:
+
+```JAVASCRIPT
+const functionOne = function(){ return 5; };
+const functionTwo = function(){ return 5; };
+
+console.log(functionOne === functionTwo); //false
+```
+
+- This means, that if we define a funciton wthiin oru components, it will be re-generated on every single render, producing an identical but unique funciton each time.
+
+- Example; 👩‍💻 [Code Playground](https://codesandbox.io/s/gkx80v?file=/App.js&utm_medium=sandpack)
+
+```JAVASCRIPT
+import React from 'react';
+
+import MegaBoost from './MegaBoost';
+
+function App() {
+  const [count, setCount] = React.useState(0);
+
+  function handleMegaBoost() {
+    setCount((currentValue) => currentValue + 1234);
+  }
+
+  return (
+    <>
+      Count: {count}
+      <button
+        onClick={() => {
+          setCount(count + 1)
+        }}
+      >
+        Click me!
+      </button>
+      <MegaBoost handleClick={handleMegaBoost} />
+    </>
+  );
+}
+
+export default App;
+```
