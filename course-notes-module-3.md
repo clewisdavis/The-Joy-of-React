@@ -5612,3 +5612,61 @@ function App() {
 
 export default App;
 ```
+
+- The example, a typical counter applicaiton, but with a special "mega Boost" button
+- The button increases the count by a large amount, in case you are in a hurry and don't watn to click teh standard button a bunch of times.
+
+- The `MegaBoost` component si a pure component, thanks to `React.memo` (wrapping around the default export inside `MegaBoose.js`).
+- This component doesn't receive `count` as a prop, but it re-renders whenever `count` changes!
+
+- 🤔 The problem here is that we are generating a brand new runction on every render.
+- If we render 3 times, we will create 3 seperate `handleMegaBoost` functions, breaking through the `React.memo` force field.
+
+- It's the same problem we saw with the `boxes` array in the last lesson, but instead of a twin array being passed as a prop, we have a twin function being passed as a prop.
+
+- Using what we have learned about useMemo, we could solve the prolem like this:
+
+```JAVASCRIPT
+const handleMegaBoost = React.useMemo(() => {
+    return function() {
+        setCount((currentValue) => currentValue + 1234);
+    }
+}, []);
+```
+
+- Instead of returning an array, we are returning a function. This function is then stored in the `handleMegaBoost` variable.
+- This works...but a better way to do to this:
+
+```JAVASCRIPT
+const handleMegeBoost = React.useCallback(() => {
+    setCount((currentValue) => currentValue + 1234);
+}, []);
+```
+
+- 📣 `useCallback` serves teh same purpose as `useMemo`, but its build specifically for functions.
+- We ahnd it  function direclty, and it momoizes that function, threading it between renders.
+
+- Put another way, these two expressoins have the same effect:
+
+```JAVASCRIPT
+// This: 
+React.useCallback(function helloWorld(){}, []);
+
+// is functionally equivalent to this:
+React.useMemo(() => function helloWorld(){}, []);
+```
+
+- Basically, useCallback is syntactic sugar, to make our lives a bit easier when trying to memoize callback functions.
+
+#### This stuff is hard 🤔
+
+- It's difficult to get comfortable with `useMemo` and `useCallback`.
+
+- Good news, you can build complex, apps without using either of these hooks.
+
+- These hooks are advanced and inted to optimize applications. But React is pretty fast out of the box.
+- If struggling with these momoization lessons, set them aside and come back in a few months after you get more comfortable with React.
+
+### Exercises, Memoization
+
+#### A pure grid
