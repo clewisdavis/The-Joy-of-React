@@ -5670,3 +5670,46 @@ React.useMemo(() => function helloWorld(){}, []);
 ### Exercises, Memoization
 
 #### A pure grid
+
+- In the exercise, you find a customizable two dimensional grid. In teh same applicaiton, we are trackign the user's mouse position, and displaying it above the grid.
+
+- The task, is to optimize the grid so that it doesn't have to re-render when the user's mouse position changes.
+
+ACs
+
+- `Grid` should only re-render when either `numRows` or `numCols` changes. Moving the mouse across the viewport should not re-render the Grid component.
+- [Code Sandbox](https://codesandbox.io/s/u5yrhu?file=/App.js&utm_medium=sandpack)
+
+```JAVASCRIPT
+import React from 'react';
+
+import { range } from './utils';
+
+function Grid({ numRows, numCols }) {
+  console.info('Grid render');
+  
+  return (
+    <div className="grid-wrapper">
+      {range(numRows).map((rowIndex) => (
+        <div key={rowIndex} className="row">
+          {range(numCols).map((colIndex) => (
+            <div key={colIndex} className="cell" />
+          ))}
+        </div>
+      ))}
+    </div>
+  );
+}
+
+// wrap the export in a memo, so any component that imports the component, get the memoize version
+export default React.memo(Grid);
+```
+
+#### Shopping Cart
+
+- Revisit the "Shopping Car" exercise back in Module 1
+- Update the code so that `CartTable` doesn't re-render unnecessarily.
+
+ACs:
+
+- Editing the postal code should not trigger a re-render in the `CartTable` component.
