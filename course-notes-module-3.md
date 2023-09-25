@@ -5713,3 +5713,80 @@ export default React.memo(Grid);
 ACs:
 
 - Editing the postal code should not trigger a re-render in the `CartTable` component.
+
+- Tip: On this one, everytime a new array is generated via the `items.filter()`, it triggers a re-render.
+- Add `React.memo()` to the `CardTale` export.
+
+```JAVASCRIPT
+// Card table component
+import React from 'react';
+
+function CardTable() {
+    // component code here
+}
+export default React.memo(CartTable);
+```
+
+- Then, in the shopping cart, add `useMemo()` hook to the `inStockItems` and `outOfStockItems`. This will prevent a re-render everytime user enters something in the postal code field.
+
+```JAVASCRIPT
+// Shopping Cart Component
+import React from 'react';
+
+import CartTable from './CartTable';
+
+function ShoppingCart({ items }) {
+  const [postalCode, setPostalCode] = React.useState('');
+  const postalCodeId = React.useId();
+ 
+  // .filter generates a new array, which triggers a re-render
+  // wrap in a useMemo hook, and pass in the items array
+  // this will only re-render if an update in the items array
+  const inStockItems = React.useMemo(() => {
+     return items.filter(
+        (item) => item.inStock
+      );
+    }, [items]);
+
+  // do the same thing for the out of stock items
+  const outOfStockItems = React.useMemo(() => {
+     return items.filter(
+        // flip the logic with !
+        (item) => !item.inStock
+      );
+    }, [items]);
+
+  return (
+    <>
+      <h2>Shopping cart</h2>
+      
+      <form>
+        <label htmlFor={postalCodeId}>
+          Enter Postal / ZIP code for shipping estimate:
+        </label>
+        <input
+          id={postalCodeId}
+          type="text"
+          value={postalCode}
+          onChange={(event) => {
+            setPostalCode(event.target.value);
+          }}
+        />
+      </form>
+      
+      <CartTable items={inStockItems} />
+
+      <div className="actions">
+        <button>Continue checkout</button>
+      </div>
+
+      <h2>Sold out</h2>
+      <CartTable items={outOfStockItems} />
+    </>
+  );
+}
+
+export default ShoppingCart;
+```
+
+#### Memoized Click Toggle
