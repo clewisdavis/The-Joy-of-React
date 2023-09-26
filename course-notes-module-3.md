@@ -5820,3 +5820,34 @@ AC's
 
 - The `ClockToggle` component should become a pure component.
 - `ClockToggle` should not re-render when the `time` or `showClock` state variables change.
+
+- Tricky exercise, the custom hook `use-toggle.js` was creating the re-render by running a new fuction based on the updated state.
+- Solution, was to add a `useCallback` hook, on the function within the `useToggle` component.
+- The hard part, is tracking down, where the re-rending is happening based on the state change.
+
+```JAVASCRIPT
+// use-toggle.js
+import React from 'react';
+
+function useToggle(initialValue = false) {
+  if (typeof initialValue !== 'boolean') {
+    console.warn('Invalid type for useToggle');
+  }
+
+  const [value, setValue] = React.useState(
+    initialValue
+  );
+
+  // this function is causing the re-render
+  // add the useCallback hook here
+  const toggleValue = React.useCallback(
+    function toggleValue() {
+      setValue((currentValue) => !currentValue);
+  }, []);
+
+
+  return [value, toggleValue];
+}
+
+export default useToggle;
+```
