@@ -5790,3 +5790,33 @@ export default ShoppingCart;
 ```
 
 #### Memoized Click Toggle
+
+- In the Custom Hooks exercises, we created a handy `useToggle` hook:
+
+```JAVASCRIPT
+function useToggle(initialValue = false) {
+  if (typeof initialValue !== 'boolean') {
+    console.warn('Invalid type for useToggle');
+  }
+
+  const [value, setValue] = React.useState(
+    initialValue
+  );
+
+  function toggleValue() {
+    setValue((currentValue) => !currentValue);
+  }
+
+  return [value, toggleValue];
+}
+```
+
+- We have updated our digital clock app to use this hook.
+- In the [sand box](https://codesandbox.io/s/xrng0i?file=/App.js&utm_medium=sandpack), everything works, but our `ClockToggle` component is rendering on every state change, even once that don't affect it.
+
+- Task, update code so that `ClockToggle` doesn't re-render unnecessarily.
+
+AC's
+
+- The `ClockToggle` component should become a pure component.
+- `ClockToggle` should not re-render when the `time` or `showClock` state variables change.
