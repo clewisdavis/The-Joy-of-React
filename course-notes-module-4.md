@@ -29,6 +29,8 @@
 
 ### The Spectrum of Components
 
+- Here is a simple implementation of a `<Banner/>` component, meant to show teh user a message.
+
 ```JAVASCRIPT
 import React from 'react';
 
@@ -60,3 +62,68 @@ function Banner({ type, user, children }) {
 
 export default Banner;
 ```
+
+- What do you think about this structure?
+- An opportunity to do things, in a more flexible and scalable way.
+
+- The spectrum of components.
+- On the left, primitive lego bricks we build our application with, reusable and generic.
+
+![spectrum](images/image-23.png)
+
+- But we need things that are more application specific and tied into our business logic.
+- As you move along the spectrum we start to be more and more tied into our specific application.
+
+![Alt text](images/image-24.png)
+
+- At the end of the spectrum, the components that are the most tied into our application and business logic.
+
+- Good mental model, every component should be clear where they sit on the spectrum.
+
+- With this in mind, where should this go in our spectrum? How would you structure this?
+- Whenever you render our <LoggedInBanner/> it does the business logic check, then it defers to our generic <Banner/>.
+
+```JAVASCRIPT
+// Create a new component
+// this component can be responsible for the logic
+// and then you can return a generic <Banner/>
+function LoggedInBanner({ type, user, children }) {
+  // Only logged in, verified users are
+  // allowed to see the banner
+  if (
+    !user ||
+    user.registrationStatus === 'unverified'
+  ) {
+    return null;
+  }  
+
+  return (
+    <Banner type={type}>
+      {children}
+    </Banner>
+  )
+}
+```
+
+- And now, you have two separate components, that have two separate concerns.
+- Purely cosmetic, based on it's type.
+
+```JAVASCRIPT
+// Generic Banner
+function Banner({ type, children }) {
+  const backgroundColor = type === 'success'
+    ? 'var(--color-success)'
+    : 'var(--color-error)';
+   
+  return (
+    <div
+      className={styles.banner}
+      style={{ backgroundColor }}
+    >
+      {children}
+    </div>
+  );
+}
+```
+
+- You can export `<LoggedInBanner>`, so you can use it in your `<App>`.
