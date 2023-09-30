@@ -127,3 +127,75 @@ function Banner({ type, children }) {
 ```
 
 - You can export `<LoggedInBanner>`, so you can use it in your `<App>`.
+- Then you can use this in the `<App>` component, and if you wanted to just show, if you wanted to just show something all the time. Whether they are logged in or not.
+
+```JAVASCRIPT
+// BANNER
+import React from 'react';
+
+import Banner from './Banner';
+
+const EXAMPLE_USER = {
+  name: 'Sayen',
+  registrationStatus: 'verified',
+};
+
+function App() {
+  return (
+    <Banner
+      type="success"
+    >
+      Email to reset password sent!
+    </Banner>
+    
+  );
+}
+
+export default App;
+```
+
+- But, if you wanted to conditionally show the `Banner` based on log in.
+- Import your `LoggedInBanner` and use that in the place of `Banner`
+
+```JAVASCRIPT
+import React from 'react';
+
+import { LoggedInBanner } from './Banner';
+
+const EXAMPLE_USER = {
+  name: 'Sayen',
+  registrationStatus: 'verified',
+};
+
+function App() {
+  return (
+    <LoggedInBanner
+      type="success"
+      user={EXAMPLE_USER}
+    >
+      Successfully logged in! Welcome aboard, {EXAMPLE_USER.name}!
+    </LoggedInBanner>
+    
+  );
+}
+
+export default App;
+```
+
+- Now you have two different components, that occupy different parts of the spectrum.
+- `Banner`, is the primitive, and `LoggedInBanner` is the one with business logic.
+
+![Spectrum](images/image-25.png)
+
+- Benefits, you have these two differ components you can use depending on which banner is most appropriate.
+- The real benefit, is the structure of your application.
+- The problem is, when you cram all the logic in the low level component, it's impossible to maintain or follow. Early returns, conditions, etc.
+- And every time the product changed, a new requirement, you end up cramming all that logic into one area of the app. Cannot tell what that part of the app is rendering.
+
+- When you restructure it, it becomes very clear what each component does and renders.
+- 📣 And as the product changes and scales, you can solve that by creating new components.
+- The cool thing, is all the new components you are spinning off, all use the same underlying banner.
+
+### Exercises
+
+#### Product Details Page
