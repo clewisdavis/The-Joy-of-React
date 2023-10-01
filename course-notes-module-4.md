@@ -199,3 +199,17 @@ export default App;
 ### Exercises
 
 #### Product Details Page
+
+Imagine you are building nan e-commerce site. You have received a mockup, and we implemented as one big component.
+
+In terms of our spectrum of abstraction, we have created a very high  level component, but there are two lower level components hiding within. Begging to be extracted into their own components.
+
+Your mission (is you choose it) is to identify a spectrum related problem and to extract at least 1 lower level component.
+
+- AC's
+  - Extract at least 1 lower-level, potentially-reusable component.
+  - The extracted component can be defined inside `/ProductDetails.js`, below the main component.
+  - If you are not sure where to start / which components should be extracted, I provide my suggestions below the sandbox.
+
+- Attempted to extract the `buttons`, within the photo carousel. And create a new component called `PhotoButtons`.
+- Passing in as props, product, and the state, `selectedPhotoIndex` and `setSelectedPhotoIndex`
