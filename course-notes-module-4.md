@@ -375,6 +375,8 @@ function ProductDetails({ product }) {
 - Full Solution of `ProductDetails.js`
 - Code Sandbox - [Product Component Spectrum](https://codesandbox.io/s/magical-microservice-td2ghh?file=/ProductDetails.js)
 
+![Product Spectrum](images/image-26.png)
+
 ```JAVASCRIPT
 import React from 'react';
 import { Star } from 'react-feather';
