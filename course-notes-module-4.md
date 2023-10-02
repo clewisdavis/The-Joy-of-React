@@ -211,5 +211,258 @@ Your mission (is you choose it) is to identify a spectrum related problem and to
   - The extracted component can be defined inside `/ProductDetails.js`, below the main component.
   - If you are not sure where to start / which components should be extracted, I provide my suggestions below the sandbox.
 
+👩‍💻 Code Sandbox - [Product Details Page](https://codesandbox.io/s/rp4htb?file=/ProductDetails.js&utm_medium=sandpack)
+
 - Attempted to extract the `buttons`, within the photo carousel. And create a new component called `PhotoButtons`.
 - Passing in as props, product, and the state, `selectedPhotoIndex` and `setSelectedPhotoIndex`
+
+```JAVASCRIPT
+// My attempt to abstract the photos button. 
+function PhotoButtons({ product, selectedPhotoIndex, setSelectedPhotoIndex }) {
+  return (
+          <div className="buttons">
+            {product.photos.map((photoSrc, index) => {
+              const isSelected = selectedPhotoIndex === index;
+  
+              return (
+                <button
+                  key={index}
+                  className="thumbnail-button"
+                  onClick={() => setSelectedPhotoIndex(index)}
+                >
+                  <VisuallyHidden>
+                    Toggle image #{index + 1}
+                  </VisuallyHidden>
+                  <img alt="" src={photoSrc} />
+                  <span
+                    className="selected-ring"
+                    style={{
+                      opacity: isSelected ? 1 : 0,
+                    }}
+                  />
+                </button>
+              );
+            })}
+          </div>  
+  )
+}
+```
+
+- Solution: Try and do the star rating, because it's a low level component with a bunch of logic in it.
+- Pass in the `product` as a prop.
+
+```JAVASCRIPT
+// Star rating
+function StarRating({ product }) {
+  return (
+        <div className="star-rating">
+          {range(5).map((num) => {
+            const className =
+              product.rating > num
+                ? 'star filled'
+                : 'star hollow';
+            return <Star className={className} />;
+          })}
+        </div>
+  )
+}
+```
+
+- You can take this a step further, by updating the prop name, to `rating`, and just pass in the product.rating to make it clear you are only using a single object.
+
+```JAVASCRIPT
+function ProductDetails({ product }) {
+    return (
+        <StarRating 
+          rating={product.rating}
+        />
+        // rest of component code
+    )
+}
+// Star rating component
+function StarRating({ rating }) {
+  return (
+        <div className="star-rating">
+          {range(5).map((num) => {
+            const className =
+              rating > num
+                ? 'star filled'
+                : 'star hollow';
+            return <Star className={className} />;
+          })}
+        </div>
+  )
+}
+```
+
+- Another thing you can pull out, is the photo toggle functionality.
+- And move the state, inside that component, since it's not used anywhere else.
+
+```JAVASCRIPT
+function PhotoToggle({ photos }) {
+  // move the state, inside the photos toggle
+    const [
+    selectedPhotoIndex,
+    setSelectedPhotoIndex,
+  ] = React.useState(0);
+  
+  return (
+      <div>
+          <img
+            className="primary-photo"
+            alt=""
+            src={photos[selectedPhotoIndex]}
+          />        
+          <div className="buttons">
+            {photos.map((photoSrc, index) => {
+              const isSelected = selectedPhotoIndex === index;
+  
+              return (
+                <button
+                  key={index}
+                  className="thumbnail-button"
+                  onClick={() => setSelectedPhotoIndex(index)}
+                >
+                  <VisuallyHidden>
+                    Toggle image #{index + 1}
+                  </VisuallyHidden>
+                  <img alt="" src={photoSrc} />
+                  <span
+                    className="selected-ring"
+                    style={{
+                      opacity: isSelected ? 1 : 0,
+                    }}
+                  />
+                </button>
+              );
+            })}
+          </div>  
+      </div>
+  )
+}
+```
+
+- Then take a look at the higher level component, much easier to see what is going on.
+- In the props, you can see at a high level, what the data structure each component uses.
+
+```JAVASCRIPT
+// Uses the low level components, StarRating and PhotoToggle defined above. 
+function ProductDetails({ product }) {
+
+  return (
+    <article className="product-details">
+      <div className="photos-wrapper">
+        <div>
+          <PhotoToggle 
+            photos={product.photos}
+          />
+        </div>
+      </div>
+      <div className="product-info">
+        <h1>{product.title}</h1>
+        <StarRating 
+          rating={product.rating} 
+        />
+        <p className="product-description">
+          {product.description}
+        </p>
+      </div>
+    </article>
+  );
+}
+```
+
+- Full Solution of `ProductDetails.js`
+- Code Sandbox - [Product Component Spectrum](https://codesandbox.io/s/magical-microservice-td2ghh?file=/ProductDetails.js)
+
+```JAVASCRIPT
+import React from 'react';
+import { Star } from 'react-feather';
+
+import { range } from './utils';
+import VisuallyHidden from './VisuallyHidden';
+
+function ProductDetails({ product }) {
+
+  return (
+    <article className="product-details">
+      <div className="photos-wrapper">
+        <div>
+          <PhotoToggle 
+            photos={product.photos}
+          />
+        </div>
+      </div>
+      <div className="product-info">
+        <h1>{product.title}</h1>
+        <StarRating 
+          rating={product.rating} 
+        />
+        <p className="product-description">
+          {product.description}
+        </p>
+      </div>
+    </article>
+  );
+}
+
+function StarRating({ rating }) {
+  return (
+        <div className="star-rating">
+          {range(5).map((num) => {
+            const className =
+              rating > num
+                ? 'star filled'
+                : 'star hollow';
+            return <Star className={className} />;
+          })}
+        </div>
+  )
+}
+
+function PhotoToggle({ photos }) {
+  // move the state, inside the photos toggle
+    const [
+    selectedPhotoIndex,
+    setSelectedPhotoIndex,
+  ] = React.useState(0);
+  
+  return (
+      <div>
+          <img
+            className="primary-photo"
+            alt=""
+            src={photos[selectedPhotoIndex]}
+          />        
+          <div className="buttons">
+            {photos.map((photoSrc, index) => {
+              const isSelected = selectedPhotoIndex === index;
+  
+              return (
+                <button
+                  key={index}
+                  className="thumbnail-button"
+                  onClick={() => setSelectedPhotoIndex(index)}
+                >
+                  <VisuallyHidden>
+                    Toggle image #{index + 1}
+                  </VisuallyHidden>
+                  <img alt="" src={photoSrc} />
+                  <span
+                    className="selected-ring"
+                    style={{
+                      opacity: isSelected ? 1 : 0,
+                    }}
+                  />
+                </button>
+              );
+            })}
+          </div>  
+      </div>
+  )
+}
+
+export default ProductDetails;
+```
+
+#### Extracting a Card Component
