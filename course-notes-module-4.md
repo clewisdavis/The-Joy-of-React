@@ -378,6 +378,7 @@ function ProductDetails({ product }) {
 ![Product Spectrum](images/image-26.png)
 
 ```JAVASCRIPT
+// ProductDetails.js
 import React from 'react';
 import { Star } from 'react-feather';
 
@@ -468,3 +469,12 @@ export default ProductDetails;
 ```
 
 #### Extracting a Card Component
+
+In the sandbox below, we have two separate components that each implement a similar 'card' design. Let's extract into it's own `Card` component.
+
+- 👩‍💻 Code sandbox - [Card Component](https://codesandbox.io/s/xrdbfl?file=/App.js&utm_medium=sandpack)
+AC's
+
+- Two files, `Card.js` and `Card.module.css`, have been created. Your mission is to populate them with the component + styles.
+- You should use this component within `UserProfileCard` and `ProductInfoCard`.
+- Note that the two cards have slightly differ styles: they have a different `box-shadow` value. Each card should be able to specify the elevation level for the shadow, to be applied dynamically inside `Card`.
