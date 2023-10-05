@@ -473,8 +473,96 @@ export default ProductDetails;
 In the sandbox below, we have two separate components that each implement a similar 'card' design. Let's extract into it's own `Card` component.
 
 - 👩‍💻 Code sandbox - [Card Component](https://codesandbox.io/s/xrdbfl?file=/App.js&utm_medium=sandpack)
+
 AC's
 
 - Two files, `Card.js` and `Card.module.css`, have been created. Your mission is to populate them with the component + styles.
 - You should use this component within `UserProfileCard` and `ProductInfoCard`.
 - Note that the two cards have slightly differ styles: they have a different `box-shadow` value. Each card should be able to specify the elevation level for the shadow, to be applied dynamically inside `Card`.
+
+- Create a `Card` component, with a `children` prop so you can use it in the other components `UserProfileCard` and `ProductInfoCard`
+
+```JAVASCRIPT
+import React from 'react';
+
+import styles from './Card.module.css';
+
+function Card({ children }) {
+  /* TODO */
+  return (
+    <div className={styles.card}>
+      {children}
+    </div>
+  )
+}
+
+export default Card;
+```
+
+- Make sure you bring over the base `.card` styles into your CSS module `Card.module.css`
+
+```CSS
+.card {
+  background: white;
+  padding: 16px;
+  border-radius: 8px;
+}
+```
+
+- Now you need to account for the different elevations within the CSS global variables, `var(--elevation-1)`, `var(--elevation-2)`, `var(--elevation-3)`.
+
+- Add an `elevation` prop to your `Card` component
+- Create a boxShadow variable, and interpolate the CSS variable using the value of the prop `elevation`
+- And add it to the DOM element via the `style` attribute.
+
+```JAVASCRIPT
+import React from 'react';
+
+import styles from './Card.module.css';
+
+function Card({ 
+  elevation = 2, // values 1 | 2 | 3
+  children,
+}) {
+  /* TODO */
+  // Create a style for the elevation prop, and interpolate into a string using the CSS variable
+  const boxShadow = `var(--elevation-${elevation})`;
+  return (
+    <div className={styles.card} style={{ boxShadow }}>
+      {children}
+    </div>
+  )
+}
+
+export default Card;
+```
+
+- Then, on your other components, import and then wrap with `Card` component. You can just pass in the elevation value you want, 1, 2, or 3.
+
+```JAVASCRIPT
+function UserProfileCard({ user }) {
+  const profileUrl = `/users/${user.handle}`;
+  const imageAlt = `${user.avatarDescription} (user profile photo)`;
+
+  return (
+    <>
+    <Card elevation={1}>
+      <img
+        className={styles.avatar}
+        alt={imageAlt}
+        src={user.avatarSrc}
+      />
+      <a
+        href={profileUrl}
+        className={styles.userProfileLink}
+      >
+        {user.name}
+      </a>
+    </Card>
+      
+    </>
+  );
+}
+
+export default UserProfileCard;
+```
