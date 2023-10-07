@@ -614,3 +614,27 @@ To understand why very few product-focused companies use third party component l
 - 📣 the bottom line: very few tech companies rely on 'pre-styled' component libraries like Material UI, because they want complete control over the branding / aesthetic.
 
 #### Application Structure
+
+When building a first-party component library, it's common for the component library to be its own project. It has its own git repository, its own landing page, and its own documentation.
+
+- This is useful when our components need to be shared across multiple projects, but honesty, it adds a ton of friction.
+- Josh's practice, is to keep all the components, from the entire spectrum, in a single directory.
+- For example; the components from this course platform.
+
+![components](images/image-27.png)
+
+- Components with a single purple asterisk *, lowest-level components.
+- Moving up the spectrum, components marked with **, higher level components, like `AccountDropDown`
+- Finally, high-level components marked with, ***, things like `AccountPage` which renders all the main content of the Account Page.
+
+- Good way to work, it's a spectrum and all the components are at your finger tips.
+
+- Also, some directories have multiple components, for example the `Account Page`.
+- Allow you to keep all the related content together.
+- Here, the `MyAccountInfo` component will never be used outside of `AccountPage` component, and so it doesn't make sense to clutter up my `/src/components` directory.
+
+![source directory](images/image-28.png)
+
+- Blog post on this topic, [Delightful React File Structure](https://www.joshwcomeau.com/react/file-structure/)
+
+## Prop Delegation
