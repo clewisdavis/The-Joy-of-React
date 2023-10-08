@@ -638,3 +638,107 @@ When building a first-party component library, it's common for the component lib
 - Blog post on this topic, [Delightful React File Structure](https://www.joshwcomeau.com/react/file-structure/)
 
 ## Prop Delegation
+
+In teh `Banner` example from the Spectrum lesson, we saw how our `LoggedIn` banner had to "forward" some props along:
+
+```JAVASCRIPT
+function LoggedInBanner({
+  user,
+  // These two props:
+  type,
+  children,
+}) {
+  if (
+    !user ||
+    user.registrationStatus === 'unverified'
+  ) {
+    return null;
+  }
+
+  // ...are forwarded along to Banner:
+  return <Banner type={type}>{children}</Banner>;
+}
+```
+
+- 🤔 What if the component had 10 forwarded props instead of 2? We would have to list them all out, one by one?
+- React has a solution for that, instead we can take advantage of rest parameters and spread syntax
+  - [JS Primer: Rest and Spread](https://courses.joshwcomeau.com/joy-of-react/10-javascript-primer/12-rest-spread)
+
+- Here is what it looks like:
+
+```JAVASCRIPT
+function LoggedInBanner({
+  user,
+  // Collect all unspecified props:
+  ...delegated
+}) {
+  if (
+    !user ||
+    user.registrationStatus === 'unverified'
+  ) {
+    return null;
+  }
+
+  // And pass them onto Banner:
+  return <Banner {...delegated} />
+}
+```
+
+- Chosen the name `delegated` ebcause it feels symantically appropriate, but we can name this variable whatever we want, some prefer `rest`:
+
+- If you `console.log` the `delegated` variable, we see an object containing all of the other props provided to this component. For example:
+
+```JAVASCRIPT
+console.log(delegated);
+/*
+  {
+    type: 'success',
+    children: 'Account registered!',
+  }
+*/
+```
+
+- To apply these props onto our `Banner` element, we create an expression slot with curly brackets, and spread the props along using the spread syntax `...`:
+
+```JAVASCRIPT
+// This code: 
+<Banner {...delegated} />
+
+// ...is equivalent to this code: 
+<Banner
+    type={delegated.type}
+    children={delegated.children}
+/>
+
+// ...which is the same thing as this code:
+<Banner type={delegated.type}>
+  {delegated.children}
+</Banner>
+```
+
+- To go one step further in demystifying this new syntax, here's hwo it gets transpiled to plain JS:
+
+```JAVASCRIPT
+// This JSX...
+<UserProfileCard user={currentUser} {...delegated} />
+
+// ...turns into this JavaScript:
+React.createElement(
+  UserProfileCard,
+  {
+    user: currentUser,
+    ...delegated
+  }
+);
+```
+
+- 🛑 One gatcha, the `...delegated` item needs to be the final item in the list. And cannot have a trailing comma, you will get an error.
+
+```JAVASCRIPT
+function Slider({
+  label,
+  ...delegated, // <-- This comma is a problem
+}) {}
+```
+
+### Supercharged HTML tags
