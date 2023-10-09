@@ -742,3 +742,152 @@ function Slider({
 ```
 
 ### Supercharged HTML tags
+
+- Imagine you have a component, that is a text input.
+
+```JAVASCRIPT
+import React from 'react';
+
+function TextInput({ 
+    id, 
+    label, 
+    type,
+    value,
+    onChange,
+}) {
+  const generatedId = React.useId();
+  const appliedId = id || generatedId;
+  
+  return (
+    <div className="text-input">
+      <label htmlFor={appliedId}>
+        {label}
+      </label>
+      <input
+        id={appliedId}
+        type={type}
+        value={value}
+        onChange={onChange}
+      />
+    </div>
+  );
+}
+
+export default TextInput;
+```
+
+- You only have access to the things you exposed via props.
+- You cannot provide, whatever attribute you would normally put on a text input, `required={true}` or a `minLength={12}` for example.
+- React will not recognize those attributes if not provided via props. React has no idea that a component is supposed to be a wrapper around your `input` field
+- All React knows, is we created a component, and it returns some JSX.
+- And given them `props`, to work with.
+
+- 📣 If you want your component `TextInput`, to work with attributes of the `input`, you have to use the prop delegation trick.
+
+- If you have a bunch of props, you can combine them into a `...delegated` object
+
+```JAVASCRIPT
+function TextInput({ id, label, ...delegated }) {
+    return (
+        // JSX here...
+    )
+}
+```
+
+- Then in your JSX, spread the delegated object onto your element, this case the `input` field.
+- 🆒 You can choose where to put your `...delegated` props, can go on any element, and be passed in.
+
+```JAVASCRIPT
+// TextInput.js
+import React from 'react';
+
+function TextInput({ id, label, ...delegated }) {
+  const generatedId = React.useId();
+  const appliedId = id || generatedId;
+  
+  return (
+    <div className="text-input">
+      <label htmlFor={appliedId}>
+        {label}
+      </label>
+      <input
+        id={appliedId}
+        // spread the ...delegated props
+        {...delegated}
+      />
+    </div>
+  );
+}
+
+export default TextInput;
+```
+
+- When you use the component, you can add a bunch of props, and passing into the component.
+- All of the stuff you specify in the `input` is automatically being delegated along.
+
+```JAVASCRIPT
+    <TextInput
+      required={true}
+      data-test-id="login-email-field"
+      label="Email"
+      type="email"
+      value={email}
+      onChange={(event) => {
+        setEmail(event.target.value);
+      }}
+    />
+```
+
+- Full component: [LogIn Form, Delegated](https://codesandbox.io/s/ckz6pc?file=/LoginForm.js&utm_medium=sandpack)
+
+```JAVASCRIPT
+// LogIn form...adding a bunch of properties to the TextInput
+import React from 'react';
+
+import TextInput from './TextInput';
+
+function LoginForm() {
+  const [email, setEmail] = React.useState('');
+  const [password, setPassword] = React.useState('');
+
+  function handleLogin() {
+    alert(`Logged in with ${email}`);
+  }
+
+  return (
+    <form onSubmit={handleLogin}>
+      <TextInput
+        required={true}
+        data-test-id="login-email-field"
+        label="Email"
+        type="email"
+        value={email}
+        onChange={(event) => {
+          setEmail(event.target.value);
+        }}
+      />
+      <TextInput
+        required={true}
+        minLength={12}
+        label="Password"
+        type="password"
+        value={password}
+        onChange={(event) => {
+          setPassword(event.target.value);
+        }}
+      />
+      <button>
+        Submit
+      </button>
+    </form>
+  );
+}
+
+export default LoginForm;
+```
+
+### Exercises, Prop Delegation
+
+Exercises for Prop Delegation
+
+#### A Slider Component
