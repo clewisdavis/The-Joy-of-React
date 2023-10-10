@@ -891,3 +891,50 @@ export default LoginForm;
 Exercises for Prop Delegation
 
 #### A Slider Component
+
+- In the [sandbox](https://codesandbox.io/s/f6m2ku?file=/Slider.js&utm_medium=sandpack), you have a `Slider` component.
+
+- Internally, this component renders an `<input type"range">` the built-in DOM neod for creating ranges and sliders. And so we can think of thi s`Slider` component as a "supercharged" range input.
+
+- Unfortunately, we've only exposed a subset of attributes we might wish to set on this DOM node through props.
+- Your mission is to forward all props on to the input, so that we can treat `<Slider>` as a supercharged range input.
+
+**ACs**
+
+- The `Slider` component should use the prop delegation technique to forward all unspecified props to the `<input type="range">` that renders.
+
+- Add the `...delegated` rest parameter to your component as a prop.
+- And then spread that onto your element in the JSX, the `<input>` slider.
+
+```JAVASCRIPT
+import React from 'react';
+
+import styles from './Slider.module.css';
+
+// add the ...delegated rest parameter
+function Slider({ label, ...delegated }) {
+  const id = React.useId();
+  
+  return (
+    <div className={styles.wrapper}>
+      <label
+        htmlFor={id}
+        className={styles.label}
+      >
+        {label}
+      </label>
+      <input
+        type="range"
+        id={id}
+        className={styles.slider}
+        // spread that onto the input
+        {...delegated}
+      />
+    </div>
+  );
+}
+
+export default Slider;
+```
+
+#### A Toggle Component
