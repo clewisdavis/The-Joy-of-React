@@ -938,3 +938,27 @@ export default Slider;
 ```
 
 #### A Toggle Component
+
+- Toggle components are similar to checkboxes. They are often used to flip a value on or off.
+- We have a custom `Toggle` component, like this:
+
+![Toggle](images/image-29.png)
+
+- We want to be abe to pass a custom `className` to provide custom styles. For example, passing a CSS class that updates the color of the toggle circle.
+
+![Toggle Circle](images/image-30.png)
+
+- Your mission is to update the `Toggle` component so that it can be customized, by passing a `className`. It should also support additional custom props, like data attributes.
+
+**ACs**
+
+- In the example below, the second `<Toggle>` instance has a prop: `className="green-toggle`. This class should be applied o the `<button>` inside the `Toggle` component, producing the green circle shown in the GIF above.
+- Other props (eg. data attributes) should also be forwarded along to the `<button>` element.
+
+Note: It may be helpful to review the [Conflicts section](https://courses.joshwcomeau.com/joy-of-react/10-javascript-primer/12-rest-spread) of the Rest/Spread primer lesson.
+
+- [Code Sandbox Toggle](https://codesandbox.io/s/0t2xol?file=/App.js&utm_medium=sandpack)
+
+```JAVASCRIPT
+
+```
