@@ -127,7 +127,7 @@ function render(reactElement, containerDOMElement) {
 
 - Remember, it's a JS framework, and fundamentally uses the same things you would use, if building in JS.
 
-### Productive failure
+### Productive Failure
 
 - A learning method used from academic.
 - n Productive Failure, the conventional instruction process is reversed so that learners attempt to solve challenging problems ahead of receiving explicit instruction. While students often fail to produce satisfactory solutions (hence “Failure”), these attempts help learners encode key features and learn better from subsequent instruction (hence “Productive”).
@@ -650,7 +650,7 @@ const element = React.createElement(
 
 ### Exercises
 
-**Build a Search Form**
+#### Build a Search Form
 
 - In this exercise, we will build an online search form, inline search form.
 - All style are provided, you just need to add three elements inside the `<form>` tag:
