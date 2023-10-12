@@ -952,13 +952,133 @@ export default Slider;
 
 **ACs**
 
-- In the example below, the second `<Toggle>` instance has a prop: `className="green-toggle`. This class should be applied o the `<button>` inside the `Toggle` component, producing the green circle shown in the GIF above.
+- In the example below, the second `<Toggle>` instance has a prop: `className="green-toggle`. This class should be applied to the `<button>` inside the `Toggle` component, producing the green circle shown in the GIF above.
 - Other props (eg. data attributes) should also be forwarded along to the `<button>` element.
 
 Note: It may be helpful to review the [Conflicts section](https://courses.joshwcomeau.com/joy-of-react/10-javascript-primer/12-rest-spread) of the Rest/Spread primer lesson.
 
 - [Code Sandbox Toggle](https://codesandbox.io/s/0t2xol?file=/App.js&utm_medium=sandpack)
 
-```JAVASCRIPT
+- Want to have the built in CSS class `toggle`, as well as the modifier CSS class `green-toggle`.
+- The way to do this, is to make a prop for `className`, and to manually add the class in our component.
+- Create an expression slot, and use a template string, and then interpolate in the CSS `className`
 
+```JAVASCRIPT
+// Toggle.js
+function Toggle({
+    label,
+    checked,
+    onClick,
+    className,
+    ...delegated
+}) {
+    return (
+      <button
+        id={id}
+        // template string to interpolate the supplied className
+        className={`toggle ${className}`}
+        type="button"
+        aria-pressed={checked}
+        onClick={onClick}
+        {...delegated}
+      >
+    )
+}
+```
+
+- Small bug 🐛: When you interpolate a prop, without providing a value, React will translate to the string `undefined`. And you end up with a CSS `className` of `undefined`, which is kind of strange.
+
+![Undefined](images/image-31.png)
+
+- To fix this, just set a default value of `''`, on the `className` prop, which resolve to nothing.
+
+```JAVASCRIPT
+function Toggle({
+  label,
+  checked,
+  onClick,
+  className = '',
+  ...delegated
+}) {
+    // code here
+}
+```
+
+- Full solution: Toggle Component
+
+```JAVASCRIPT
+// Toggle.js
+import React from 'react';
+
+function Toggle({
+  label,
+  checked,
+  onClick,
+  className = '',
+  ...delegated
+}) {
+  const id = React.useId();
+  
+  // This style updates the UI, to move the ball
+  // and indicate whether it's toggled or not.
+  const ballStyle = {
+    transform: checked
+      ? `translateX(100%)`
+      : `translateX(0%)`,
+  };
+  
+  return (
+    <div className="wrapper">
+      <label
+        htmlFor={id}
+        className="label"
+      >
+        {label}
+      </label>
+      <button
+        id={id}
+        className={`toggle ${className}`}
+        type="button"
+        aria-pressed={checked}
+        onClick={onClick}
+        {...delegated}
+      >
+        <span className="ball" style={ballStyle} />
+      </button>
+    </div>
+  );
+}
+
+export default Toggle;
+```
+
+```JAVASCRIPT
+// App.js
+import React from 'react';
+
+import useToggle from './hooks/use-toggle';
+import Toggle from './Toggle';
+
+function App() {
+  const [enableWifi, toggleEnableWifi] = useToggle(true);
+  const [lowPowerMode, toggleLowPowerMode] = useToggle(false);
+  
+  return (
+    <main>
+      <Toggle
+        label="Enable Wi-Fi"
+        checked={enableWifi}
+        onClick={toggleEnableWifi}
+      />
+      <Toggle
+        className="green-toggle"
+        label="Low Power Mode"
+        checked={lowPowerMode}
+        onClick={toggleLowPowerMode}
+      />
+    </main>
+  );
+}
+
+export default App;
 ```
