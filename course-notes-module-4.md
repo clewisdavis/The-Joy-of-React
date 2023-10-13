@@ -1084,3 +1084,135 @@ export default App;
 ```
 
 #### Conflicts
+
+In the "Toggle" exercise from previous lesson, we saw how delegated props can lead to some issues if there are conflicts.
+
+- For example:
+
+```JAVASCRIPT
+function Checkbox({ label, ...delegated}) {
+  const id = React.useId();
+
+  return (
+    <>
+      <label htmlFor={id}>
+        {label}
+      </label>
+      <input
+        id={id}
+        type="checkbox"
+        {...delegated}
+      />
+    </>
+  );
+}
+```
+
+- This `Checkbox` component applies two hardcoded attributes to the `<input>`, `type` and `id`.
+- Now suppose the consumer of this component uses it like this:
+
+```JAVASCRIPT
+<Checkbox 
+  label="Do you agree with terms?"
+  type="button"
+  onClick={handleAgreeTerms}
+/>
+```
+
+- The `type` and `onClick` props are not specified in the `Checkbox` component, and so thy are collected into the `delegated` object, and pasted onto the `<input>`:
+
+```JAVASCRIPT
+// Here's the React element that will be created:
+<input
+  id={id}
+  type="checkbox"
+  type="button"
+  onClick={handleAgreeToTerms}
+/>
+```
+
+- We have specified two different values for `type` and when there are conflicts like this, **later values overwrite earlier ones**. And this input will be a button instead of a checkbox.
+
+📣 Essentially the consumer has "hacked" our Checkbox component to not render a checkbox!
+
+- Instead, re-write our `Checkbox` component to spread the provided props first:
+
+```JAVASCRIPT
+function Checkbox({ label, ...delegated}) {
+  const id = React.useId();
+
+  return (
+    <>
+      <label htmlFor={id}>
+        {label}
+      </label>
+      <input
+        {...delegated}
+        id={id}
+        type="checkbox"
+      />
+    </>
+  );
+}
+```
+
+- With this change, the same `<Checkbox>` element produces a different result:
+
+```JAVASCRIPT
+<input
+  // Delegated props:
+  type="button"
+  onClick={handleAgreeToTerms}
+  // Built-in attributes:
+  id={id}
+  type="checkbox"
+/>
+
+// After removing the duplicate `type`, we're left with:
+<input
+  onClick={handleAgreeToTerms}
+  id={id}
+  type="checkbox"
+/>
+```
+
+- 📣 Because we flipped the order, the user-supplied `type="button"` will now be overwritten by the built-in `type="checkbox`.
+
+#### A powerful tool in API design
+
+- When we produce React components, we get to decide how much power we want to give consumers. We can choose which properties they are allowed to overwrite, adn which ones are mandatory / locked in.
+
+- In the example above, the `Checkbox` should always render an `<input type="checkbox">`, and so I don't want to let consumers overwrite the `type` attribute.
+
+- But this is not always the case. Sometimes, you want the consumer to overwrite the built-in attributes.
+
+```JAVASCRIPT
+function ArrowIcon({ size, ...delegated }) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      width={size}
+      height={size}
+    >
+      <path
+        d="M 20 0 L 24 12 L 0 12 L 24 12 L 20 24"
+        stroke="black"
+        strokeLinecap="round"
+        {...delegated}
+      />
+    </svg>
+  );
+}
+```
+
+- By default, this component will render a black arrow with rounded lines, but I can supply my own overrides:
+
+```JAVASCRIPT
+<ArrowIcon stroke="red" strokeLinecap="square" />
+```
+
+- No right/wrong answer when it comes to where the `{...delegated}` should go.
+- It is a choice we can use as a tool, to decide how much power/flexibility I want to grant to the developers consuming the component.
+
+#### Manually managing conflicts
