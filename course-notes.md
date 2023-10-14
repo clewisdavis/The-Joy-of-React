@@ -17,7 +17,7 @@ Notes from the course, 2023/2024
   - [Prop vs. State](course-notes-module-2d.md)
   - [Complex State](course-notes-module-2e.md)
   - [Dynamic Key Generation](course-notes-module-2f.md)
-  - [Lifting State Up](course-notes-module-2ag.md)
+  - [Lifting State Up](course-notes-module-2g.md)
   - [Component Instances](course-notes-module-2h.md)
   - [State Management Tools](course-notes-module-2i.md)
   - [Project: Word Game](course-notes-module-2j.md)
