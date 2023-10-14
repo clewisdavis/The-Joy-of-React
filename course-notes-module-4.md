@@ -1216,3 +1216,91 @@ function ArrowIcon({ size, ...delegated }) {
 - It is a choice we can use as a tool, to decide how much power/flexibility I want to grant to the developers consuming the component.
 
 #### Manually managing conflicts
+
+Sometimes, delegated props is to blunt of a tool, we need to do some manual work to resolve the conflict.
+
+- For example, when it comes to CSS classes, we often want to apply both the user-supplied class as well as the built-in one.
+
+- In teh Toggle exercise, we manually merged teh two classes together sot hat we were applyign the `toggle` class as well as the `green-toggle` class.
+
+- I've built a lot of components that follow this exact template. Here is the bare bones example:
+
+```JAVASCRIPT
+function Template({ className = '' }) {
+  const appliedClass = `built-in-class ${className}`;
+
+  return (
+    <div
+      className={appliedClass}
+    />
+  );
+}
+```
+
+- In a sense, we seen this example of this pattern already, when we talked about the Rules of Hooks:
+
+```JAVASCRIPT
+function TextInput({ id, label, type }) {
+  let generatedId = React.useId();
+  let appliedId = id || generatedId;
+
+  return (
+    <div className="text-input">
+      <label htmlFor={appliedId}>
+        {label}
+      </label>
+      <input
+        id={appliedId}
+        type={type}
+      />
+    </div>
+  );
+}
+```
+
+- If the user supplies an `id` prop, it will be used for the input's `id`, and the label's `htmlFor`.
+- If they don't , we will use the generated value we get from the `React.useId` hook.
+
+- We could rely on rest/spread to apply the correct `id` on the `<input>`, but we also need to set the exact same value on the `<label>`, via the `htmlFor` attribute. As a result we need to manage ths conflict manually.
+
+- Here is one more example, where we can supply custom inline styles to a component that already has some.
+
+```JAVASCRIPT
+function ExampleComponent({
+  // User-specified styles.
+  // Defaults to an empty object so that we always receive an
+  // object, never “undefined”:
+  style = {},
+  children,
+  ...delegated
+}) {
+  const builtInStyle = {
+    padding: 16,
+    background: 'red',
+  };
+
+  return (
+    <div
+      {...delegated}
+      style={{
+        // Merge both sets of styles, prioritizing the
+        // built-in styles:
+        ...style,
+        ...builtInStyle,
+      }}
+    >
+      {children}
+    </div>
+  );
+}
+```
+
+- To review, we have several options when it comes to conflicting attributes.
+
+1. If we want the consumer to overwrite a particular hardcoded attribute, we can place the `{...delegated}` syntax afterwards.
+2. If we want to prioritize the hardcoded attribute, however, the `{...delegated}` syntax should come first.
+3. If we want to merge both values, we will need to manage it ourselves, without using `{...delegated}`.
+
+All 3 of these options are valid in different situations. 📣 It all comes down to how much control we want to grant the consumer.
+
+#### Delegating Styles
