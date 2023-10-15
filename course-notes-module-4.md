@@ -1304,3 +1304,136 @@ function ExampleComponent({
 All 3 of these options are valid in different situations. 📣 It all comes down to how much control we want to grant the consumer.
 
 #### Delegating Styles
+
+- How do you manage low level component, and allow them to be used and styled in many differ situations.
+- Allow for flexibility when it comes to styles.
+- A low level component `<Slider/>`, on the spectrum, might be used in many places in a larger React application.
+- 📣 Lots of different context, lots of different designs, we want to be flexible enough, to adapt to all those circumstances.
+
+- In the example; building a `VolumeSlider` component that consumes the lower level `<Slider />` component, and we want to make a couple tweaks
+  - Update the handle size
+  - And the color of the handle
+
+```JAVASCRIPT
+import React from 'react';
+
+import Slider from './Slider_props';
+import styles from './VolumeSlider.module.css';
+
+function VolumeSlider({ volume, setVolume }) {
+  return (
+    <Slider
+      label="Volume"
+      min={0}
+      max={100}
+      value={volume}
+      onChange={(event) => {
+        setVolume(event.target.value);
+      }}
+    />
+  );
+}
+
+export default VolumeSlider;
+```
+
+- 🤔 How do you allow the lower level `<Slider />` component to be customized? Two main ways:
+
+1. Add explicit `props` for all the things, we want to customize. For example, add the `handleSize`, `handleColor` and `handleActiveColor` props to the low level `Slider` component
+
+```JAVASCRIPT
+function VolumeSlider({ volume, setVolume }) {
+  return (
+    <Slider
+      label="Volume"
+      min={0}
+      max={100}
+      value={volume}
+      // explicitly customize
+      handleSize={12}
+      handleColor="green"
+      handleActiveColor="lightGreen"
+      //
+      onChange={(event) => {
+        setVolume(event.target.value);
+      }}
+    />
+  );
+}
+```
+
+2. Add a `className = ''` prop to the low level component, and the consumer can supply whatever `className` they want. Then create a variable, that will combine the consumer supplied `className` with the baseline styles.
+
+```JAVASCRIPT
+import React from 'react';
+
+import styles from './Slider.module.css';
+
+function Slider({ label, className = '', ...delegated }) {
+  const id = React.useId();
+  
+  // Combine the baseline styles, with the consumer supplied
+  const sliderClassName = `${styles.slider} ${className}`;
+
+  return (
+    <div className={styles.wrapper}>
+      <label htmlFor={id} className={styles.label}>
+        {label}
+      </label>
+      <input
+        {...delegated}
+        type="range"
+        id={id}
+        // Pass all styles in
+        className={sliderClassName}
+      />
+    </div>
+  );
+}
+
+export default Slider;
+```
+
+- And instead of setting all the `props` individually like above, you just set `className={styles.volumeSlider}` on the low level component. And the styles, will be within your CSS module `VolumeSlider.module.css`.
+
+```JAVASCRIPT
+// VolumeSlider
+import React from 'react';
+
+import Slider from './Slider_className';
+// Add your styles
+import styles from './VolumeSlider.module.css';
+
+function VolumeSlider({ volume, setVolume }) {
+  return (
+    <Slider
+      label="Volume"
+      min={0}
+      max={100}
+      value={volume}
+      // Pass styles into the component
+      className={styles.volumeSlider}
+      onChange={(event) => {
+        setVolume(event.target.value);
+      }}
+    />
+  );
+}
+
+export default VolumeSlider;
+```
+
+- Any modification you want to make, just add to your CSS module
+
+```CSS
+.volumeSlider {
+  --handle-size: 12px;
+  --handle-color: red;
+  --handle-active-color: lightgreen;
+}
+```
+
+- 📣 Pass a `className` and declare whatever tweaks we want in the CSS file.
+- 📣 Or, create a limited number of props, and use those props within the body of the component.
+
+- 🤔 Which of these approaches do you prefer, and Pros and Cons?
