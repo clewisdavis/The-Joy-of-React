@@ -1437,3 +1437,188 @@ export default VolumeSlider;
 - 📣 Or, create a limited number of props, and use those props within the body of the component.
 
 - 🤔 Which of these approaches do you prefer, and Pros and Cons?
+
+- Big debate with no consensus among the React community. The biggest difference here is how much power you want to grant the consumer of your component.
+
+- With the `className` approach, developers can apply any CSS they want to the `<input>`.
+- For example; we could add some CSS to make the slider `vertical`.
+
+```CSS
+.verticalSlider {
+  width: 100px;
+  transform: rotate(-90deg);
+  margin: 50px;
+}
+```
+
+- 📣 By exposing the `className` prop, we grant teh consumer a lot of control. With individual props, we limit that control.
+
+#### The arguments for specific props
+
+- When building low level components, likely to implement them according to a design system.
+
+- A design system is a document that provides guidelines and rules on using each component. The components we implement should only allow the customizations specified in the design system.
+
+- In other words, we want to make sure that developers "color within the lines". By exposing a `className` prop, a rogue developer could radically change how this component is styled, in violation of the design system.
+
+- Components are meant to encapsulate markup, logic and styles. What is the point of having a DS if the developer can do whatever they want with the aesthetic?
+
+- We can always update the DS as requirements change. But it's chaos to allow developers to apply any CSS they like to these components.
+
+#### The argument for "className" prop
+
+- In a real world app, the 'specific props' approach becomes unwieldy.
+- What if wanted to speficy a hover color? Customize the handle size, but only for a specific media query?
+
+- CSS is a huge and sprawling language. We could end up with 50+ props, which would be a nightmare to maintain.
+- What if a designer comes up with a legitimate use case that doesn't work with our specific props?
+
+- Here is what will happen, developers will reach around React altogether, and apply whatever CSS they want.
+
+```CSS
+/* HACK: Apply rotation to Slider component */
+.some-wrapper form input[type="range"] {
+  margin: 50px !important;
+  transform: rotate(90deg) !important;
+}
+```
+
+- Cannot stop a developer from applying CSS to a particular element. A determined developer can still apply whatever styles they want.
+- Or worse, they decide to create an `SliderAlt` that is 95% the same, but different in this one regard. Some codebase have multiple near-identical components because the prop interface wasn't flexible enough.
+
+- 📣 It is just not realistic to come up a handful of style-related props that work for every possible use case. The world is to messy for that.
+
+### Final thought
+
+- Go with the `className` approach.
+
+### Forwarding Refs
+
+- `ref` is a reserved work in React, so you cannot use it as a custom prop on a React component.
+- In your `App` component, you are consuming the `Slider` component. Thinking of it as a super charged input. Giving it a bunch of props and you want to capture the input via a `ref`
+- This doesn't work, because we are not allowed to capture `references` of functional components, `<Slider />`.
+
+```JAVASCRIPT
+// App.js
+import React from 'react';
+
+import Slider from './Slider';
+
+function App() {
+  const [volume, setVolume] = React.useState(50);
+  
+  // Create a React ref:
+  const sliderRef = React.useRef();
+  
+  React.useEffect(() => {
+    // Focus the slider on mount:
+    sliderRef.current.focus();
+  }, []);
+  
+  return (
+    <main>
+      <Slider
+        // Capture a reference to the slider:
+        ref={sliderRef}
+        label="Volume"
+        min={0}
+        max={100}
+        value={volume}
+        onChange={(event) => {
+          setVolume(event.target.value);
+        }}
+      />
+    </main>
+  );
+}
+
+export default App;
+```
+
+- To solve this, we can capture that reference, on the actual component.
+- If someone tries to use a `ref` on the component, we can do that, my adding the `React.forwardRef` to the export of the component, `Slider`.
+- Also adding `ref` as an argument.
+- And `ref={ref}` to your element.
+
+```JAVASCRIPT
+// SLider.js
+import React from 'react';
+
+import styles from './Slider.module.css';
+
+function Slider({ label, ...delegated }, 
+  // add the ref
+  ref) {
+  const id = React.useId();
+  
+  return (
+    <div className={styles.wrapper}>
+      <label
+        htmlFor={id}
+        className={styles.label}
+      >
+        {label}
+      </label>
+      <input
+        // add ref to your element
+        ref={ref}
+        {...delegated}
+        type="range"
+        id={id}
+        className={styles.slider}
+      />
+    </div>
+  );
+}
+
+// Add the forwardRef helper
+export default React.forwardRef(Slider);
+```
+
+- Then in `App.js`, you can just pass along the `ref`.
+
+```JAVASCRIPT
+import React from 'react';
+
+import Slider from './Slider';
+
+function App() {
+  const [volume, setVolume] = React.useState(50);
+  
+  // Create a React ref:
+  const sliderRef = React.useRef();
+  
+  React.useEffect(() => {
+    // Focus the slider on mount:
+    sliderRef.current.focus();
+  }, []);
+  
+  return (
+    <main>
+      <Slider
+        // Capture a reference to the slider:
+        ref={sliderRef}
+        label="Volume"
+        min={0}
+        max={100}
+        value={volume}
+        onChange={(event) => {
+          setVolume(event.target.value);
+        }}
+      />
+    </main>
+  );
+}
+
+export default App;
+```
+
+- 🤔 This is known as a higher-order component in React. It takes a component as input, and produces a new component as output.
+
+- Note, if you want to use `React.memo` and `React.forwardRef` on the same component?
+
+```JAVASCRIPT
+export default React.memo(React.forwardRef(Slider));
+```
+
+#### Exercises, Supercharged Button
