@@ -1622,3 +1622,74 @@ export default React.memo(React.forwardRef(Slider));
 ```
 
 #### Exercises, Supercharged Button
+
+Get some practice forwarding refs along.
+
+- In the [sandbox](https://codesandbox.io/s/755kcr?file=/App.js&utm_medium=sandpack), have a `<Button>` component, and we want to set i tup to be a 'supercharged' button. This means we should be able to capture a reference to it, as well as forward all props along to it.
+
+ACs:
+
+- When hovering or focusing the button in the DOM, it should log "Captured ref: HTMLElement" in the console.
+- There should be no console warning.
+
+- My solution:
+
+```JAVASCRIPT
+// Button.js
+import React from 'react';
+
+import styles from './Button.module.css';
+
+// Add ref as a parameter to forward along
+// And add the ...delegated prop
+function Button({ children, ...delegated }, ref) {
+  return (
+    <button 
+      className={styles.btn} 
+      // Put ref on the element
+      ref={ref}
+      // Spread any props onto the button
+      {...delegated}
+    >
+      {children}
+    </button>
+  );
+}
+
+// Add the React.forwardRef
+export default React.forwardRef(Button);
+```
+
+- App.js
+
+```JAVASCRIPT
+// App.js
+import React from 'react';
+
+import Button from './Button';
+
+function App() {
+  // Capture the element
+  const buttonRef = React.useRef();
+  
+  // Console log the element on onFocus
+  function logRef() {
+    console.log('Captured ref:', buttonRef.current);
+  }
+  
+  return (
+    <Button
+      // add ref as prop
+      ref={buttonRef}
+      onMouseEnter={logRef}
+      onFocus={logRef}
+    >
+      Hover or Focus Me
+    </Button>
+  );
+}
+
+export default App;
+```
+
+#### Exercise, SquareSlider forwarding
