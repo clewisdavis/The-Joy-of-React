@@ -1541,7 +1541,7 @@ export default App;
 - And `ref={ref}` to your element.
 
 ```JAVASCRIPT
-// SLider.js
+// Slider.js
 import React from 'react';
 
 import styles from './Slider.module.css';
@@ -1693,3 +1693,110 @@ export default App;
 ```
 
 #### Exercise, SquareSlider forwarding
+
+One of the great things about Rect is the ability to 'compose' components. For example, we can build a `SquareSlider` component that builds on the lower-level `Slider` component, locking in specific values.
+
+In the sandbox below, we are trying to capture a ref on a `<SquareSlider>` component, but it isn't working. Your mission is to fix it.
+
+ACs
+
+- The `sliderRef` ref should hold a reference to the `<input type="range">`.
+- You can verify this in teh console. It should show that `sliderRef` holds an `HTMLElement`.
+
+- Code Sandbox - [Square Slider Forwarding](https://codesandbox.io/s/mfr63n?file=/App.js&utm_medium=sandpack)
+
+- In this one, you have to pass down the `ref` to the lower level component. `App` > `SquareSlider` > `Slider`. Using the `React.forwardRef` on the two lower level components.
+
+```JAVASCRIPT
+// App.js
+import React from 'react';
+
+import SquareSlider from './SquareSlider';
+
+function App() {
+  // Define the ref
+  const sliderRef = React.useRef();
+  
+  React.useEffect(() => {
+    // Log the value on mount
+    console.log(sliderRef.current);
+  }, []);
+  
+  return (
+    <main>
+      <SquareSlider
+        // Define the ref prop
+        ref={sliderRef}
+        label="Intensity"
+        min={0}
+        max={10}
+      />
+    </main>
+  );
+}
+
+export default App;
+```
+
+- `SquareSlider` Component
+
+```JAVASCRIPT
+// SquareSlider.js
+import React from 'react';
+
+import Slider from './Slider';
+import styles from './SquareSlider.module.css';
+
+// add ref prop
+function SquareSlider(props, ref) {
+  return (
+    <Slider 
+      // pass down to lower level
+      ref={ref}
+      {...props}
+      className={styles.squareSlider} 
+    />
+  );
+}
+
+// wrap in forwardRef, to pass it down to lower level
+export default React.forwardRef(SquareSlider);
+```
+
+- And low level `Slider` component
+
+```JAVASCRIPT
+// Slider.js
+import React from 'react';
+
+import styles from './Slider.module.css';
+
+// add the ref as a parameter
+function Slider({ label, className = '', ...delegated }, ref) {
+  const id = React.useId();
+  
+  return (
+    <div className={styles.wrapper}>
+      <label
+        htmlFor={id}
+        className={styles.label}
+      >
+        {label}
+      </label>
+      <input
+        {...delegated}
+        // define the element to use ref
+        ref={ref}
+        type="range"
+        id={id}
+        className={`${styles.slider} ${className}`}
+      />
+    </div>
+  );
+}
+
+// Wrap in an forwardRef
+export default React.forwardRef(Slider);
+```
+
+### Polymorphism
