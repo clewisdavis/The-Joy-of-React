@@ -1800,3 +1800,51 @@ export default React.forwardRef(Slider);
 ```
 
 ### Polymorphism
+
+In order to build usable, accessible interfaces, it's important to understand the semantics of different HTML tags.
+
+- For example; if an element can be clicked to perform an action in JS, it should be a button. Unless that action is to navigate the user to a new page, in which case, it should be an anchor `<a>`.
+
+- When choose an HTML tag, it is much more important to focus on the semantics than the aesthetics.
+- You should use a `<button>` even if you don't want it to look like a button.
+- With CSS, we can strip away all those built in button stles.
+- It is easier to remove a handful of CSS rules than it is to recreate all of the usability benefits built into the `<button>` tag.
+- With that in mind, let's suppose our designer wants us to build the following UI.
+
+![Data Table View](images/image-32.png)
+
+- See the top right corner, actions the user can take
+- Looks like links? It depends on whether clicking them changes teh URL or not.
+- "Export All Data" doesn't sound like a link to me; I imagine it generating a .csv and emailing it to the user.
+
+- So, we can build a `LinkButton` component. It's always going to look like a link, but it's going to be flexible in its implementation: it can either render a `<a>` tag or a `<button>` tag, depending on whether an `href` is supplied.
+
+- [Check out the sandbox](https://codesandbox.io/s/wor88z?file=/LinkButton.js&utm_medium=sandpack)
+
+ACs:
+
+- The `LinkButton` component has an optional prop, `herf`
+- If an `href` is provided, `LinkButton` should render an `<a>` tag, otherwise it should render a `<button>` tag.
+
+```JAVASCRIPT
+import React from 'react';
+
+import styles from './LinkButton.module.css';
+
+function LinkButton({ href, children, ...delegated }) {
+  // TODO: render an <a> tag if “href” is provided.
+  const Tag = typeof href === 'string' ? 'a' : 'button';
+  
+  return (
+    <Tag 
+      className={styles.button}
+      href={href}
+      {...delegated}
+    >
+      {children}
+    </Tag>
+  )
+}
+
+export default LinkButton;
+```
