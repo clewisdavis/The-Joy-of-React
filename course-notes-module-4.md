@@ -1823,8 +1823,59 @@ In order to build usable, accessible interfaces, it's important to understand th
 
 ACs:
 
-- The `LinkButton` component has an optional prop, `herf`
+- The `LinkButton` component has an optional prop, `href`
 - If an `href` is provided, `LinkButton` should render an `<a>` tag, otherwise it should render a `<button>` tag.
+
+- One approach, you can add a `if` conditional statement to check if you have an `href` and then return the anchor.
+- This approach works, but, the problem is, you have two separate branches that have to be maintained.
+
+```JAVASCRIPT
+import React from 'react';
+
+import styles from './LinkButton.module.css';
+
+function LinkButton({ href, children }) {
+  // TODO: render an <a> tag if “href” is provided.
+  if (href) {
+    <a href={href} className={styles.button}>
+      {children}
+    </a>
+  };
+
+  return (
+    <button className={styles.button}>
+      {children}
+    </button>
+  )
+}
+
+export default LinkButton;
+```
+
+- Instead, use this concept called, **Polymorphism**, 🤔 the condition of occurring in several different forms.
+- First, create a variable, `Tag` and it will hold either a anchor tag `a`, or a button tag `button`.
+- And decide which of those to choose, based off the `href` property. `typeof` is equal to a `string` and if so, render a `a` or a `button`
+
+```JAVASCRIPT
+const Tag = typeof href === 'string' ? 'a' : 'button';
+```
+
+- 🤔 Here is the tricky part, now going to take the variable, `Tag` and going to render it, as it it was a React component. And add the `href` prop to it.
+- Why doesn't it always have an `href` since you are adding one a prop? This is React doing some clean up for us, when the prop is resolved to `undefined`, React will strip it out, before it creates the element.
+
+```JAVASCRIPT
+  return (
+    <Tag 
+      className={styles.button}
+      href={href}
+      {...delegated}
+    >
+      {children}
+    </Tag>
+  )
+```
+
+- Full component, with **Polymorphism**
 
 ```JAVASCRIPT
 import React from 'react';
@@ -1848,3 +1899,25 @@ function LinkButton({ href, children, ...delegated }) {
 
 export default LinkButton;
 ```
+
+- 🤔 How is this actually working? Remember `React.createElement`.
+- The `Tag` variable, is going to resolve to either, string `a` or string `button`.
+- Why is this using an uppercase? `Tag`, if you did a lower case `tag` you would end up with an element rendered as `<tag>` in your HTML. So you cannot use a lower case.
+- 📣 The JSX compiler, uses the case of the first letter, to determine if it should render a DOM primitive, `div`, `a` etc. Or a React component, `Tag`.
+- The uppercase, tells JSX how to treat it, as a string, or as a variable.
+
+```JAVASCRIPT
+return (
+  React.createElement(
+    Tag,
+    {
+      href,
+      className: styles.button,
+      ...delegated
+    },
+    children
+  )
+)
+```
+
+### Exercises, Polymorphism
