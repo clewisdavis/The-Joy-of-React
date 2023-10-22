@@ -1921,3 +1921,68 @@ return (
 ```
 
 ### Exercises, Polymorphism
+
+#### A List component
+
+Suppose you are building a list component. There are two types of lists in HTML: unordered list `<ul>` and ordered list `<ol>`. Our list component should be able to render either.
+
+ACs:
+
+- The consumer should be able to specify whether they want to render an `ol` or a `ul`, by passing a prop to `List`.
+- The component should restrict the user so that it can only render `ul` and `ol`, and not for example a `p` or a `button`.
+
+- Code Sandbox - [List Component](https://codesandbox.io/s/728sr2?file=/List.js&utm_medium=sandpack)
+
+- My Solution:
+
+```JAVASCRIPT
+// App.js
+// Define a new prop, list type, and pass in the order you want
+import React from 'react';
+
+import List from './List'
+
+function App() {
+  return (
+    <main>
+      <List
+        listType={'ordered'}
+      >
+        <li>Item 1</li>
+        <li>Item 2</li>
+        <li>Item 3</li>
+      </List>
+    </main>
+  );
+}
+
+export default App;
+```
+
+- List.js
+
+```JAVASCRIPT
+// List.js
+import React from 'react';
+
+import styles from './List.module.css';
+
+function List({ listType, className = '', children, ...delegated }) {
+ 
+  // check the type, and render 
+  const Tag = listType === 'ordered' ? 'ol' : 'ul';
+  
+  return (
+    <Tag
+      {...delegated}
+      className={`${styles.wrapper} ${className}`}
+    >
+      {children}
+    </Tag>
+  )
+}
+
+export default List;
+```
+
+- A more standardized approach, is the `as` prop.
