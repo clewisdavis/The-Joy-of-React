@@ -1933,20 +1933,18 @@ ACs:
 
 - Code Sandbox - [List Component](https://codesandbox.io/s/728sr2?file=/List.js&utm_medium=sandpack)
 
-- My Solution:
+- A more standardized approach, is the `as` prop. Use object desctructuring to extract the `as` prop, rename it to `Tag`.
+- 👀 more on the [Object Destructuring JS lesson](https://courses.joshwcomeau.com/joy-of-react/10-javascript-primer/05-object-destructuring)
+
+- A standard practice, derived from styled components, 'as' [polymorphic prop](https://styled-components.com/docs/api#as-polymorphic-prop)
 
 ```JAVASCRIPT
-// App.js
-// Define a new prop, list type, and pass in the order you want
-import React from 'react';
-
-import List from './List'
-
 function App() {
   return (
     <main>
       <List
-        listType={'ordered'}
+        // add 'as' as a prop
+        as='ol'
       >
         <li>Item 1</li>
         <li>Item 2</li>
@@ -1959,18 +1957,25 @@ function App() {
 export default App;
 ```
 
-- List.js
+- But how do you make this work?
+- In the `List` component, add `as` as a prop, then define your `Tag` and assign it to equal `as`.
 
 ```JAVASCRIPT
-// List.js
 import React from 'react';
 
 import styles from './List.module.css';
 
-function List({ listType, className = '', children, ...delegated }) {
- 
-  // check the type, and render 
-  const Tag = listType === 'ordered' ? 'ol' : 'ul';
+function List({ 
+  // ol and ul
+  // add 'as' prop
+  as,
+  className = '', 
+  children, 
+  ...delegated 
+}) {
+
+  // define Tag
+  const Tag = as;
   
   return (
     <Tag
@@ -1985,4 +1990,55 @@ function List({ listType, className = '', children, ...delegated }) {
 export default List;
 ```
 
-- A more standardized approach, is the `as` prop.
+- Use some JS features, to rename destructured keys in an object 🤔
+- `as: Tag`
+
+- Now, what happens if I omit the 'as' prop? You get an error. Can solve this by setting a default tag.
+- 🤔 Lots of JS tricks here, destructuring, rename the variable, and then setting a default value.
+- `as: Tag = 'ul'`
+
+- Next problem, what happens if you pass another tag? Button for example; should only be able to render a `ul` and a `ol`.
+- Throw an error, and interpolate the Tag.
+
+```JAVASCRIPT
+  // Check the tag
+  if (!VALID_TAGS.includes(Tag)) {
+    throw new Error(`Unrecognized tag: ${Tag}`);
+  }
+```
+
+- Full solution:
+
+```JAVASCRIPT
+import React from 'react';
+
+import styles from './List.module.css';
+
+// define the valid tags
+const VALID_TAGS = ['ul', 'ol'];
+
+function List({ 
+  // ol and ul
+  as: Tag = 'ul',
+  className = '', 
+  children, 
+  ...delegated 
+}) {
+
+  // Check the tag
+  if (!VALID_TAGS.includes(Tag)) {
+    throw new Error(`Unrecognized tag: ${Tag}`);
+  }
+  
+  return (
+    <Tag
+      {...delegated}
+      className={`${styles.wrapper} ${className}`}
+    >
+      {children}
+    </Tag>
+  )
+}
+
+export default List;
+```
