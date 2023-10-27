@@ -2391,3 +2391,71 @@ function UserButton() {
 meh
 
 ### Slots
+
+- You can use slots to pass any markup to a component. An alternative to having to define a bunch of props, and think of every case.
+- We have been using slots all along, the `{children}` prop for example.
+
+```JAVASCRIPT
+function YourComponent({ children }) {
+  return (
+    <div>{children}</div>
+  )
+}
+```
+
+- Imagine you want to render a photo, and use the `<picture>` tag to render the correct density photo for the device. You end up with a lot of image sources, hard to maintain through props.
+
+```CODE
+<picture>
+  <source
+    type="image/webp"
+    srcSet={`
+      https:/img/spaceship.webp 1x,
+      https:/img/spaceship@2x.webp 2x,
+      https:/img/spaceship@3x.webp 3x
+  `}
+  />
+  <source
+    type="image/png"
+    srcSet={`
+      https:/img/spaceship.png 1x,
+      https:/img/spaceship@2x.png 2x,
+      https:/img/spaceship@3x.png 3x
+  `}
+  />
+  <img
+    alt="A meerkat looking curiously at the camera"
+    src="/img/meerkat.jpg"
+  />
+</picture>
+```
+
+- A better pattern is to use the **slots pattern**. Here is what it looks like:
+
+```JAVASCRIPT
+function CaptionImage({ image, caption }) {
+  return (
+    <figure>
+      {image}
+      <div className="divider" />
+      <figcaption>{caption}</figcaption>
+    </figure>
+  );
+}
+```
+
+- And the consumer would use it like this:
+
+```JAVASCRIPT
+<CaptionedImage
+  image={
+    <img
+      alt="A punk-rock cat illustration"
+      src="https://sandpack-bundler.vercel.app/img/punk-cat.png"
+    />
+  }
+  caption="Illustration by Josh Comeau"
+/>
+```
+
+- The `image` prop takes a React element. It creates a 'slot' inside the `<figure>` for the consumer to include whatever markup we need.
