@@ -2459,3 +2459,78 @@ function CaptionImage({ image, caption }) {
 ```
 
 - The `image` prop takes a React element. It creates a 'slot' inside the `<figure>` for the consumer to include whatever markup we need.
+
+- We have been doing this all along, with the `{children}` prop, not a new idea.
+- The `children` prop isn't special, we can pass React elements to any prop, not just `{children}`.
+
+- 🤔 The cool thing is, we can pass multiple slots in a single component. It's like being able to specify multiple distinct children.
+
+- For example, we can pass a `caption` and a `image` prop.
+
+```JAVASCRIPT
+<CaptionedImage
+  image={
+    <img
+      alt="A meerkat looking curiously at the camera"
+      src="https://sandpack-bundler.vercel.app/img/meerkat.jpg"
+    />
+  }
+  caption={
+    <>
+      Photo by <a href="">Manuel Capellari</a>, shot in August 2019 and
+      published on <strong>Unsplash</strong>.
+    </>
+  }
+/>
+```
+
+- And then specify the slots in the component.
+
+```JAVASCRIPT
+function CaptionedImage({ image, caption }) {
+  return (
+    <figure>
+      {image}         {/* <— Slot 1 */}
+      <div
+        className="divider"
+      />
+      <figcaption>
+        {caption}     {/* <— Slot 2 */}
+      </figcaption>
+    </figure>
+  );
+}
+```
+
+- 📣 This pattern provides maximum control and power to the consumer:
+
+- With delegated props, we are able to provide additional props to a particular element.
+- With polymorphism, we are able to change a particular element's HTML tag.
+- With slots, able to provide any markup we want, without restrictions.
+
+- 🤔 This is a tradeoff, the more power you give to the consumer, the more flexible our component is, but more likely things can go awry. The consumer can potentially introduce bugs, use the component in ways not intended.
+
+- Code Sandbox - [Slots](https://codesandbox.io/s/0ulfh7?file=/App.js&utm_medium=sandpack)
+
+#### Exercises, Slots
+
+Exercises for Slots
+
+##### Icon Buttons
+
+Build an `IconButton` component.
+
+![Icon Button](images/image-34.png)
+
+- Will use the `react-feather` package to provide the icons. Here is how we render an icon from `react-feather`.
+
+```JAVASCRIPT
+import { Award } from 'react-feather';
+
+<Award size={32} />
+```
+
+ACs:
+
+- We should be able to pass any icon we want, as a React element, to the button. We can test using the imported icons from the `react-feather` package.
+- The `IconButton` component should render the icon in the appropriate slot.
