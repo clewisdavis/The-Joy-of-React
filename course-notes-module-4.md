@@ -2534,3 +2534,132 @@ ACs:
 
 - We should be able to pass any icon we want, as a React element, to the button. We can test using the imported icons from the `react-feather` package.
 - The `IconButton` component should render the icon in the appropriate slot.
+
+- My solution:
+
+- First, design the consumer experience for the component, how you would like to pass in the properties.
+
+```JAVASCRIPT
+import React from 'react';
+import {
+  Award,
+  Camera,
+  Frown,
+  Slash,
+  XCircle,
+} from 'react-feather';
+
+import IconButton from './IconButton';
+
+function App() {
+  // TODO: Render an “IconButton
+  // Add an 'icon' prop and just pass in the icon
+  // as a component, <Award/>, literally
+  return (
+  <>
+    <IconButton icon={<Award/>}>
+      Win an award
+    </IconButton>
+    <IconButton icon={<Camera/>}>
+      Take a picture
+    </IconButton>
+
+  </>
+  )
+}
+
+export default App;
+```
+
+- Then, design the component with the correct props to support the consumer experience.
+
+```JAVASCRIPT
+import React from 'react';
+
+import styles from './IconButton.module.css';
+
+// Add the props, children and icon and include the slots
+// inside the JSX
+function IconButton({ children, icon }) {
+  return (
+    <button className={styles.wrapper}>
+      <span className={styles.iconWrapper}>
+        { icon }   {/* <— Slot for icon */}
+      </span>
+      <span className={styles.childrenWrapper}>
+        { children }  {/* <— Slot for children */}
+      </span>
+    </button>
+  );
+}
+
+export default IconButton;
+```
+
+##### Stretch Goal, to much control
+
+The problem here, is we have given to much control over the `icon`.
+
+ACs:
+
+- The `IconButton` should still have an icon prop, which gives it an icon to render. `IconButton` should not be the one importing the icons from 'react-feather'.
+- `IconButton` should have 100% control over the props being applied to the icon.
+
+- Solution: Passing the component through the `icon` prop, rather than an element in App.js
+
+```JAVASCRIPT
+// App.js
+import React from 'react';
+import {
+  Award,
+  Camera,
+  Frown,
+  Slash,
+  XCircle,
+} from 'react-feather';
+
+import IconButton from './IconButton';
+
+function App() {
+  return (
+    <>
+      <IconButton icon={Award}>
+        Collect Award
+      </IconButton>
+      <IconButton icon={Frown}>
+        Rate Our Product
+      </IconButton>
+      <IconButton icon={XCircle}>
+        Dismiss
+      </IconButton>
+    </>
+  );
+}
+
+export default App;
+```
+
+- Then we render the component inside `IconButton`.
+
+```JAVASCRIPT
+// IconButton.js
+import React from 'react';
+
+import styles from './IconButton.module.css';
+
+// rename the icon prop using destructuring
+function IconButton({ icon: Icon, children }) {
+  return (
+    <button className={styles.wrapper}>
+      <span className={styles.iconWrapper}>
+        <Icon size={20} strokeWidth={1.5} />
+      </span>
+      <span className={styles.childrenWrapper}>
+        {children}
+      </span>
+    </button>
+  );
+}
+
+export default IconButton;
+```
