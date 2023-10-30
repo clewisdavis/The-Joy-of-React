@@ -2663,3 +2663,31 @@ function IconButton({ icon: Icon, children }) {
 
 export default IconButton;
 ```
+
+ℹ️ Icons in React, collection
+
+- [Feather Icons](https://feathericons.com)
+- [Lucide Icons](https://lucide.dev)
+
+### Context
+
+- The main way to pass data inside a React app is through props. Like a train network, props allow us to pass state and other data across the application.
+
+- It can be tedious to pass data through props. To help improve quality of life, React includes a secondary mode of transportation: Context.
+
+- Context is like an express train, it alow us to skip certain stop s and hop straight from one component to another.
+
+#### The Problem
+
+- The problem 'Context' is solving.
+- Have a large application with a lot of nested components, and you want to use a piece of data, you have to pass that along through all the components. Called 'prop drilling'.
+- But if you have a change in the design, it becomes a nightmare to remember to clean up all the props. You end up with a codebase, with unused props.
+
+![Prop Drilling](images/image-35.png)
+
+- Context solves this problem, similar to Mario, skipping between worlds, context will allow you to jump to any component that is an child.
+- Or an express bus stop, going straight from the terminal to the airport.
+
+#### Syntax
+
+-
