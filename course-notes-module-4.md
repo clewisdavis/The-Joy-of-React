@@ -2690,4 +2690,72 @@ export default IconButton;
 
 #### Syntax
 
+- A an example, suppose we have a `favoriteColor` help in state, and we want to make it available to every compoennt in the app. Using context.
+
+- There are two steps to providing context: **providing** and **consuming**.
+
+##### Step 1: Providing
+
+In Step 1, we use a provider to make a particular value available through context. We do this by wrapping our application in a Provider component, which we get from React when creating a context.
+
+- Looks like this:
+
+```JAVASCRIPT
+// App.js
+import React from 'react';
+
+import Home from './Home';
+
+// Create a new context
+export const FavouriteColorContext = React.createContext();
+
+function App() {
+  const [
+    favouriteColor,
+    setFavouriteColor
+  ] = React.useState('#EBDEFB');
+
+  // Wrap everything `App` would normally render inside
+  // a Provider, and pass our `favouriteColor` state
+  // variable as the value:
+  return (
+    <FavouriteColorContext.Provider value={favouriteColor}>
+      <Home />
+    </FavouriteColorContext.Provider>
+  );
+}
+
+export default App;
+```
+
+- First, we create a 'context' with the `React.createContext()` method.
+
+- A 'context' can be thought of as a channel, a radio frequency we can use to broadcast data down through the app. 📻 It's the vehicle we use to deliver a value from one spot to another.
+
+- `FavouriteColorContext` is a plain old JS object. It includes a bunch of stuff that react ue internally. It also includes a `Provider` component for us to render.
+
+- When we render `<FavouriteColorContext.Provider>`, we start to broadcast a value, making it available to any descendant component. In this case, we are broadcasting the `favouriteColor` state variable.
+
+- Often, Provider components are kept at the very top of our applications, so that their broadcast can reach anywhere in the app.
+
+##### Step 2: Consuming
+
+- When we want to access this value, we do so like this:
+
+```JAVASCRIPT
+import { FavouriteColorContext } from './App';
+
+function Sidebar() {
+  const favouriteColor = React.useContext(FavouriteColorContext);
+}
+```
+
+- `useContext` is a hook designed to 'plug in' to a particular context and pluck out its current value. IN this case, we are handing it the `FavouriteColorContext` object we created in `App`, and it's grabbing the `favouriteColor` value that was funneled through.
+
+- To extend the channel/frequency analogy, `useContext` is like a radio 📻. By passing it the `FavouriteColorContext` value, we are tuning this radio to the correct frequency and `favouriteColor` music starts playing.
+
+- Code Sandbox - [Context](https://codesandbox.io/s/vss206?file=/App.js&utm_medium=sandpack)
+
+##### Updating value in context
+
 -
