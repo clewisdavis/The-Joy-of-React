@@ -2758,4 +2758,42 @@ function Sidebar() {
 
 ##### Updating value in context
 
--
+- In the example above, the `favoriteCOlor` state variable is being passed through context as a read-only value. There is no way to change that value.
+
+- What if we wanted to allow some descendant to be able to change the color?
+
+- We can solve for this by **passing the setter function through context as well**. This is similar to the pattern we learned in the Lifting State Up lesson.
+
+- [Updated Sandbox](https://codesandbox.io/s/8tfi1m?file=/App.js&utm_medium=sandpack), the `Sidebar` component now uses both the current state value and teh setter function, to allow the use to change the sidebar's color:
+
+- In practice, we almost always pass an object through context, since this allows us to package up multiple values together.
+
+**📣 Here is the basic formula:**
+
+1. Create a new context with `React.createContext`.
+2. Use the `Provider` component, from that context, to wrap around the application. Pass it a bundle of values that you ned in other parts of the app.
+3. Pluck the data you need from context, with the `useContext` hook.
+
+ℹ️ When to use context:
+
+- When should we use context to pass state around the app, adn when should we use prop-drilling?
+
+- Context is most commonly used for global sate. Global state refers to state that is needed across many different parts of the application, like color theme, or a current logged in user.
+- This is in contrast to 'local state', which is used only in a single place within the app.
+
+- 👍 Rule of thumb, keep having to pass prop though a component, probably use context.
+
+```JAVASCRIPT
+function AccountSettings({ user }) {
+  return (
+    <section>
+      <UserProfile user={user} />
+    </section>
+  )
+}
+```
+
+- The `AccountSettings` component doesn't actually use the `user` prop. It passes it right along to `UserProfile`.
+- No right/wrong way, subjective.
+
+#### Exercises, Passing a use object
