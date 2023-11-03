@@ -2758,7 +2758,7 @@ function Sidebar() {
 
 ##### Updating value in context
 
-- In the example above, the `favoriteCOlor` state variable is being passed through context as a read-only value. There is no way to change that value.
+- In the example above, the `favoriteColor` state variable is being passed through context as a read-only value. There is no way to change that value.
 
 - What if we wanted to allow some descendant to be able to change the color?
 
@@ -2797,3 +2797,76 @@ function AccountSettings({ user }) {
 - No right/wrong way, subjective.
 
 #### Exercises, Passing a use object
+
+- Let's update the 'Prop Drilling' sandbox from a couple lessons ago sot hat it uses context.
+
+ACs:
+
+- A new context should be created in App.js, making the `user` state variable available to all other components.
+- The `ModuleLessons` component should pluck `user` from context, instead of receiving it through props.
+- No need to update `AccountDropdown`, it can continue to receive `user` via props.
+
+- [Solution Sandbox](https://codesandbox.io/s/yt4p7f?file=/ModuleLessons.js&utm_medium=sandpack)
+
+```JAVASCRIPT
+// App.js
+import React from 'react';
+
+import useUser from './use-user.hook';
+import AccountDropdown from './AccountDropdown';
+import CourseIndexLayout from './CourseIndexLayout';
+
+// Provide a Context
+export const UserContext = React.createContext();
+
+function App() {
+  const user = useUser();
+  
+  // Wrap the context Provider around the App
+  return (
+    <UserContext.Provider value={user}>
+      <AccountDropdown user={user} />
+      <CourseIndexLayout />
+    </UserContext.Provider>
+  );
+}
+
+export default App;
+```
+
+- Consume the context
+
+```JAVASCRIPT
+import React from 'react';
+
+// consume context, import from App
+import { UserContext } from './App';
+
+function ModuleLessons() {
+
+  // define context to use below
+  const user = React.useContext(UserContext);
+  return (
+    <>
+      User email: {user?.email || 'Not provided'}
+    </>
+  );
+}
+
+export default ModuleLessons;
+```
+
+##### Video Playback Rate
+
+- Context is mostly used for 'global' state, things that are necessary all over the application.
+
+- One example might be the 'playback rate' for videos. When a user changes the playback speed for one video, it should change for al videos, no matter where they are in the app!
+
+- Update the sandbox below so that `playbackRate` is stored in context.
+
+ACs:
+
+- The `VideoPlayer` component should receive `playbackRate` through context, rather than through props.
+- The `VideoPlayer` component should also receive the setter function, `setPlaybackRate`, through context instead of props.
+
+- [Code Sandbox](https://codesandbox.io/s/pgrn04?file=/App.js&utm_medium=sandpack)
