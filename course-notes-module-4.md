@@ -2766,6 +2766,29 @@ function Sidebar() {
 
 - [Updated Sandbox](https://codesandbox.io/s/8tfi1m?file=/App.js&utm_medium=sandpack), the `Sidebar` component now uses both the current state value and teh setter function, to allow the use to change the sidebar's color:
 
+- Pass the `value` as ab object directly in the `Provider`.
+
+```JAVASCRIPT
+<PlaybackContext.Provider value={{ playbackRate, setPlaybackRate }}>
+  // JSX
+</PlaybackContext.Provider>
+```
+
+- In your consuming component, don't forget to 'destructure' to consume the values passed in.
+
+```JAVASCRIPT
+  function VideoPlayer () {
+      // define the context, destructure the values
+      const { playbackRate, setPlaybackRate } = React.useContext(PlaybackContext);
+
+      return (
+        //JSX
+      )
+  }
+
+  export default VideoPlayer;
+```
+
 - In practice, we almost always pass an object through context, since this allows us to package up multiple values together.
 
 **📣 Here is the basic formula:**
@@ -2870,3 +2893,136 @@ ACs:
 - The `VideoPlayer` component should also receive the setter function, `setPlaybackRate`, through context instead of props.
 
 - [Code Sandbox](https://codesandbox.io/s/pgrn04?file=/App.js&utm_medium=sandpack)
+
+- Step one, define context
+
+```JAVASCRIPT
+import React from 'react';
+
+import VideoPlayer from './VideoPlayer';
+
+// set up the context
+export const PlaybackContext = React.createContext();
+
+function App() {
+  const [playbackRate, setPlaybackRate] = React.useState('1');
+
+  return (
+    // Wrap around the App
+    // pass in the values as an object
+    <PlaybackContext.Provider value={{ playbackRate, setPlaybackRate }}>
+      <main>
+        <h1>Video Archives</h1>
+        
+        {DATA.map(({ id, video, createdBy, license }) => (
+          <article key={id}>
+            <VideoPlayer
+              src={video.src}
+              caption={video.caption}
+              playbackRate={playbackRate}
+              setPlaybackRate={setPlaybackRate}
+            />
+            <dl>
+              <dt>Created by</dt>
+              <dd>{createdBy}</dd>
+              <dt>Licensed under</dt>
+              <dd>{license}</dd>
+            </dl>
+          </article>
+        ))}
+      </main>
+    </PlaybackContext.Provider>
+  );
+}
+
+const DATA = [
+  {
+    id: 'snowstorm',
+    video: {
+      src: 'https://sandpack-bundler.vercel.app/videos/snowstorm.mp4',
+      caption: 'A peaceful snowstorm in a residential area',
+    },
+    createdBy: 'Karolina Grabowska',
+    license: 'Creative Commons Zero (CC0)',
+  },
+  {
+    id: 'flowers',
+    video: {
+      src: 'https://sandpack-bundler.vercel.app/videos/flowers.mp4',
+      caption: 'Macro video of a flower blowing in the wind',
+    },
+    createdBy: 'Imam Hossain',
+    license: 'Creative Commons Zero (CC0)',
+  },
+  {
+    id: 'plane',
+    video: {
+      src: 'https://sandpack-bundler.vercel.app/videos/plane.mp4',
+      caption: 'Plane flying over the clouds',
+    },
+    createdBy: 'Ahmet Akpolat',
+    license: 'Creative Commons Zero (CC0)',
+  },
+];
+
+export default App;
+```
+
+- Step two, consume the context provider
+
+```JAVASCRIPT
+import React from 'react';
+
+// consume the provider
+import { PlaybackContext } from './App';
+
+function VideoPlayer({
+  src,
+  caption,
+}) {
+  // Define the context
+  // Object Desctructure the values
+  const { playbackRate, setPlaybackRate } = React.useContext(PlaybackContext);
+  
+  const playbackRateSelectId = React.useId();
+
+  const videoRef = React.useRef();
+
+  React.useEffect(() => {
+    videoRef.current.playbackRate = playbackRate;
+  }, [playbackRate]);
+
+  return (
+    <div className="video-player">
+      <figure>
+        <video ref={videoRef} controls src={src} />
+        <figcaption>{caption}</figcaption>
+      </figure>
+
+      <div className="actions">
+        <label htmlFor={playbackRateSelectId}>
+          Select playback speed:
+        </label>
+        <select
+          id={playbackRateSelectId}
+          value={playbackRate}
+          onChange={(event) => {
+            setPlaybackRate(event.target.value);
+          }}
+        >
+          <option value="0.5">0.5</option>
+          <option value="1">1</option>
+          <option value="1.25">1.25</option>
+          <option value="1.5">1.5</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+        </select>
+      </div>
+    </div>
+  );
+}
+
+export default VideoPlayer;
+```
+
+#### Provider Components
