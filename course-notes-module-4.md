@@ -3026,3 +3026,68 @@ export default VideoPlayer;
 ```
 
 #### Provider Components
+
+- Should you have one context for everything or separate context for every item?
+- Best practice to have separate context for each piece of functionality.
+
+```JAVASCRIPT
+// App.js
+export const UserContext = React.createContext();
+export const ThemeContext = React.createContext();
+export const PlaybackRateContext = React.createContext();
+
+function App() {
+  const [user, setUser] = React.useState(null);
+  const [theme, setTheme] = React.useState('light');
+  const [playbackRate, setPlaybackRate] = React.useState(1);
+
+  return (
+    <UserContext.Provider value={user}>
+      <ThemeContext.Provider value={theme}>
+        <PlaybackRateContext.Provider value={playbackRate}>
+          <Homepage />
+        </PlaybackRateContext.Provider>
+      </ThemeContext.Provider>
+    </UserContext.Provider>
+  );
+}
+```
+
+- Can't you combine all this into one context?
+
+```JAVASCRIPT
+export const AppContext = React.createContext();
+```
+
+- Not a good practice? Why?
+
+- For performance, you don't want to cause unnecessary re-renders.
+- And code readability.
+
+- What about all the logic for each provider? Your `App.js` can get really cluttered up with logic for each provider.
+- Recommended you use a **provider component pattern**.
+- This will manage everything for each provider, and make for better code readability.
+
+- 🤔 Here is the `App.js` using this pattern. All of the logic for each provider is included within the 'provider component'.
+
+```JAVASCRIPT
+//App.js
+import Homepage from './Homepage';
+import UserProvider from './UserProvider';
+import ThemeProvider from './ThemeProvider';
+import PlaybackRateProvider from './PlaybackRateProvider';
+
+function App() {
+  return (
+    <UserProvider>
+      <ThemeProvider>
+        <PlaybackRateProvider>
+          <Homepage />
+        </PlaybackRateProvider>
+      </ThemeProvider>
+    </UserProvider>
+  );
+}
+```
+
+##### Practice - extracting two more provider components
