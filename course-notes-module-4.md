@@ -2981,7 +2981,7 @@ function VideoPlayer({
   caption,
 }) {
   // Define the context
-  // Object Desctructure the values
+  // Object Destructure the values
   const { playbackRate, setPlaybackRate } = React.useContext(PlaybackContext);
   
   const playbackRateSelectId = React.useId();
@@ -3091,3 +3091,16 @@ function App() {
 ```
 
 ##### Practice - extracting two more provider components
+
+The sandbox picks up from the above. The `UserProvider` component has been created and it' sup to you to create two new provider components: `ThemeProvider` and `PlaybackRateProvider`.
+
+ACs:
+
+- The `ThemeProvider` component should manage everything related to the `theme` state and context.
+- The `PlaybackRateProvider` component should manage everything related to the `playbackRate` state and context.
+- `App.js` should import and use the two new components, matching the style/format of the `UserProvider` component.
+- Inside `Homepage.js` the imports should be updated so that we are importing the contexts from the provider components, not the `App`.
+
+- [Code Playground](https://codesandbox.io/s/d5p7w2?file=/App.js&utm_medium=sandpack)
+
+- Meh, very confusing, which is the context and which is the provider. 🤔
