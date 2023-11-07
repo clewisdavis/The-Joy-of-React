@@ -3104,3 +3104,88 @@ ACs:
 - [Code Playground](https://codesandbox.io/s/d5p7w2?file=/App.js&utm_medium=sandpack)
 
 - Meh, very confusing, which is the context and which is the provider. 🤔 Probably need more practice with this one.
+- Checkout the solution code here, [Provider Component Exercise](https://codesandbox.io/s/kosxl6?file=/App.js&utm_medium=sandpack).
+
+##### Performance
+
+In the last module, we learned hwo to crete 'pure' components with React.memo. A pure component is one that doesn't re-render unless its props or state changes.
+
+- 🤔 But what happens when a pure component consumes a context? For example;
+
+```JAVASCRIPT
+import { FavouriteColorContext } from './App';
+
+function Sidebar() {
+  const favouriteColor = React.useContext(FavouriteColorContext);
+
+  return (
+    <div style={{ backgroundColor: favouriteColor }}>
+      Sidebar
+    </div>
+  )
+}
+
+export default React.memo(Sidebar);
+```
+
+- By wrapping `Sidebar` with `React.memo`, we produce a pure component, but what effect does that have? WHen will this component re-render?
+
+- You can think of context as 'internal props'. It follows all the same rules as props. If the value held in context changes, this component will re-render.
+
+- It is functionally equivalent to this:
+
+```JAVASCRIPT
+function Sidebar({ favouriteColor }) {
+  return (
+    <div style={{ backgroundColor: favouriteColor }}>
+      Sidebar
+    </div>
+  )
+}
+
+export default React.memo(Sidebar);
+```
+
+So, our updated definition for how pure components work:
+
+```CODE
+A pure component will re-render if a prop, state variable, or context value changes.
+```
+
+##### Memoizing context values
+
+In most situations we won't be passing a single value through context. We pass several things, packaged up in an object. For example;
+
+```JAVASCRIPT
+// App.js
+export const FavouriteColorContext = React.createContext();
+
+function App() {
+  const [
+    favouriteColor,
+    setFavouriteColor
+  ] = React.useState('#EBDEFB');
+
+  return (
+    <FavouriteColorContext.Provider
+      value={{ favouriteColor, setFavouriteColor }}
+    >
+      <Home />
+    </FavouriteColorContext.Provider>
+  );
+}
+```
+
+- We are passing the state value, `favouriteColor`, as well as the state-setter function, `setFavouriteColor`.
+- When we pass multiple values like this, it tends to wreak havoc on pure components.
+
+- Let's solve this, the playground has a `ColorPicker` component that consumes the `FavouriteColor` context.
+- There is also an unrelated piece of state, `count`.
+
+- `ColorPicker` is a pure component, and it doesn't depend at all on the `count` variable, but it re-renders when a `count` changes.
+- Your mission is to figure out why this happens, and to fix it, sot hat `ColorPicker` only re-renders when the `favouriteColor` state changes.
+
+ACs:
+
+- Clicking the 'Count: 0' button should NOT cause the `ColorPicker` component to re-render.
+- A 'ColorPicker rendered' message is logged whenever `ColorPicker` re-renders, and so you will know you have succeeded once clicking the 'Count' button doesn't spawn a console message.
