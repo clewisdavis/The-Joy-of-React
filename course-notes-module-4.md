@@ -3189,3 +3189,81 @@ ACs:
 
 - Clicking the 'Count: 0' button should NOT cause the `ColorPicker` component to re-render.
 - A 'ColorPicker rendered' message is logged whenever `ColorPicker` re-renders, and so you will know you have succeeded once clicking the 'Count' button doesn't spawn a console message.
+
+- 🤔 What is going on here?
+- Have to remember, you can only pass a single value through context, `value={{ favouriteColor, setFavouriteColor }}`, we are not passing two different values, we are passing a single object, that holds multiple values. An object with two key value pairs.
+
+- To prove the point, you can pull it out and make a single value, and pass it along to your `Provider`.
+- 🤔 The problem is, the `value` object is being regenerated on every single render. Triggering a re-render.
+- Whenever something changes in the object `value={{ favouriteColor, setFavouriteColor }}`, it creates a new object, which triggers a re-render.
+
+```JAVASCRIPT
+import React from 'react';
+
+export const FavouriteColorContext = React.createContext();
+
+function FavouriteColorProvider({ children }) {
+  const [
+    favouriteColor,
+    setFavouriteColor
+  ] = React.useState('#EBDEFB');
+
+  // make it a single value to pass to your provider
+  const value = { favouriteColor, setFavouriteColor };
+  
+  return (
+    <FavouriteColorContext.Provider
+      value={value}
+    >
+      {children}
+    </FavouriteColorContext.Provider>
+  );
+}
+
+export default FavouriteColorProvider;
+```
+
+- How to solve this?
+- We store the value in a `useMemo` and define the dependency so that it only triggers a re-render when the state variable is changed.
+
+```JAVASCRIPT
+// FavouriteColorProvider.js
+import React from 'react';
+
+export const FavouriteColorContext = React.createContext();
+
+function FavouriteColorProvider({ children }) {
+  const [
+    favouriteColor,
+    setFavouriteColor
+  ] = React.useState('#EBDEFB');
+
+  // Store the value, in a useMemo
+  // add the dependency favouriteColor to trigger a re-render
+  const value = React.useMemo(() => {
+    return { favouriteColor, setFavouriteColor };
+  }, [favouriteColor])
+  
+  return (
+    <FavouriteColorContext.Provider
+      value={value}
+    >
+      {children}
+    </FavouriteColorContext.Provider>
+  );
+}
+
+export default FavouriteColorProvider;
+```
+
+- 🤔 This hurts my brain, but a shortcut to remember, as you are working with a `.Provider`.
+- Anytime you pass an object to an context provider, `<FavouriteColorContext.Provider value={value}>`, which is most of the time.
+- You want to 'memoize' that object, so that we only re-render when something inside the object changes.
+
+```JAVASCRIPT
+  const value = React.useMemo(() => {
+    return { favouriteColor, setFavouriteColor };
+  }, [favouriteColor])
+```
+
+#### Modals
