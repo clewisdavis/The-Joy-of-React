@@ -3258,7 +3258,7 @@ export default FavouriteColorProvider;
 
 - 🤔 This hurts my brain, but a shortcut to remember, as you are working with a `.Provider`.
 - Anytime you pass an object to an context provider, `<FavouriteColorContext.Provider value={value}>`, which is most of the time.
-- You want to 'memoize' that object, so that we only re-render when something inside the object changes.
+- 📣 You want to 'memoize' that object, so that we only re-render when something inside the object changes.
 
 ```JAVASCRIPT
   const value = React.useMemo(() => {
@@ -3267,3 +3267,15 @@ export default FavouriteColorProvider;
 ```
 
 #### Modals
+
+Just about every modern we app needs a good `<Modal>` component.
+
+A modal is an in-window popup that displays a message. Sometimes, it has buttons to confirm an action, in which case it's often called a 'dialog box'.
+
+However, modals are deceptively tricky, they have complex usability expectations and accessibility requirements.
+
+##### Building a modal
+
+In the sandbox below, you have an incomplete `Modal` component. Your job is to see how many issues you can find + fix.
+
+[Sandbox Code - Modal](https://codesandbox.io/s/kgtwu5?file=/Modal.js&utm_medium=sandpack)
