@@ -3279,3 +3279,225 @@ However, modals are deceptively tricky, they have complex usability expectations
 In the sandbox below, you have an incomplete `Modal` component. Your job is to see how many issues you can find + fix.
 
 [Sandbox Code - Modal](https://codesandbox.io/s/kgtwu5?file=/Modal.js&utm_medium=sandpack)
+
+- When opening the modal, focus state should be on the modal, in this case, the close button.
+- Do this by applying a `useEffect` within the `Modal` component to apply the `.focus()` on the button element. Or whatever element you want, using the `useRef`.
+
+```JAVASCRIPT
+import React from 'react';
+import { X as Close } from 'react-feather';
+
+import styles from './Modal.module.css';
+
+function Modal({ handleDismiss, children }) {
+  // Get button reference
+  const closeBtnRef = React.useRef();
+
+  console.log(closeBtnRef.current);
+
+  // Apply the focus state for keyboard navigation
+  React.useEffect(() => {
+    closeBtnRef.current.focus();
+  }, [])
+
+  return (
+    <div className={styles.wrapper}>
+      <div className={styles.backdrop} />
+      <div className={styles.dialog}>
+        <button
+          // apply ref
+          ref={closeBtnRef}
+          className={styles.closeBtn}
+          onClick={handleDismiss}
+        >
+          <Close />
+        </button>
+        {children}
+      </div>
+    </div>
+  );
+}
+
+export default Modal;
+```
+
+- The next thing, is when you close the modal, to return the focus state, to the previously focused element used to launch the modal.
+- You can use an existing property for this, `document.activeElement`, this will tell you which element is currently focused as you browse the page/DOM.
+- With that, you can store that in a variable, to use within our `useEffect`. To restore focus when the component unmounts. And add a cleanup function to re-focus the element.
+
+```JAVASCRIPT
+import React from 'react';
+import { X as Close } from 'react-feather';
+
+import styles from './Modal.module.css';
+
+function Modal({ handleDismiss, children }) {
+  // Get button reference
+  const closeBtnRef = React.useRef();
+
+  console.log(closeBtnRef.current);
+
+  // Apply the focus state for keyboard navigation
+  React.useEffect(() => {
+    // Store previously focused element
+    const currentlyFocusedElement = document.activeElement;
+
+    // Focus on the close button on mount
+    closeBtnRef.current.focus();
+
+    // Cleanup function, when component unmounts
+    // Add the optional chaining operator ?, that way if wasn't anything focused, don't do anything at all
+    return () => {
+      currentlyFocusedElement?.focus();
+    }
+  }, []);
+
+  return (
+    <div className={styles.wrapper}>
+      <div className={styles.backdrop} />
+      <div className={styles.dialog}>
+        <button
+          // apply ref
+          ref={closeBtnRef}
+          className={styles.closeBtn}
+          onClick={handleDismiss}
+        >
+          <Close />
+        </button>
+        {children}
+      </div>
+    </div>
+  );
+}
+
+export default Modal;
+```
+
+- The next issue, when the modal is launched, you can still tab through and into the page in the background.
+- How do you lock focus withing a container, element? With this one, can use a third party library, `react-focus-lock`
+- How does it work? [react-focus-lock](https://www.npmjs.com/package/react-focus-lock)
+
+```JAVASCRIPT
+ import FocusLock from 'react-focus-lock';
+
+ const JailForAFocus = ({onClose}) => (
+    <FocusLock>
+      You can not leave this form
+      <button onClick={onClose} />
+    </FocusLock>
+ );
+```
+
+- This will make it possible to navigate inside the modal.
+
+```JAVASCRIPT
+import React from 'react';
+import { X as Close } from 'react-feather';
+// import the focus trap
+import FocusLock from 'react-focus-lock';
+
+import styles from './Modal.module.css';
+
+function Modal({ handleDismiss, children }) {
+  // Get button reference
+  const closeBtnRef = React.useRef();
+
+  console.log(closeBtnRef.current);
+
+  // Apply the focus state for keyboard navigation
+  React.useEffect(() => {
+    // Store previously focused element
+    const currentlyFocusedElement = document.activeElement;
+
+    // Focus on the close button on mount
+    closeBtnRef.current.focus();
+
+    // Cleanup function, when component unmounts
+    // Add the optional chaining operator ?, that way if wasn't anything focused, don't do anything at all
+    return () => {
+      currentlyFocusedElement?.focus();
+    }
+  }, []);
+
+  return (
+    <FocusLock>
+    <div className={styles.wrapper}>
+      <div className={styles.backdrop} />
+      <div className={styles.dialog}>
+        <button
+          // apply ref
+          ref={closeBtnRef}
+          className={styles.closeBtn}
+          onClick={handleDismiss}
+        >
+          <Close />
+        </button>
+        {children}
+      </div>
+    </div>
+    </FocusLock>
+  );
+}
+
+export default Modal;
+```
+
+- Another issue, is you can scroll the background page behind the modal. We can use another library by the same developer to solve this, [react-remove-scroll](https://www.npmjs.com/package/react-remove-scroll).
+
+```JAVASCRIPT
+import React from 'react';
+import { X as Close } from 'react-feather';
+// import the focus trap
+import FocusLock from 'react-focus-lock';
+// remove scroll
+import {RemoveScroll} from 'react-remove-scroll';
+
+import styles from './Modal.module.css';
+
+function Modal({ handleDismiss, children }) {
+  // Get button reference
+  const closeBtnRef = React.useRef();
+
+  console.log(closeBtnRef.current);
+
+  // Apply the focus state for keyboard navigation
+  React.useEffect(() => {
+    // Store previously focused element
+    const currentlyFocusedElement = document.activeElement;
+
+    // Focus on the close button on mount
+    closeBtnRef.current.focus();
+
+    // Cleanup function, when component unmounts
+    // Add the optional chaining operator ?, that way if wasn't anything focused, don't do anything at all
+    return () => {
+      currentlyFocusedElement?.focus();
+    }
+  }, []);
+
+  return (
+    <FocusLock>
+      <RemoveScroll>
+        <div className={styles.wrapper}>
+          <div className={styles.backdrop} />
+          <div className={styles.dialog}>
+            <button
+              // apply ref
+              ref={closeBtnRef}
+              className={styles.closeBtn}
+              onClick={handleDismiss}
+            >
+              <Close />
+            </button>
+            {children}
+          </div>
+        </div>
+      </RemoveScroll>
+    </FocusLock>
+  );
+}
+
+export default Modal;
+```
+
+- [Forked Solution](https://codesandbox.io/s/modal-accessibility-react-y6dr3c)
