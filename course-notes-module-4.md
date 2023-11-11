@@ -3500,4 +3500,177 @@ function Modal({ handleDismiss, children }) {
 export default Modal;
 ```
 
+- Another thing, when you cannot click on the outside element to close the modal. We need to fix this.
+- For this, just add an `onClick` to the backdrop element and pass along the `handleDismiss` function.
+- You can just add it to the `div`, not an issue since it's redundant functionality, you already have the button for the close.
+
+```JAVASCRIPT
+  return (
+    <FocusLock>
+      <RemoveScroll>
+        <div className={styles.wrapper}>
+          <div onClick={handleDismiss} className={styles.backdrop} />
+          <div className={styles.dialog}>
+            <button
+              ref={closeBtnRef}
+              className={styles.closeBtn}
+              onClick={handleDismiss}
+            >
+              <Close />
+            </button>
+            {children}
+          </div>
+        </div>
+      </RemoveScroll>
+    </FocusLock>
+  );
+```
+
+- Another common thing, is to hit the `esc` key to close. We need to add that as well.
+- This requires another `useEffect`, to listen for the keyboard, and also to cleanup the event
+
+```JAVASCRIPT
+  // add another effect for the keyboard
+  React.useEffect(() => {
+    function handleKeyDown(event) {
+      if (event.code === `Escape`) {
+        handleDismiss();
+      }
+    }
+
+    // add the listener for keyboard
+    window.addEventListener('keydown', handleKeyDown);
+
+    // cleanup function to undo the event listener
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+
+  }, [handleDismiss]);
+```
+
+- Screen reader issues, they don't know what the context is.
+- Use the `VisuallyHidden` component for the close button on a screen reader.
+- For the dialog, add `role="dialog" aria-modal="true" aria-label={title}`, and pass in the title as a prop.
+
+```JAVASCRIPT
+  return (
+    <FocusLock>
+      <RemoveScroll>
+        <div className={styles.wrapper}>
+          <div 
+            onClick={handleDismiss} 
+            className={styles.backdrop} 
+          />
+          <div 
+            className={styles.dialog}
+            role="dialog"
+            aria-modal="true"
+            aria-label={title}
+          >
+            <button
+              ref={closeBtnRef}
+              className={styles.closeBtn}
+              onClick={handleDismiss}
+            >
+              <Close />
+              <VisuallyHidden>
+                Dismiss Modal
+              </VisuallyHidden>
+            </button>
+            {children}
+          </div>
+        </div>
+      </RemoveScroll>
+    </FocusLock>
+  );
+```
+
+- Full Modal Component and forked solution
+
 - [Forked Solution](https://codesandbox.io/s/modal-accessibility-react-y6dr3c)
+
+```JAVASCRIPT
+import React from 'react';
+import { X as Close } from 'react-feather';
+// import the focus trap
+import FocusLock from 'react-focus-lock';
+// remove scroll
+import {RemoveScroll} from 'react-remove-scroll';
+
+import styles from './Modal.module.css';
+import VisuallyHidden from './VisuallyHidden';
+
+function Modal({ title, handleDismiss, children }) {
+
+  // add the ref
+  const closeBtnRef = React.useRef();
+  console.log(closeBtnRef);
+
+  // create a useEffect, that will only run when the component mounts
+  React.useEffect(() => {
+    // run this
+    // capture to refocus when closed
+    const currentlyFocusedElem = document.activeElement;
+
+    // focus the close btn
+    closeBtnRef.current.focus();
+
+    // cleanup function, refocus
+    return () => {
+      currentlyFocusedElem?.focus();
+    }
+  }, []);
+
+  // add another effect for the keyboard
+  React.useEffect(() => {
+    function handleKeyDown(event) {
+      if (event.code === `Escape`) {
+        handleDismiss();
+      }
+    }
+
+    // add the listener for keyboard
+    window.addEventListener('keydown', handleKeyDown);
+
+    // cleanup function to undo the event listener
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+
+  }, [handleDismiss]);
+
+  return (
+    <FocusLock>
+      <RemoveScroll>
+        <div className={styles.wrapper}>
+          <div 
+            onClick={handleDismiss} 
+            className={styles.backdrop} 
+          />
+          <div 
+            className={styles.dialog}
+            role="dialog"
+            aria-modal="true"
+            aria-label={title}
+          >
+            <button
+              ref={closeBtnRef}
+              className={styles.closeBtn}
+              onClick={handleDismiss}
+            >
+              <Close />
+              <VisuallyHidden>
+                Dismiss Modal
+              </VisuallyHidden>
+            </button>
+            {children}
+          </div>
+        </div>
+      </RemoveScroll>
+    </FocusLock>
+  );
+}
+
+export default Modal;
+```
