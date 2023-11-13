@@ -3674,3 +3674,26 @@ function Modal({ title, handleDismiss, children }) {
 
 export default Modal;
 ```
+
+#### Exercises -
+
+##### Hamburger Navigation
+
+- The hamburger menu is a common convention, clicking or tapping the hamburger menu icon will open a nav menu. Common on mobile and can be found on desktop.
+
+- In the sandbox is an incomplete hamburger menu. Your job is to finish implementing it, taking care to consider usability and accessibility of this feature.
+
+ACs:
+
+- While the menu is open, focus should be trapped within the modal (you can use the provided `FocusLock` component)
+- When the menu is closed, focus should be restored to the last-focused element.
+- While the menu is open, scrolling should be disabled (you can use the provided `RemoveScroll` component)
+- Hitting 'Escape' should close the menu.
+- Clicking the backdrop should close the menu.
+- The markup should be structured correctly, for screen-reader users. Her are some links to help out.
+  - [ARIA menu button pattern](https://www.w3.org/WAI/ARIA/apg/patterns/menu-button/)
+  - [Example HTML](https://www.accede-web.com/en/guidelines/rich-interface-components/hamburger-menu/)
+
+- ℹ️ Note: We do not want to automatically focus the dismiss button when the menu opens, like we did in the previous Modals lesson.
+
+- [Code Sandbox - Hamburger Menu](https://codesandbox.io/s/nymnyn?file=/Header.js&utm_medium=sandpack)
