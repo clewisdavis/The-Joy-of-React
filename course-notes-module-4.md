@@ -3696,4 +3696,86 @@ ACs:
 
 - ℹ️ Note: We do not want to automatically focus the dismiss button when the menu opens, like we did in the previous Modals lesson.
 
-- [Code Sandbox - Hamburger Menu](https://codesandbox.io/s/nymnyn?file=/Header.js&utm_medium=sandpack)
+- [Forked Code Sandbox - Hamburger Menu](https://codesandbox.io/s/hamburger-menu-exercise-react-csqcsg?file=/Header.js)
+
+- Note on Accessibility, reference markup examples from this resource, [AcceDe Web](https://www.accede-web.com/en/guidelines/rich-interface-components/hamburger-menu/)
+
+```HTML
+<nav role="navigation" aria-label="Main menu">
+  <button aria-expanded="true">
+    <svg aria-hidden="true" focusable="false">[…]</svg>
+    Menu
+  </button>
+  <ul class="visible">
+    [Main navigation menu]
+  </ul>
+</nav>
+```
+
+- Full Drawer Component:
+
+```JAVASCRIPT
+import React from "react";
+import { X as Close } from "react-feather";
+import FocusLock from "react-focus-lock";
+import { RemoveScroll } from "react-remove-scroll";
+
+import styles from "./Drawer.module.css";
+
+function Drawer({ handleDismiss, children }) {
+  // Create a hook for the keyboard, see below
+  useEscapeKey(handleDismiss);
+
+  return (
+    <FocusLock>
+      <RemoveScroll>
+        <div className={styles.wrapper}>
+          <div onClick={handleDismiss} className={styles.backdrop} />
+          <div className={styles.drawer}>
+            <div>{children}</div>
+            <button className={styles.closeBtn} onClick={handleDismiss}>
+              <Close size={18} /> Dismiss
+            </button>
+          </div>
+        </div>
+      </RemoveScroll>
+    </FocusLock>
+  );
+}
+
+// Hook for the keyboard functionality
+function useEscapeKey(callback) {
+  // Effect to capture and refocus element
+  React.useEffect(() => {
+    // store previously focused element
+    const currentlyFocusedElem = document.activeElement;
+
+    // cleanup and refocus when closed
+    return () => {
+      currentlyFocusedElem?.focus();
+    };
+  }, []);
+
+  // Effect to capture the keyboard actions
+  React.useEffect(() => {
+    // keydown function
+    function handleKeydown(event) {
+      if (event.code === "Escape") {
+        callback();
+      }
+    }
+
+    // listener for the keyboard
+    window.addEventListener("keydown", handleKeydown);
+
+    // cleanup function
+    return () => {
+      window.removeEventListener("keydown", handleKeydown);
+    };
+  }, [callback]);
+}
+
+export default Drawer;
+
+
+```
