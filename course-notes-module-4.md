@@ -3776,6 +3776,51 @@ function useEscapeKey(callback) {
 }
 
 export default Drawer;
-
-
 ```
+
+#### Unstyled Component Libraries
+
+- Earlier in this module, discussed how component libraries like React Boostrap and Material UI are NOT often used by product companies, because they come with their own built in design system.
+
+- But as we know, building our own UI components from scratch can be surprisingly challenging. Libraries like Material UI come with a robust, battle tested components for things like modals, auto completes and dropdowns.
+
+- Fortunately we can separate the baby from the bathwater with unstyled component libraries.
+
+- These libraries focus on purely the mechanics and usability. Often, accessibility is a first class concern. They have no built in design system adn the few styles that re included can be easily overridden.
+
+- ℹ️ Mix and Match!
+
+- Because these libraries are unstyled, you don't need to pick one an stick with. We can 'mix and match' components from multiple libraries.
+- 📣 But won't it bloat our JS bundles to depend on multiple component libraries?
+- Nope, all the libraries we are talking about support 'tree shaking', which means our bundles only include the specific component we `import`. Might be some small additional cost but very minimal.
+
+- Why would we mix and match?
+- We can assemble our own bespoke collection of our favorite components.
+- If the package we choose becomes unmaintained, we can gradually migrate to a newer solution, one component at a time. We don't have to drop everything and spend weeks moving everything over.
+
+##### Reach UI
+
+- [Reach UI](https://reach.tech)
+- Not being actively maintained at the moment, and recommended that folks us a different option.
+- And incompatible with React 18
+
+##### Radix Primitives
+
+- [Radix Primitives](https://www.radix-ui.com/primitives), unstyled accessible components, with a ton of components.
+- Top recommendation for using this library.
+
+##### Headless UI
+
+- [Headless UI](https://headlessui.com)
+
+##### Ariakit
+
+- [Ariakit](https://ariakit.org)
+
+##### React Aria
+
+- [React Aria](https://react-spectrum.adobe.com/react-aria/)
+
+##### Base UI
+
+- [Base UI](https://mui.com/base-ui/getting-started/)
