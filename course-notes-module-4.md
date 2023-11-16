@@ -3812,6 +3812,8 @@ export default Drawer;
 ##### Headless UI
 
 - [Headless UI](https://headlessui.com)
+- By the team at Tailwind Labs, intended to be used with Tailwind, but not required.
+- Modest collection of components
 
 ##### Ariakit
 
@@ -3820,7 +3822,20 @@ export default Drawer;
 ##### React Aria
 
 - [React Aria](https://react-spectrum.adobe.com/react-aria/)
+- Not actually a component library, but a library of React custom hooks that can be used to build a component library. Created and maintained by Adobe.
+- Adobe also has a separate library, React Spectrum, is a styled component library, using Adobe's design system, by using React Aria.
 
 ##### Base UI
 
 - [Base UI](https://mui.com/base-ui/getting-started/)
+- Built by the Material UI team, an unstyled version of Material UI.
+- Material UI is one of the most popular component libraries, with Base UI you get all the benefits of that battle tested, without having to adopt any of hte Material UI styles.
+
+#### Converting our Modal
+
+- The strategy here, is to use the '[Compound Components](https://courses.joshwcomeau.com/joy-of-react/04-component-design/06-compound-components)' pattern we learned earlier.
+
+- Why this direction, of wrapping the third-party library components?
+
+1. We can choose a consistent prop API. In a larger app, we might use components from different libraries and packages, and they all have their own names and common props like `isOpen` and `handleDismiss`. If we create our own wrappers, you have total control over the interface, and we can make sure it's consistent.
+2. We might decide later, to migrate to a different third-party component. This way we only have to change one file. And not a bunch of changes to every single component that has a modal.
