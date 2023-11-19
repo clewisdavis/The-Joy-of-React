@@ -3839,3 +3839,74 @@ export default Drawer;
 
 1. We can choose a consistent prop API. In a larger app, we might use components from different libraries and packages, and they all have their own names and common props like `isOpen` and `handleDismiss`. If we create our own wrappers, you have total control over the interface, and we can make sure it's consistent.
 2. We might decide later, to migrate to a different third-party component. This way we only have to change one file. And not a bunch of changes to every single component that has a modal.
+
+- [Forked Sandbox to convert modal to headless UI](https://codesandbox.io/s/modal-headless-ui-fnh9cj?file=/Modal.js)
+
+- 🤔 Think about this from the consumer side, how a developer might use the API, and the producer side.
+
+#### Exercises, unstyled component libraries
+
+Unstyled Component library exercises
+
+##### Building a FAQ
+
+- Let's suppose we are building a FAQs component.
+
+- On the surface, this sort of UI component might seem straightforward, but there are a bunch of usability/accessibility concerns here. Rather than try to tackle them all ourselves, we will use the [Radix Primitive "Accordion"](https://www.radix-ui.com/primitives/docs/components/accordion) component.
+
+Your mission is to use this component to implement the FAQs.
+
+ACs:
+
+- Using the Accordion Component from Radix Primitives, wire it up so that we see the 4 questions. Clicking the quesiton should reveal the answer.
+- The component should be styled sot hat it matches the example above. The classes are provided in `FrequentlyAskedQuestions.module.css`, but you need to apply them to the correct answer.
+- No key warnings should be present in the console.
+
+- Forked Sandbox - [FAQs component](https://codesandbox.io/s/accordion-unstyled-component-radix-primitive-fzhwgm?file=/FrequentlyAskedQuestions.js)
+
+- Tips:
+- Don't forget to `map()` over the data, and apply a `key` for each item, 🤔 always forget about that. Just remember every time you have an element displayed over and over, like a list. That is your clue to use `map()`.
+- Learn to read the docs, a skill on it's own, for the functionality you want.
+
+```JAVASCRIPT
+// FrequentlyAskedQuestions.js
+import React from "react";
+import * as Accordion from "@radix-ui/react-accordion";
+
+import styles from "./FrequentlyAskedQuestions.module.css";
+import { ChevronDown } from "react-feather";
+
+function FrequentlyAskedQuestions({ data }) {
+  return (
+    <Accordion.Root type="single" collapsible="true">
+      {data.map(({ id, question, answer }) => (
+        <Accordion.Item key={id} value={id} className={styles.item}>
+          <Accordion.Header>
+            <Accordion.Trigger className={styles.trigger}>
+              {question}
+              <ChevronDown />
+            </Accordion.Trigger>
+          </Accordion.Header>
+          <Accordion.Content className={styles.Content}>
+            {answer}
+          </Accordion.Content>
+        </Accordion.Item>
+      ))}
+    </Accordion.Root>
+  );
+}
+
+export default FrequentlyAskedQuestions;
+
+```
+
+- 🤔 Stretch Goal: See if you can get the `Chevron` to work when you click on an item. The trick here, is to look at the docs, and see if exposes the state in an API, `[data-state]` is open or closed. And you can use that in your css to trigger the icon style, rotation.
+- [Radix, API, Item](https://www.radix-ui.com/primitives/docs/components/accordion#item)
+
+```CSS
+.trigger[data-state="open"] svg {
+  transform: rotate(180deg);
+}
+```
+
+#### Exercises, Building a Tooltip
