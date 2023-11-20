@@ -3910,3 +3910,38 @@ export default FrequentlyAskedQuestions;
 ```
 
 #### Exercises, Building a Tooltip
+
+- On this course platform, I have an `Asterisk` component that I use to tuck additional contextual information our of the way.
+- In this exercise, we refactor using the "[Tooltip](https://www.radix-ui.com/primitives/docs/components/tooltip)" Component from Radix Primitives.
+
+ACs:
+
+- Focusing or hovering over the asterisk should show the tooltip, containing the provided `children`.
+- Wen hovering, the tooltip should show after 200ms.
+
+- 🤔 Tooltip or a popover? Tooltips, semantically, are meant to provide context for a button, it's a tip about a tool. A more semantically appropriate component for the Asterisk use case would be a [Popover](https://www.radix-ui.com/primitives/docs/components/popover). A popover is a generic UI element that 'pops over' something else.
+
+- Forked Sandbox - [Radix Tooltip](https://codesandbox.io/s/tooltip-radix-primitives-lxcm2h?file=/Asterisk.js)
+
+```JAVASCRIPT
+import React from "react";
+import * as Tooltip from "@radix-ui/react-tooltip";
+
+import styles from "./Asterisk.module.css";
+
+function Asterisk({ children }) {
+  return (
+    <Tooltip.Root>
+      <Tooltip.Trigger className={styles.trigger}>*</Tooltip.Trigger>
+      <Tooltip.Content className={styles.content}>
+        <Tooltip.Arrow />
+        {children}
+      </Tooltip.Content>
+    </Tooltip.Root>
+  );
+}
+
+export default Asterisk;
+```
+
+### Project, Toast Component
