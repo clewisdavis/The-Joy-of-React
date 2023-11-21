@@ -23,9 +23,36 @@ Notes from the course, 2023/2024
   - [Project: Word Game](course-notes-module-2j.md)
 
 - [Module 3 - React Hooks](course-notes-module-3.md)
+  - [1. Introduction](name.md)
+  - [2. The useID Hook](name.md)
+  - [3. Rules of Hooks](name.md)
+  - [4. Immutability Revisited](name.md)
+  - [5. Refs](name.md)
+  - [6. Side Effects](name.md)
+  - [7. Custom Hooks](name.md)
+  - [8. Data Fetching](name.md)
+  - [9. Memoization](name.md)
+  - [10. More to Discover](name.md)
+
 - [Module 4 - Component API Design](course-notes-module-4.md)
+  - [1. Introduction](./module-4-component-api/01-notes-intro.md)
+  - [2. Spectrum of Components](./module-4-component-api/02-notes-spectrum.md)
+  - [3. Component Libraries](./module-4-component-api/03-notes-libraries.md)
+  - [4. Prop Delegation](./module-4-component-api/04-notes-prop-delegation.md)
+  - [5. Forwarding Refs](./module-4-component-api/05-notes-forward-refs.md)
+  - [6. Polymorphism](./module-4-component-api/06-notes-polymorphism.md)
+  - [7. Compound Components](./module-4-component-api/07-notes-compound-components.md)
+  - [8. Slots](./module-4-component-api/08-notes-slots.md)
+  - [9. Context](./module-4-component-api/09-notes-context.md)
+  - [10. Modals](./module-4-component-api/10-notes-modals.md)
+  - [11. Unstyled Component Libraries](./module-4-component-api/11-notes-unstyled-libraries.md)
+
+- [Project - Toast Component](course-notes-module-4-project-toast-component.md)
+
 - [Module 5 - Best Practices](course-notes-module-5.md)
+
 - [Module 6 - Full Stack React](course-notes-module-6.md)
+
 - Bonus - Layout Animations with Framer Motion
 - Project - Interactive MDX-Based Blog
 - Reference - JS Primer
