@@ -1,5 +1,7 @@
 # The Joy of React - Project
 
+- [Course Outline Notes](course-notes.md)
+
 ## About this Project - Toast Component
 
 - In this project we will build our very own 'Toast' component.
@@ -55,10 +57,37 @@ We build a `Toast` component from scratch, we will not use a pre-built component
 
 - Ideally we should not depend on any component we could not build ourselves. It's ok to use a handful of third party components, but if they disappeared tomorrow, you should be able to build them yourself.
 
-## Getting Started
+## Getting Started - README.md file
 
 - To get started, fork this [Github](https://github.com/joy-of-react/project-toast) repository:
 
 <https://github.com/joy-of-react/project-toast>
 
 - Happy Thanksgiving 🦃
+- The README.md is the home base for this project, to guide you through.
+
+### Getting started
+
+- This project is created with Parcel, and be run locally on your computer using Node.js and NPM.
+- To review and get started with [running local development environment](https://courses.joshwcomeau.com/joy-of-react/project-wordle/03-dev-server), lesson.
+
+```CODE
+# Install dependencies:
+npm install
+
+# Run a development server:
+npm run dev
+```
+
+- To create new components, you can use the helper script to create all the files and standard markup.
+
+```CODE
+# Create a new component:
+npm run new-component [TheNewComponentName]
+```
+
+### Troubleshooting
+
+If you run into strange errors when trying to run a development server, start by deleting the `.parcel-cache` director. This holds temporary automatically-generated files, and sometimes things get out of sync, and need to be deleted.
+
+If still have errors, then share them in the Discord.
