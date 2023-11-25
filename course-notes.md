@@ -48,6 +48,12 @@ Notes from the course, 2023/2024
   - [11. Unstyled Component Libraries](./module-4-component-api/11-notes-unstyled-libraries.md)
 
 - [Project - Toast Component](course-notes-module-4-project-toast-component.md)
+  - Exercise 1: [Wiring up form controls](./module-4-project-toast/exercise-1-wiring-up.md)
+  - Exercise 2: [Live editable toast preview](./module-4-project-toast/exercise-2-toast-preview.md)
+  - Exercise 3: [Toast Shelf](./module-4-project-toast/exercise-3-toast-shelf.md)
+  - Exercise 4: [Context](./module-4-project-toast/exercise-4-context.md)
+  - Exercise 5: [Keyboard and Screen Reader Support](./module-4-project-toast/exercise-5-keyboard-screen-reader.md)
+  - Exercise 6: [Extracting custom hooks](./module-4-project-toast/exercise-6-custom-hooks.md)
 
 - [Module 5 - Best Practices](course-notes-module-5.md)
 

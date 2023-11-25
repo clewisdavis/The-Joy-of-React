@@ -4,6 +4,12 @@
 
 ## About this Project - Toast Component
 
+- Exercise 2: [Live editable toast preview](./module-4-project-toast/exercise-2-toast-preview.md)
+- Exercise 3: [Toast Shelf](./module-4-project-toast/exercise-3-toast-shelf.md)
+- Exercise 4: [Context](./module-4-project-toast/exercise-4-context.md)
+- Exercise 5: [Keyboard and Screen Reader Support](./module-4-project-toast/exercise-5-keyboard-screen-reader.md)
+- Exercise 6: [Extracting custom hooks](./module-4-project-toast/exercise-6-custom-hooks.md)
+
 - In this project we will build our very own 'Toast' component.
 
 - Like so much in front end dev, Toast components are deceptively complex. If you want to build an acessible, production ready component, we have to be careful with our decisions.
