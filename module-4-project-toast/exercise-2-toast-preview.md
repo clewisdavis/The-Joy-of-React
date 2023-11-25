@@ -10,3 +10,9 @@
 - Exercise 6: [Extracting custom hooks](./exercise-6-custom-hooks.md)
 
 ## Exercise 2: Live editable toast preview
+
+Inside the `src/components`, you wil find a `Toast` component. This component includes the basic DOM structure you will need, but it's static and does not accept any props.
+
+In this exercise, the mission is to render the `Toast` component within the `ToastPlayground` and allow the playground to customize the Toast using the state we set up in the previous exercise. We should also figure out a 'dismissal' mechanism, so the close button functions.
+
+- For now, you can impor teh `Toast` component in the `ToastPlayground` and render it between the header and the controls:
