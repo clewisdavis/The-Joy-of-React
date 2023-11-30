@@ -43,8 +43,10 @@ One of hte core defining characteristics of a toast notification is they stack.
 
 ACs:
 
-- Instead of live-editing a single Toast instance, the playground should be used to push new toast messages onto a stack, rendered inside `ToastShelf` and shown in the corner of the page.
-- When 'Pop Toast' is clicked, teh message/variant form controls should be reset to their default state, `message` should be an empty string, `variant` should be 'notice'.
-- Clicking the 'x' button inside the toast should remove that specific toast (but leave the rest untouched).
-- A proper `<form>` tag should be used int he `ToastPlayground`. The toast should be created when submitting the form.
-- There should be no key warnings in the console. Keys should be unique and should not sure the index.
+1. Instead of live-editing a single Toast instance, the playground should be used to push new toast messages onto a stack, rendered inside `ToastShelf` and shown in the corner of the page.
+2. When 'Pop Toast' is clicked, the message/variant form controls should be reset to their default state, `message` should be an empty string, `variant` should be 'notice'.
+3. Clicking the 'x' button inside the toast should remove that specific toast (but leave the rest untouched).
+4. A proper `<form>` tag should be used int he `ToastPlayground`. The toast should be created when submitting the form.
+5. There should be no key warnings in the console. Keys should be unique and should not sure the index.
+
+Solution Notes:
