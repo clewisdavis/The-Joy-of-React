@@ -50,3 +50,137 @@ ACs:
 5. There should be no key warnings in the console. Keys should be unique and should not sure the index.
 
 Solution Notes:
+
+- Add a new state structure, the new state needs to be an array to hold all the toasts, in the `<ToastPlayground>` component.
+
+```JAVASCRIPT
+  // Update to be an array to hold all the variants, objects, don't forget to generate the key
+  const [toasts, setToasts] = React.useState([
+    {
+      id: crypto.randomUUID(),
+      message: 'Oh No',
+      variant: 'error',
+    },
+    {
+      id: crypto.randomUUID(),
+      message: 'Logged In',
+      variant: 'success',
+    }
+  ]);
+```
+
+- Displaying the toasts in the provided `<ToastShelf>` component.
+- Add the new component and pass in `toast` state as a prop.
+
+```JAVASCRIPT
+    <ToastShelf
+        toasts={toasts}
+    />
+```
+
+- Inside the provided `ToastShelf` component, add the new `toast` prop, and you will have to map over the array from within the component.
+
+```JAVASCRIPT
+function ToastShelf({ toasts }) {
+  return (
+    <ol className={styles.wrapper}>
+      {toasts.map(toast => (
+        <li className={styles.toastWrapper}>
+          <Toast variant={toast.variant}>
+            {toast.message}
+          </Toast>
+        </li>
+      ))}
+    </ol>
+  );
+}
+```
+
+- Wiring up the form to push new toasts, create a new function to push the new toasts.
+- The function will do the following below.
+
+```JAVASCRIPT
+  function handleCreateToast(event) {
+    // prevent the default for behavior
+    event.preventDefault();
+
+    // create a new array, do not mutate the state
+    const nextToast = [
+      // copy the current toast
+      ...toasts,
+      {
+        id: crypto.randomUUID(),
+        message,
+        variant,
+      }
+    ];
+    // call the state setter and pass along the new array
+    setToasts(nextToast);
+
+    // clear out the state in the form
+    setMessage('');
+    setVariant(VARIANT_OPTIONS[0]);
+  }
+```
+
+- And update the JSX, to be in a form format, and use an `onSubmit` handler.
+
+```JAVASCRIPT
+    <form onSubmit={handleCreateToast} className={styles.controlsWrapper}>
+       // form here
+    </form>
+```
+
+- We also have to dismiss the toast, with the 'x'
+- Create a `handleDismiss` function.
+
+```JAVASCRIPT
+  function handleDismiss(id) {
+    // not allowed to mutate in React
+    // create a new array, includes all the items except the one we want to remove
+    const nextToast = toasts.filter(toast => {
+      // go through all the toast, and find the one trying to dismiss
+      // 🤔 keep the toast, if the id is NOT equal to the one we are dismissing
+      return toast.id !== id
+    })
+
+    // call state setter function passing in the new array
+    setToasts(nextToast);
+  }
+```
+
+- And pass it into the `<ToastShelf>` component.
+
+```JAVASCRIPT
+  <ToastShelf
+    handleDismiss={handleDismiss}
+    toasts={toasts}
+  />
+```
+
+- Then, within the `ToastShelf` component, pass it down to the actual `Toast`, where it will be used on an `onClick` event.
+
+```JAVASCRIPT
+    <Toast 
+      id={toast.id}
+      variant={toast.variant}
+      handleDismiss={handleDismiss}
+    >
+      {toast.message}
+    </Toast>
+```
+
+- Within the `Toast`, add it to the 'x' button
+- 🤔 Pass in the `id` so it knows which one to filter out
+
+```JAVASCRIPT
+      <button 
+        className={styles.closeButton}
+        onClick={() => handleDismiss(id)}
+      >
+        <X size={24} />
+        <VisuallyHidden>Dismiss message</VisuallyHidden>
+      </button>
+```
+
+- 🤔 This was a really hard exercise.
