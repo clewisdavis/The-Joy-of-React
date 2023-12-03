@@ -22,3 +22,5 @@ ACs:
 - Components that require the state should pull it from context with the `useContext` hook, rather than passing through props.
 - As we saw in the 'Provider Components' lessons, we can also share functions hat allow consumers to alter the state. Consider making function available that will create a new toast, or dismiss a specific toast.
 - This is a 'refactor' exercise. The UX should not change at all.
+
+- Again, have to review the solution video.
