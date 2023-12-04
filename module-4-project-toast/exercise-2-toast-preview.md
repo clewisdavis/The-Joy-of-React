@@ -1,6 +1,6 @@
 # The Joy of React - Project, Toast Component
 
-- [Course Outline Notes](course-notes.md)
+- [Course Outline Notes](../course-notes.md)
 
 - Exercise 1: [Wiring up form controls](./exercise-1-wiring-up.md)
 - Exercise 2: [Live editable toast preview](./exercise-2-toast-preview.md)
