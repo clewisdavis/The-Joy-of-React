@@ -10,3 +10,19 @@
 - Exercise 6: [Extracting custom hooks](./exercise-6-custom-hooks.md)
 
 ## Exercise 5: Keyboard and Screen Reader Support
+
+In this exercise, we will improve the experience for two different groups of people:
+
+- Sighted keyboard users
+- Users who use a screen reader
+
+### 5.1 Keyboard Users
+
+Let's try something, pretend you do not have a mouse or track pad, using the keyboard alone, create and dismiss a toast message?
+
+The UX is not so great when trying to dismiss. In this exercise, we will wire up the escape key to dismiss the toast.
+
+AC's:
+
+- Hitting the `Escape` key should dismiss all toasts
+- You'll want to do this with a `useEffect` hook, but it's up to you do decide which component should do this.
