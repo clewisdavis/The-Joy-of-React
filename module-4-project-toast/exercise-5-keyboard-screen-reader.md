@@ -80,3 +80,49 @@ function ToastProvider({ children }) {
 
 export default ToastProvider;
 ```
+
+### 5.2 Screen Reader Users
+
+A screen reader is a piece of software that narrates the page. Primarily for low vision or folks that are blind. But can be used for other cognitive reasons.
+
+- Imagine we reach out to an accessibility specialist, and they do us a favor of converting our HTML to be screen reader friendly. We need to add some markup to the HTML.
+
+```HTML
+<ol
+  class="ToastShelf_wrapper"
++ role="region"
++ aria-live="polite"
++ aria-label="Notification"
+>
+  <li class="ToastShelf_toastWrapper">
+    <div class="Toast_toast Toast_error">
+      <div class="Toast_iconContainer">
+        <!-- Variant SVG icon -->
+      </div>
+      <p class="Toast_content">
++       <div class="VisuallyHidden_wrapper">
++         error -
++       </div>
+        Something went wrong! Please contact customer support
+      </p>
+      <button
+        class="Toast_closeButton"
++       aria-label="Dismiss message"
++       aria-live="off"
+      >
+        <!-- Close SVG icon -->
+-       <div class="VisuallyHidden_wrapper">
+-         Dismiss message
+-       </div>
+      </button>
+    </div>
+  </li>
+</ol>
+```
+
+ACs:
+
+- The `<ol>` should have specified role / aria tags
+- The toasts content should be prefixed with the variant, using the `VisuallyHidden` component.
+  - NOTE: The diff above shows an error toast, but the prefix should be dynamic, based on the variant.
+- The 'Dismiss message' content in the close button should be moved to an `aria-label`. `aria-live` should also be set to 'off'.
