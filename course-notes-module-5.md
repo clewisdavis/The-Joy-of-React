@@ -45,3 +45,55 @@ export default PriceDisplay;
 ```
 
 ### Exercises
+
+#### Pricing Issues
+
+In the previous exercise, has one potential issue. If multiple plans have the same price, the price will not animate:
+
+![Pricing Issues](images/image-36.png)
+
+- Update the sandbox below so that the price animates when the user changes plans, even if those plans are the same price.
+
+ACs:
+
+- The display price should animate whenever the user changes the plan, even if the price doesn't change.
+
+Exercise Notes:
+
+- We can be very strategic how we use keys, and choose a value, that updates all the time.
+- In this case, the `price` value doesn't change, but the `id` is unique for each item in the `PLANS` object.
+- To make the animation fire, use the `plan.id` and pass it down to the `<PriceDisplay>` component.
+
+```JAVASCRIPT
+  <PriceDisplay id={plan.id} price={plan.price} />
+```
+
+- Then within your `<PriceDisplay>` component, add `id` to the props and use the `key={id}` on the element you want to React to redraw, if that value is updated.
+
+```JAVASCRIPT
+import React from 'react';
+import styles from './PriceDisplay.module.css';
+
+// ADD THE ID
+function PriceDisplay({ id, price }) {
+  const formattedPrice = new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+  }).format(price);
+  
+  // ADD IT TO THE ELEMENT YOU WANT TO UPDATE
+  return (
+    <div className={styles.wrapper}>
+      <div key={id} className={styles.animated}>
+        {formattedPrice}
+      </div>
+    </div>
+  );
+}
+
+export default PriceDisplay;
+```
+
+- [Sandbox Environment Solution](https://codesandbox.io/p/sandbox/keys-update-dom-pj3c7l?file=%2Findex.js)
+
+#### Toonie Clicker, revisited
