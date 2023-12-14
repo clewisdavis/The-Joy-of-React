@@ -96,4 +96,45 @@ export default PriceDisplay;
 
 - [Sandbox Environment Solution](https://codesandbox.io/p/sandbox/keys-update-dom-pj3c7l?file=%2Findex.js)
 
-#### Toonie Clicker, revisited
+#### Coin Clicker, revisited
+
+Earlier in the course, we created this 'Coin' clicker, to learn how to lift state up. Now, let's suppose we want to add a little '+2' that shows whenever the coin is clicked.
+
+The markup has been provided, your job is to re-trigger the animation whenever the coin is clicked.
+
+![Coin](images/image-37.png)
+
+ACs:
+
+- Clicking the coin should show the +2 animation.
+- The animation should not show when the page originally loads. It should only show when the number of coins changes.
+
+- Notes:
+
+- In the previous exercise, we set the `key` on an actual DOM element within the JSX. But you can also set a `key` on the component itself, to trigger a re-render.
+- Here, when the state of `numOfCoins` is updated, we update the `<FloatingText>` component by setting a `key` value on it.
+
+```JAVASCRIPT
+    <FloatingText key={numOfCoins}>
+      + {numOfCoins}
+    </FloatingText>
+```
+
+- This will re-render the component, therefore triggering the +2 animation.
+- The next problem, is to add a condition, so the animation doesn't run on initial page load.
+
+```JAVASCRIPT
+        {/* Conditionally run this, to prevent the animation from running on page load */}
+        {numOfCoins > 0 && (
+          <div className={styles.floatingNumWrapper}>
+            <FloatingText key={numOfCoins}>
+              + {numOfCoins}
+            </FloatingText>
+          </div>        
+        )
+        }
+```
+
+- Use the logical `&&` operator to check the condition `numOfCoins > 0`, boolean value, if it's true, it will render the `<FloatingText>` component.
+
+- [Code and Box Playground - Animation Leveraging Keys](https://codesandbox.io/p/sandbox/leveraging-keys-coin-clicker-animation-lw75tq)
