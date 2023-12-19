@@ -56,6 +56,17 @@ Notes from the course, 2023/2024
   - Exercise 6: [Extracting custom hooks](./module-4-project-toast/exercise-6-custom-hooks.md)
 
 - [Module 5 - Best Practices](course-notes-module-5.md)
+  - [Leveraging Keys](./module-5-happy-practice/01-notes-leveraging-keys.md)
+  - [Elements Revisited](./module-5-happy-practice/02-notes-elements-revisited.md)
+  - [Deriving State](./module-5-happy-practice/03-notes-deriving-state.md)
+  - Lifting Content Up
+  - Single Source of Truth
+  - Principle of Least Privilege
+  - useReducer
+  - Immer
+  - Portals
+  - Refs Revisited
+  - Error Boundaries
 
 - [Module 6 - Full Stack React](course-notes-module-6.md)
 
