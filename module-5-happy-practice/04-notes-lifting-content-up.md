@@ -68,3 +68,21 @@ function ArticlePage({ articleSlug }) {
 - 🤔 brian hurts a little
 
 ### Exercise, Art Store
+
+In the sandbox below, we are building an e-commerce store for an artist.
+
+The header has a cute shopping cart button and the button has a badge that increments as the user starts adding items to the cart.
+
+The components are structured in the following hierarchy:
+
+- `App`
+- `Header`
+- `CartButton`
+
+Using what we learned in the previous lesson, restructure things so that `App` owns the `CartButton` component, without changing the DOM structure at all.
+
+ACs:
+
+- The `<CartButton>` element should be owned by the `App` component, rather than `<Header>`.
+- The DOM structure should not be affected (teh cart button should still be a chile fo the `<header>` DOM node).
+- Bonus: Using what we learned in the "Leveraging Keys" lesson, up date the code so that the 'fade' animation re-triggers whenever the number changes.
