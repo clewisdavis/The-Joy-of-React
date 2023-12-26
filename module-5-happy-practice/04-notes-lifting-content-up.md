@@ -84,5 +84,75 @@ Using what we learned in the previous lesson, restructure things so that `App` o
 ACs:
 
 - The `<CartButton>` element should be owned by the `App` component, rather than `<Header>`.
-- The DOM structure should not be affected (teh cart button should still be a chile fo the `<header>` DOM node).
+- The DOM structure should not be affected (the cart button should still be a child of the `<header>` DOM node).
 - Bonus: Using what we learned in the "Leveraging Keys" lesson, up date the code so that the 'fade' animation re-triggers whenever the number changes.
+
+Notes:
+
+- Add an opening and close to the `<Header>` component. And add a `children` prop/slot to the component.
+
+```JAVASCRIPT
+import React from 'react';
+
+import CartButton from './CartButton';
+
+function Header({ children }) {
+  return (
+    <header>
+      <h1>
+        Pintor Famoso
+        <span className="artist-title">
+          Abstract Expressionist
+        </span>
+      </h1>
+      {/* <CartButton numOfItems={numOfItemsInCart} /> */}
+      {children}
+    </header>
+  );
+}
+
+export default Header;
+```
+
+- Create an opening and closing `<Header>` tag, And lift up the `<CartButton>` component inside of it.
+
+```JAVASCRIPT
+function App() {
+  const [cartItems, setCartItems] = React.useState([]);
+
+  console.log(cartItems);
+  
+  function addToCart(item) {
+    setCartItems([...cartItems, item]);
+  }
+  
+  return (
+    <>
+      {/* <Header numOfItemsInCart={cartItems.length} /> */}
+      <Header>
+        <CartButton numOfItems={cartItems.length} />
+      </Header>
+      <Shop paintings={DATA} addToCart={addToCart} />
+    </>
+  );
+}
+```
+
+- For the animation, just add a `key` to the DOM element, to trigger a re-render and therefore making the animation re-run.
+
+```JAVASCRIPT
+function CartButton({ numOfItems }) {
+  
+  return (
+    <a href="/" className="cart-button">
+      <ShoppingCart />
+      {numOfItems > 0 && (
+        // Add the key attribute to trigger the nice animation
+        <span key={numOfItems} className="cart-number">
+          {numOfItems}
+        </span>
+      )}
+    </a>
+  );
+}
+```
