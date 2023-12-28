@@ -109,4 +109,6 @@ In this new version, `Counter` is controlled by the consumer. The consumer owns 
 
 Now, it's not exactly the same, since either way, we are using a React state variable as the source of truth, not the DOM. But from the perspective of the consumer, pretending that `Counter` is a black box, it's remarkably similar.
 
-Which approach is better? Well, it depends on the circumstances
+Which approach is better? Well, it depends on the circumstances. IF the consumer needs to access / change the state, a controlled component makes that possible. Otherwise, it's more convenient to go with uncontrolled components.
+
+The most important thing is that there should always be a single source of truth. We get into trouble when we start treating a component as both controlled and uncontrolled.
