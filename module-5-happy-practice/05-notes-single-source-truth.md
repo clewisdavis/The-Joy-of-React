@@ -112,3 +112,7 @@ Now, it's not exactly the same, since either way, we are using a React state var
 Which approach is better? Well, it depends on the circumstances. IF the consumer needs to access / change the state, a controlled component makes that possible. Otherwise, it's more convenient to go with uncontrolled components.
 
 The most important thing is that there should always be a single source of truth. We get into trouble when we start treating a component as both controlled and uncontrolled.
+
+### Exercises, Counter 2.0 Revisited
+
+Video thought experiments, consider if they are working or not.
