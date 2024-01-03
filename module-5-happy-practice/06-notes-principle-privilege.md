@@ -58,3 +58,20 @@ export default App;
 ```
 
 ### Exercises, Todo List Application
+
+Let's suppose we are building a Todo app:
+
+![To Do App](images/image-1.png)
+
+This app has 3 main pieces of functionality:
+
+1. Adding new todos
+2. Marking a todo as complete/incomplete
+3. Deleting a todo
+
+Your mission is to refactor the code below so that none of the descendant components have more privilage than they need to accomplish these tasks.
+
+ACs
+
+- The `CreateNewTodo` component should only be abel to modify the state in one specific way: to add a new todo to the list
+- The `TodoList` component should only be able to modify the state in two specific ways: toggling a todo between complete/incomplete, and deleting a todo.
