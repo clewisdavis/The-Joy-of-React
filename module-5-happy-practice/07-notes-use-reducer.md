@@ -18,3 +18,9 @@ The benefit, is it forces you to group all state-updating logic together.
 Link to the lesson - [Use Reducer](https://courses.joshwcomeau.com/joy-of-react/05-happy-practices/07-use-reducer)
 
 ### Switch / Case
+
+- come back to this
+
+### Exercises, Art Store Revisited
+
+- come back to this
