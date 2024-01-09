@@ -102,3 +102,73 @@ function updateState(currentState) {
 - That is a lot of code, because we cannot mutate anything. This is where Immer comes into play.
 
 ### Immer 101
+
+Immer is an NPM package, to make updates more manageable. What it does, allows us to write code that looks like it mutates the data. using some modern JS trickery, however, the data is never actually mutated.
+
+For example; here is how we would solve the calendar problem using Immer:
+
+```JAVASCRIPT
+import { produce } from 'immer';
+
+function updateState(currentState) {
+  return produce(currentState, (draftState) => {
+    draftState[2].metadata.invitees.splice(1, 1);
+  });
+}
+
+export default updateState;
+```
+
+How does this work?
+
+## A working draft
+
+The `produce` function we get from Immer takes two arguments:
+
+- The state we would like to edit `currentState`
+- A callback function `(draftState) => {}`
+
+`draftState` is a special 'wrapped' version of the `currentState`. I like to think of it as a shielded version: Immer is the guardian, and will make sure that the original object is never mutated, no matter what we try to do to this wrapped version.
+
+After running the code in our calback function, `produce` will resolve to a brand-new object, with al the modifications applied.
+
+A more complete example, with the `useState` hook:
+
+```JAVASCRIPT
+import React from 'react';
+import { produce } from 'immer';
+
+function App() {
+  const [numbers, setNumbers] = React.useState([0, 1, 2]);
+  
+  function handleClick() {
+    const nextState = produce(numbers, (draftState) => {
+      const nextNumber = numbers.length;
+      draftState.push(nextNumber);
+    });
+    
+    setNumbers(nextState);
+  }
+  
+  return (
+    <>
+      <h2>Data contents:</h2>
+      <div className="items">
+        {JSON.stringify(numbers)}
+      </div>
+      
+      <div className="actions">
+        <button onClick={handleClick}>
+          Add next number
+        </button>
+      </div>
+    </>
+  );
+}
+
+export default App;
+```
+
+- Sandbox Example - [Immer 101](https://codesandbox.io/p/sandbox/modest-almeida-724v8p?layout=%257B%2522sidebarPanel%2522%253A%2522EXPLORER%2522%252C%2522rootPanelGroup%2522%253A%257B%2522direction%2522%253A%2522horizontal%2522%252C%2522contentType%2522%253A%2522UNKNOWN%2522%252C%2522type%2522%253A%2522PANEL_GROUP%2522%252C%2522id%2522%253A%2522ROOT_LAYOUT%2522%252C%2522panels%2522%253A%255B%257B%2522type%2522%253A%2522PANEL_GROUP%2522%252C%2522contentType%2522%253A%2522UNKNOWN%2522%252C%2522direction%2522%253A%2522vertical%2522%252C%2522id%2522%253A%2522clr6dcwfw00063b5vb5af8dkq%2522%252C%2522sizes%2522%253A%255B70%252C30%255D%252C%2522panels%2522%253A%255B%257B%2522type%2522%253A%2522PANEL_GROUP%2522%252C%2522contentType%2522%253A%2522EDITOR%2522%252C%2522direction%2522%253A%2522horizontal%2522%252C%2522id%2522%253A%2522EDITOR%2522%252C%2522panels%2522%253A%255B%257B%2522type%2522%253A%2522PANEL%2522%252C%2522contentType%2522%253A%2522EDITOR%2522%252C%2522id%2522%253A%2522clr6dcwfw00023b5vmc30s73i%2522%257D%255D%257D%252C%257B%2522type%2522%253A%2522PANEL_GROUP%2522%252C%2522contentType%2522%253A%2522SHELLS%2522%252C%2522direction%2522%253A%2522horizontal%2522%252C%2522id%2522%253A%2522SHELLS%2522%252C%2522panels%2522%253A%255B%257B%2522type%2522%253A%2522PANEL%2522%252C%2522contentType%2522%253A%2522SHELLS%2522%252C%2522id%2522%253A%2522clr6dcwfw00033b5vodicucu5%2522%257D%255D%252C%2522sizes%2522%253A%255B100%255D%257D%255D%257D%252C%257B%2522type%2522%253A%2522PANEL_GROUP%2522%252C%2522contentType%2522%253A%2522DEVTOOLS%2522%252C%2522direction%2522%253A%2522vertical%2522%252C%2522id%2522%253A%2522DEVTOOLS%2522%252C%2522panels%2522%253A%255B%257B%2522type%2522%253A%2522PANEL%2522%252C%2522contentType%2522%253A%2522DEVTOOLS%2522%252C%2522id%2522%253A%2522clr6dcwfw00053b5vd9rnuufl%2522%257D%255D%252C%2522sizes%2522%253A%255B100%255D%257D%255D%252C%2522sizes%2522%253A%255B50%252C50%255D%257D%252C%2522tabbedPanels%2522%253A%257B%2522clr6dcwfw00023b5vmc30s73i%2522%253A%257B%2522id%2522%253A%2522clr6dcwfw00023b5vmc30s73i%2522%252C%2522tabs%2522%253A%255B%255D%257D%252C%2522clr6dcwfw00053b5vd9rnuufl%2522%253A%257B%2522tabs%2522%253A%255B%257B%2522id%2522%253A%2522clr6dcwfw00043b5v84z3k2o3%2522%252C%2522mode%2522%253A%2522permanent%2522%252C%2522type%2522%253A%2522UNASSIGNED_PORT%2522%252C%2522port%2522%253A0%252C%2522path%2522%253A%2522%252F%2522%257D%255D%252C%2522id%2522%253A%2522clr6dcwfw00053b5vd9rnuufl%2522%252C%2522activeTabId%2522%253A%2522clr6dcwfw00043b5v84z3k2o3%2522%257D%252C%2522clr6dcwfw00033b5vodicucu5%2522%253A%257B%2522tabs%2522%253A%255B%255D%252C%2522id%2522%253A%2522clr6dcwfw00033b5vodicucu5%2522%257D%257D%252C%2522showDevtools%2522%253Atrue%252C%2522showShells%2522%253Atrue%252C%2522showSidebar%2522%253Atrue%252C%2522sidebarPanelSize%2522%253A15%257D)
+
+- This feels like cheating, but we are not actually mutating the `numbers` array held in React state.
