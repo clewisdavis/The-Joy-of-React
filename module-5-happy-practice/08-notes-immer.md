@@ -172,3 +172,67 @@ export default App;
 - Sandbox Example - [Immer 101](https://codesandbox.io/p/sandbox/modest-almeida-724v8p?layout=%257B%2522sidebarPanel%2522%253A%2522EXPLORER%2522%252C%2522rootPanelGroup%2522%253A%257B%2522direction%2522%253A%2522horizontal%2522%252C%2522contentType%2522%253A%2522UNKNOWN%2522%252C%2522type%2522%253A%2522PANEL_GROUP%2522%252C%2522id%2522%253A%2522ROOT_LAYOUT%2522%252C%2522panels%2522%253A%255B%257B%2522type%2522%253A%2522PANEL_GROUP%2522%252C%2522contentType%2522%253A%2522UNKNOWN%2522%252C%2522direction%2522%253A%2522vertical%2522%252C%2522id%2522%253A%2522clr6dcwfw00063b5vb5af8dkq%2522%252C%2522sizes%2522%253A%255B70%252C30%255D%252C%2522panels%2522%253A%255B%257B%2522type%2522%253A%2522PANEL_GROUP%2522%252C%2522contentType%2522%253A%2522EDITOR%2522%252C%2522direction%2522%253A%2522horizontal%2522%252C%2522id%2522%253A%2522EDITOR%2522%252C%2522panels%2522%253A%255B%257B%2522type%2522%253A%2522PANEL%2522%252C%2522contentType%2522%253A%2522EDITOR%2522%252C%2522id%2522%253A%2522clr6dcwfw00023b5vmc30s73i%2522%257D%255D%257D%252C%257B%2522type%2522%253A%2522PANEL_GROUP%2522%252C%2522contentType%2522%253A%2522SHELLS%2522%252C%2522direction%2522%253A%2522horizontal%2522%252C%2522id%2522%253A%2522SHELLS%2522%252C%2522panels%2522%253A%255B%257B%2522type%2522%253A%2522PANEL%2522%252C%2522contentType%2522%253A%2522SHELLS%2522%252C%2522id%2522%253A%2522clr6dcwfw00033b5vodicucu5%2522%257D%255D%252C%2522sizes%2522%253A%255B100%255D%257D%255D%257D%252C%257B%2522type%2522%253A%2522PANEL_GROUP%2522%252C%2522contentType%2522%253A%2522DEVTOOLS%2522%252C%2522direction%2522%253A%2522vertical%2522%252C%2522id%2522%253A%2522DEVTOOLS%2522%252C%2522panels%2522%253A%255B%257B%2522type%2522%253A%2522PANEL%2522%252C%2522contentType%2522%253A%2522DEVTOOLS%2522%252C%2522id%2522%253A%2522clr6dcwfw00053b5vd9rnuufl%2522%257D%255D%252C%2522sizes%2522%253A%255B100%255D%257D%255D%252C%2522sizes%2522%253A%255B50%252C50%255D%257D%252C%2522tabbedPanels%2522%253A%257B%2522clr6dcwfw00023b5vmc30s73i%2522%253A%257B%2522id%2522%253A%2522clr6dcwfw00023b5vmc30s73i%2522%252C%2522tabs%2522%253A%255B%255D%257D%252C%2522clr6dcwfw00053b5vd9rnuufl%2522%253A%257B%2522tabs%2522%253A%255B%257B%2522id%2522%253A%2522clr6dcwfw00043b5v84z3k2o3%2522%252C%2522mode%2522%253A%2522permanent%2522%252C%2522type%2522%253A%2522UNASSIGNED_PORT%2522%252C%2522port%2522%253A0%252C%2522path%2522%253A%2522%252F%2522%257D%255D%252C%2522id%2522%253A%2522clr6dcwfw00053b5vd9rnuufl%2522%252C%2522activeTabId%2522%253A%2522clr6dcwfw00043b5v84z3k2o3%2522%257D%252C%2522clr6dcwfw00033b5vodicucu5%2522%253A%257B%2522tabs%2522%253A%255B%255D%252C%2522id%2522%253A%2522clr6dcwfw00033b5vodicucu5%2522%257D%257D%252C%2522showDevtools%2522%253Atrue%252C%2522showShells%2522%253Atrue%252C%2522showSidebar%2522%253Atrue%252C%2522sidebarPanelSize%2522%253A15%257D)
 
 - This feels like cheating, but we are not actually mutating the `numbers` array held in React state.
+
+### Performance
+
+- Immer doesn't do a deep copy which could have poor performance, it uses a technique called 'structural sharing', and made possible using Proxies.
+- There is a cost, but no where near the cost of doing a deep copy.
+
+- Code Example:
+
+```JAVASCRIPT
+const state = {
+    customer: {
+        name: 'Daria Hamkin',
+    },
+    toppings: {
+        pepperoni: true,
+        anchovies: false,
+        kale: true,
+    },
+};
+
+const nextState = produce(state, (draftState) => {
+    draftState.toppings.pepperoni = false;
+});
+```
+
+- `draftState` is a proxy wrapped version of `state`. When we try to change the value of `draftState.toppings.pepperoni`, the Proxy jumps in the path of the ball, deflecting it, and replacing it with an immutable operation, like:
+
+```JAVASCRIPT
+const newState = {
+    ...state,
+    toppings: {
+        ...state.toppings,
+        pepperoni: false,
+    },
+}
+```
+
+- Notice the `customer` object is reused. It gets spread into the `newState` object. If it was making a deep copy, everything would be reconstructed from scratch, but thanks to 'structural sharing' and Proxies, only reconstruct the part that change.
+
+### Drawbacks
+
+Every tool has it's drawbacks and tradeoffs. The biggest issue is that proxies cannot easily be logged. Trying `console.log` produces some pretty strange results.
+
+However, Immer ships with a tool, `current` which can help unpack a proxy, for debugging purposes.
+
+```JAVASCRIPT
+import { produce, current } from 'immer';
+
+const arr = [1, 2, 3];
+produce(arr, (draftArr) => {
+  draftArr.push(4);
+
+  console.log(current(draftArr));
+  // [1, 2, 3, 4]
+});
+```
+
+- You should never use `current` in your final production code. It's purely a tool to debug, when you are solving the problem at hand.
+
+## Exercises
+
+Get some practice with Immer.
+
+### Gradient Generator
