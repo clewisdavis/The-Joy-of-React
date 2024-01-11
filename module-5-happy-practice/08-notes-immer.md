@@ -236,3 +236,38 @@ produce(arr, (draftArr) => {
 Get some practice with Immer.
 
 ### Gradient Generator
+
+Update the Gradient Generator, which uses `useReducer`. Update the code to use Immer.
+
+ACs:
+
+- You should use the `produce` function form Immer to produce the new state, within the `reducer` function.
+- Tweak the state-updating logic to edit the draft state using mutation, instead of returning a new state object.
+- The import has already been provided for you, just under the `React` import.
+
+- Solution Code: Exercise, [Gradient Generator](https://courses.joshwcomeau.com/joy-of-react/05-happy-practices/08.02-immer-exercises)
+
+```JAVASCRIPT
+function reducer(state, action) {
+  return produce(state, (draftState) => {
+    switch (action.type) {
+      case 'add-color': {
+        draftState.numOfVisibleColors += 1;
+        break;
+      }
+  
+      case 'remove-color': {
+        draftState.numOfVisibleColors -= 1;
+        break;
+      }
+  
+      case 'change-color': {
+        draftState.colors[action.index] = action.value;
+        break;
+      }
+    }    
+  });
+}
+```
+
+### Exercise, Todo List
