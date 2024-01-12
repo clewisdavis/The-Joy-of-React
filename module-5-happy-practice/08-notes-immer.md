@@ -271,3 +271,11 @@ function reducer(state, action) {
 ```
 
 ### Exercise, Todo List
+
+Let's update our 'Todo List' app to use Immer.
+
+ACs:
+
+- The reducer should be updated so that Immer is used to update the state
+- Go through each action, and see if we can simplify the state-updating logic using mutation. It's up to you to decide what will work best in each situation.
+- Feel free to edit things beyong the reducer, eg. to change which data gest passed through in the action
