@@ -279,3 +279,37 @@ ACs:
 - The reducer should be updated so that Immer is used to update the state
 - Go through each action, and see if we can simplify the state-updating logic using mutation. It's up to you to decide what will work best in each situation.
 - Feel free to edit things beyong the reducer, eg. to change which data gest passed through in the action
+
+- Solution Code, updated to use Immer
+
+```JAVASCRIPT
+// App.js
+function reducer(todos, action) {
+  return produce(todos, (draftState) => {
+    switch (action.type) {
+      case 'create-todo': {
+        // Push the new object in
+        draftState.push(
+          {
+            value: action.value,
+            id: crypto.randomUUID(),
+          },
+        );
+        break;
+      }
+
+      case 'toggle-todo': {
+        draftState[action.index].isCompleted = 
+          !draftState[action.index].isCompleted;
+        break;
+      }
+      case 'delete-todo': {
+        draftState.splice(action.index, 1);
+        break;
+      }
+    }
+  });
+}
+```
+
+### Exercices, Pizza Toppings
