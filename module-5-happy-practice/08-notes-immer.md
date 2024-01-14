@@ -313,3 +313,14 @@ function reducer(todos, action) {
 ```
 
 ### Exercices, Pizza Toppings
+
+In this exercise, you will be working on a pizza ordering form. All of the UI is done, but there isn't any state management yet. Your mission is to manage the state using `useReducer` and Immer.
+
+ACs:
+
+- When the user submits the form, a `window.alert` shoudl show us what size and toppings they have selecte.
+- The radio buttons and checkboxes should be controleld by the reducer's state.
+- The 'Select All' button should add all of the toppings.
+  - If al the topings are selected, hoever, the button label should flip to 'Remove All' and it should toggle all of the toppings off.
+
+- This is a challenging exercise. You will need to figureout how to bing the values of checkboxes/radio button to reducer state, which is not something covered. The 'Input Cheatsheet' should get you most of the way there, but you wil need to do some playing around.
