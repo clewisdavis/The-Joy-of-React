@@ -324,3 +324,106 @@ ACs:
   - If al the topings are selected, hoever, the button label should flip to 'Remove All' and it should toggle all of the toppings off.
 
 - This is a challenging exercise. You will need to figureout how to bing the values of checkboxes/radio button to reducer state, which is not something covered. The 'Input Cheatsheet' should get you most of the way there, but you wil need to do some playing around.
+
+- Solution Notes:
+
+- Write up the boilerplate for the reducer.
+
+```JAVASCRIPT
+// Write out the boilerplate scaffolding
+  const INITIAL_STATE = {
+    
+}
+
+// reducer boilderplate
+function reducer(state, action) {
+  return produce(state, (draftState) => {
+    switch (action.type) {
+        
+    }
+  })
+}
+
+function OrderPizza() {
+    const [state, dispatch] = React.useReducer(reducer, INITIAL_STATE);
+    // rest of component here
+}
+```
+
+- How do you drive the state from the radio buttons to the state in the `reducer`? It's similar to the way you create a controlled form element.
+- Add the `checked` property, `checked={state.size === slug}`
+- Also add `onChange` event to the radio, and the only way to change state that lives in a `reducer` is to `dispatch()` an action.
+
+```JAVASCRIPT
+  onChange={() => {
+    dispatch({
+      type: 'select-size',
+      slug,
+    })
+  }}
+```
+
+- To test this out, add to your `alert`, `window.alert(JSON.stringify(state));`
+
+- Now, how to deal with the toppings, checkboxes?
+
+- Add the actions for `add-topping` and `remove-topping`
+
+```JAVASCRIPT
+function reducer(state, action) {
+  return produce(state, (draftState) => {
+    switch (action.type) {
+        case 'select-size': {
+          draftState.size = action.slug;
+          break;
+        }
+        case 'add-topping': {
+          // add a key for the topping
+          draftState.toppings[action.slug] = true;
+          break;
+        }
+        case 'remove-topping': {
+          // delete object from the property
+          delete draftState.toppings[action.slug];
+          break;
+        }
+    }
+  })
+}
+```
+
+- Then wire it up in the checkbox for element with the `checked` and `onChange`. And `dispatch`
+
+```JAVASCRIPT
+<input
+      id={inputId}
+      type="checkbox"
+      checked={state.toppings[slug]}
+      onChange={() => {
+        dispatch({
+          type: 'add-topping',
+          slug,
+        })
+      }}
+    />
+```
+
+- Add a condition, ternary, for the remove to the `dispatch`. This is getting confusing at this point.
+
+```JAVASCRIPT
+  // Add a variable for the topping
+  // the !! resolves the intial value
+  const hasTopping = !!state.toppings[slug];
+
+onChange={() => {
+    dispatch({
+      // add a ternary condition to check toppings
+      type: hasTopping 
+        ? 'remove-topping' 
+        : 'add-topping',
+      slug,
+    })
+  }}
+```
+
+- 🤔 Really getting over my head with these exercises. May need to go back over.
