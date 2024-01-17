@@ -427,3 +427,70 @@ onChange={() => {
 ```
 
 - 🤔 Really getting over my head with these exercises. May need to go back over. Ran out of time.
+
+### The useImmer Hook
+
+Writing reducers adds quite a bit of boiler plate code, and Immer adds even more:
+
+```JAVASCRIPT
+function reducer(state, action) {
+  return produce(state, (draftState) => {
+    switch (action.type) {
+      ...
+    }
+  });
+}
+```
+
+- Lot of stuff whenever we need a reducer.
+- To help with this, the Immer team has an official NPM package called `use-immer`. Includees a custom hook called `useImmerReducer` which automatically applies the `produce` function. Looks like this...
+
+```JAVASCRIPT
+import React from 'react';
+import { useImmerReducer } from 'use-immer';
+
+const initialState = { count: 0 };
+
+function reducer(draftState, action) {
+  switch (action.type) {
+    case 'increment': {
+      draftState.count++;
+      return;
+    }
+
+    case 'decrement': {
+      draftState.count--;
+      return;
+    }
+
+    case 'reset': {
+      return initialState;
+    }
+  }
+}
+
+function Counter() {
+  const [state, dispatch] = useImmerReducer(reducer, initialState);
+
+  return (
+    <>
+      Count: {state.count}
+      <button onClick={() => dispatch({ type: 'increment' })}>
+        Increment
+      </button>
+      <button onClick={() => dispatch({ type: 'decrement' })}>
+        Decrement
+      </button>
+      <button onClick={() => dispatch({ type: 'reset' })}>
+        Reset
+      </button>
+    </>
+  );
+}
+```
+
+- The same package also has a `useImmer` hook, which is essentially an immer-wrapped `useState` alternative.
+
+- Link to lesson - [useImmer Hook](https://courses.joshwcomeau.com/joy-of-react/05-happy-practices/08.03-use-immer)
+
+- I really feel like I am getting deminished results here...
