@@ -34,3 +34,61 @@
 ![client side rendering](images/image-1.png)
 
 The swoopy arrow at the start represents teh server sending along an empty HTML file. Once that file has been received by the client, it can start downloading the JS bundle. Once the JS bundle is ready, the React application can finally be rendered.
+
+### Hydration
+
+When we use server-side rendering, the browser receives a fully formed page. Ideally, all of the necessary HTMl and CSS should be included.
+
+A huge part of React is the interactivity. Building dynamic, stateful apps. Most of the time, we spend learning about how to make our apps interactive with state and effects.
+
+📣 The process of turning the initial HTML file into an interactive web application is called **hydration**.
+
+"Hydration is like watering the dry HTML with the water of interactivity and event handlers."
+
+At a high level, the process of hydration goes something like:
+
+- Perform a 'speed render' to figure out the shape of our component tree, and to initialize our component instances.
+- Wire up all the interactivity (add event listeners, attach refs, etc)
+
+In a **client side** rendering environment, the initial render is responsible for creating all of the DOM nodes.
+
+With a server **side rending**, all of those DOM nodes already exist. Instead, React has to 'adopt' the DOM.
+
+Here is what SSR graph looks like, with hydration:
+
+![hydration](images/image-2.png)
+
+Now the 'Load JS' step has been broken into two phases: Downloading the JS bundle, and hydrating the React application.
+
+## SSR Flavors
+
+Different types of SSR.
+
+On demand SSR, Josh's course platform as an example;
+
+- User visits a lesson page.
+- The server receives the request, and does the first React render, generating the initial HTML.
+- User receives a fully formed HTML document, so they can start reading even while the JS bundles are downloading.
+- The HTML is generated 'just in time' when the server receives the request.
+
+This is not the only strategy we can use. Can also use 'Static Site Generation', SSG.
+
+SSG, Static Site Generation - HTML is generated ahead of time. Instead of rending our React application on demand, when a request is received, we do the render at compile time.
+
+When React apps need to be compiled, the process is like:
+
+- Turns JSX into browser friendly JS.
+- Runs any checks, like ESLint.
+- Bundles all of our individual JS files into a handful of scripts.
+
+With SSG, add one more step to this pipeline: **Generate an initial HTML for each page by doing the first React render.**
+
+🆒 We then upload all the HTML files to our server, and those files are served 'as-is' when the user requests them.
+
+🤔 Think about what that means from a performance perspective. When a user visits your app/site, the server immediately sends along the fully formed HTML document. The server doesn't have to do any processing at all.
+
+### A note on terminology
+
+Clear up some terminology stuff. The term "Server Side Rendering" refers to one thing: Using `react-dom/server` APIs to generate the HTML in Node.js.
+
+No matter when you run it, on-demand, or at compile time, they both fit under SSR, because they both fit under the SSR umbrella, because they both use the same APIs. The only difference between them is the timing.
