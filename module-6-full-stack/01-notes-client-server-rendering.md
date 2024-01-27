@@ -73,7 +73,7 @@ On demand SSR, Josh's course platform as an example;
 
 This is not the only strategy we can use. Can also use 'Static Site Generation', SSG.
 
-SSG, Static Site Generation - HTML is generated ahead of time. Instead of rending our React application on demand, when a request is received, we do the render at compile time.
+**SSG, Static Site Generation** - HTML is generated ahead of time. Instead of rending our React application on demand, when a request is received, we do the render at compile time.
 
 When React apps need to be compiled, the process is like:
 
@@ -91,4 +91,38 @@ With SSG, add one more step to this pipeline: **Generate an initial HTML for eac
 
 Clear up some terminology stuff. The term "Server Side Rendering" refers to one thing: Using `react-dom/server` APIs to generate the HTML in Node.js.
 
-No matter when you run it, on-demand, or at compile time, they both fit under SSR, because they both fit under the SSR umbrella, because they both use the same APIs. The only difference between them is the timing.
+No matter when you run it, on-demand, or at compile time, they both fit under SSR, because they both fit under the SSR umbrella, because they both use the same APIs. **The only difference between them is the timing.**
+
+```JAVASCRIPT
+import { renderToString } from 'react-dom/server';
+
+import App from './components/App';
+
+const html = renderToString(<App />);
+```
+
+- With **SSG**, we call the `renderToString` method when we compile our site, adn save the HTML files to disk, to be served to users when they visit the page.
+
+- With **on-demand SSR**, we call the `renderToString` in response to a user request, to generate the HTML right as it's needed. These are two different flavors of SSR.
+
+- A third flavor, created by Next.js, is called **Incremental Static Regeneration (ISR)**.
+The ISR flow is a bit hard to explain in notes.
+
+- The first time a user requests a particular page, the server will generate the HTML and send it to the user, same as **'on-demand'** server side rendering.
+
+- The difference is that it hangs onto that generated HTML. The next time someone requests that same page, Next will automatically server up that pre-generated HTML, same as SSG.
+
+- In order to prevent that generated file from growing too stale, ew can configure Next to regenerate the HTML file after a certain amount of time has passed. This is known as **revalidation**.
+
+- For example, suppose we set the revalidation time of 60 minutes. When someone visits this page after 61 minutes, the Next server will serve that user the stale HTMl file, but will start a brand new Server Side Render in the background. The next user will get the fresh, newly generated file. 🤔
+
+- Why isn't this course using SSG?
+  - Because of the interactive elements, more on demand
+  - To big, would be to much to generate all at once
+
+Some downsides to SSG
+
+- Personalization, with a single HTML file, you are serving the same experience to everyone.
+- Authorization, on a paid product, no secure way to have a 'private' content when using SSG, because all users receive the exact same HTML.
+- Stale pages, pages can grow stale
+- Build Times, for smaller sites, this isn't a problem, but apps with 10k pages or more
