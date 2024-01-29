@@ -94,3 +94,25 @@ export default Counter;
 
 - 🆒 The cool thing about this, is you can mix the two types of components.
 - You can 'import' your client component within your server components. And it will still work with all the 'state', 'effects' and 'refs'.
+
+### The benefits of React Server Components
+
+Why go through all this trouble? The most obvious is performance. But it's still to be determined what the benefits are.
+
+- If half the components in your application are Server Components, it means that your JS bundle will be significantly smaller, since all of that code can be omitted. It does not get passed down to the client side.
+
+### Graphs
+
+See the graphs to visualize how the different approaches change.
+
+**Client Side Rendering**
+
+![CSR](images/image-5.png)
+
+**Server Side Rendering**
+
+![SSR](images/image-6.png)
+
+**SSR + React Server Components**
+
+![SSR + RSC](images/image-7.png)
