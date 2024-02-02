@@ -110,3 +110,43 @@ function AboutPage() {
 
 export default AboutPage;
 ```
+
+- You are not loosing anything when using a client.
+- 📣 A client component does everything a server component does, but additionally hydrates on the client to allow it to re-render.
+
+- Any components can be made into client components. The only gotcha is if you do a `db query` in the component, it will cause the client to blow up, why are you trying to do a data base query from the browser.
+
+- Summary:
+- Generally, with Next.js, inside the `app` directory, you can create sub directory when you want to create a new route. And you do that by creating `page.js` file. Which is the component you want to render at that url.
+- Every page needs to have a `layout`, which is the global UI you need, which is typically found in an 'index.html' file.
+- And all these components are `server` components by default, but you can opt in to be a client component, by setting the `use client` directive.
+
+- All coming together, file based routing and server components all coming together to be really powerful.
+
+- Note, you need 'Node version 16.14 or higher to work with Next. Update to the current LTS (Long Term Support) version.
+
+### Next Exercises
+
+- Getting setup, Next.js is a full stack framework, so will need to work from a local server. Or you could run an online using CodeSandbox.
+
+- Instructions on setting up a [Local Development](https://courses.joshwcomeau.com/joy-of-react/project-wordle/03-dev-server) via NPM.
+
+### Exercise, Server Timestamp
+
+- Back in the day, it was common for websites to have a timestamp in the footer, to show when the HTML was generated.
+- Let's add a timestamp to a basic Next.js starter app.
+
+![Time Stamp](images/image-8.png)
+
+ACs:
+
+- Add a `<footer>` tag that shows a timestamp.
+- The time should reflect when the page was generated. Refreshing teh page should re-generate the page, and update the timestamp.
+- The JS code should only run on the server, not the client.
+- To format the time, you can use the `toLocalString()` method on a date object.
+
+```JAVASCRIPT
+  const timestamp = new Date().toLocalString();
+```
+
+- Getting Started, you can use this [hello-next](https://github.com/joy-of-react/hello-next) repo.
