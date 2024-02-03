@@ -59,18 +59,32 @@ Notes from the course, 2023/2024
   - [Leveraging Keys](./module-5-happy-practice/01-notes-leveraging-keys.md)
   - [Elements Revisited](./module-5-happy-practice/02-notes-elements-revisited.md)
   - [Deriving State](./module-5-happy-practice/03-notes-deriving-state.md)
-  - Lifting Content Up
-  - Single Source of Truth
-  - Principle of Least Privilege
-  - useReducer
-  - Immer
-  - Portals
-  - Refs Revisited
-  - Error Boundaries
+  - [Lifting Content Up](./04-notes-lifting-content-up.md)
+  - [Single Source of Truth](./module-5-happy-practice/05-notes-single-source-truth.md)
+  - [Principle of Least Privilege](./module-5-happy-practice/06-notes-principle-privilege.md)
+  - [useReducer](./module-5-happy-practice/07-notes-use-reducer.md)
+  - [Immer](./module-5-happy-practice/08-notes-immer.md)
+  - [Portals](./module-5-happy-practice/09-notes-portals.md)
+  - [Refs Revisited](./module-5-happy-practice/10-notes-refs-revisited.md)
+  - [Error Boundaries](./module-5-happy-practice/11-notes-error-boundries.md)
 
 - [Module 6 - Full Stack React](course-notes-module-6.md)
+  - [Client vs Server Rendering](./module-6-full-stack/01-notes-client-server-rendering.md)
+  - [React Server Components](./module-6-full-stack/02-notes-server-components.md)
+  - [Intro to Next.js](./module-6-full-stack/03-notes-intro-next.md)
+  - Routing
+  - Next's Metadata API
+  - Creating, Building, Deploying
+  - Rendering Strategies
+  - React Cache
+  - Suspense
+  - Lazy Loading
+  - Dark Mode
 
 - Bonus - Layout Animations with Framer Motion
+
 - Project - Interactive MDX-Based Blog
+
 - Reference - JS Primer
+
 - Reference - Tools of the Trade
