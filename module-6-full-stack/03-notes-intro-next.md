@@ -149,4 +149,95 @@ ACs:
   const timestamp = new Date().toLocalString();
 ```
 
-- Getting Started, you can use this [hello-next](https://github.com/joy-of-react/hello-next) repo.
+- Getting Started, you can use this [hello-next](https://github.com/joy-of-react/hello-next) repo
+
+- Solution with cloned repo: [hello-next](https://github.com/clewisdavis/hello-next)
+
+Solution Code:
+
+```JAVASCRIPT
+// /src/app/layout.js
+import React from 'react';
+
+import './styles.css';
+
+function RootLayout({ children }) {
+  return (
+    <html lang="en">
+      <body>
+        {children}
+        <footer>
+          Page rendered on{' '}
+          {new Date().toLocaleString()}
+        </footer>
+      </body>
+    </html>
+  );
+}
+
+export default RootLayout;
+```
+
+### Exercise, Hit Counter
+
+Now let's create a hit counter using Next.js
+
+![hit counter](images/image-9.png)
+
+In a production app, we store the number of hits in a database. To keep things simple for us, we will read and write from a locally store JSON fie:
+
+```JAVASCRIPT
+// /src/database.json
+{
+  "hits": 0
+}
+```
+
+- You will find some helper methods in the project file `/src/helpers/file-helpers.js`. A small example of how to use these methods in the projects `page.js` file.
+
+ACs:
+
+- The current number of hits should be shown. The current number should be read from the `database.json` file.
+- Visiting the site should increment the number by 1. This new number should be saved by overwriting the `database.json` file.
+- Bot that you will need to convert between strings and objects with `JSON.parse` and `JSON.stringify`.
+
+Links to exercise starter:
+
+Forked Repo - [hit-counter](https://github.com/clewisdavis/hit-counter)
+
+- Solution Code:
+
+```JAVASCRIPT
+// /src/app/page.js
+import React from 'react';
+import {
+  readFile,
+  writeFile,
+} from '../helpers/file-helpers';
+
+const DATABASE_PATH = '/src/database.json';
+
+function Home() {
+  let { hits } = JSON.parse(
+    readFile(DATABASE_PATH)
+  );
+
+  hits += 1;
+
+  writeFile(
+    DATABASE_PATH,
+    JSON.stringify({ hits })
+  );
+
+  return (
+    <main>
+      <h1>Welcome!</h1>
+      <p>You are visitor number {hits}.</p>
+    </main>
+  );
+}
+
+export default Home;
+```
+
+### Client Components

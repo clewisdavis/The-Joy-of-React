@@ -13,3 +13,6 @@ The only way to take advantage of al the new stuff, is to use Next.js
 Next.js, is a full stack React meta-framework created and maintained by Vercel. Originally released in 2016, and brought common things like file-based routing.
 
 So many things open up when you can introduce a server into the mix.
+
+
+- 
