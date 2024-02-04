@@ -241,3 +241,67 @@ export default Home;
 ```
 
 ### Client Components
+
+- Review a little bit, the idea of '[Parents vs. Owners](https://courses.joshwcomeau.com/joy-of-react/05-happy-practices/04-lifting-content-up)' distinction.
+- 🤔 Strategy known as: Lifting Content Up - You take a component that is being rendered as a child component. And you lift it into the parent component and you pass the element through a prop like `children`.
+- Allow you to use the open and close syntax on a component.
+
+```JAVASCRIPT
+function ArticlePage({ articleSlug }) {
+  return (
+    <>
+      <Header />
+      
+      <MainContent>
+        <Article articleSlug={articleSlug} />
+      </MainContent>
+      
+      <footer>
+        Copyright “The News” Inc.
+      </footer>
+    </>
+  );
+}
+
+function MainContent({ children }) {
+  return (
+    <main>
+      <aside>
+        <SocialSharingWidget />
+      </aside>
+      {children}
+    </main>
+  );
+}
+```
+
+- The concept of 'owners an ownees' - the idea is most elements are owned by a particular component.
+- If a component, `ArticlePage` is the one creating the element, `React.createElement(Header)` for example. It means that component, `ArticlePage` will own that element.
+
+```JAVASCRIPT
+function ArticlePage({ articleSlug }) {
+  return (
+    <>
+      <Header />
+      {/* React.createElement(Header), ArticlePage owns this element, Header */}
+      
+      <MainContent>
+        <Article articleSlug={articleSlug} />
+      </MainContent>
+      
+      <footer>
+        Copyright “The News” Inc.
+      </footer>
+    </>
+  );
+}
+```
+
+- The owner of an element, get to decide what the props are.
+
+- Now back to the 'Client Components' lesson.
+- 🤔 🤔 One of the trickiest parts of this concept, **The Relationship between Client Components and Server Components**
+- and how we are and are NOT allowed to weave them together.
+
+- Use the 'hit counter' repo to explore this topic.
+- The Goal, is to conditionally add and remove the 'censored' class to the button.
