@@ -305,3 +305,21 @@ function ArticlePage({ articleSlug }) {
 
 - Use the 'hit counter' repo to explore this topic.
 - The Goal, is to conditionally add and remove the 'censored' class to the button.
+
+- Tip: To get setup, extract the hit counter logic into own component, use the command `npx new-component HitCounter` to generate the new files you need. Nice trick.
+
+- All set up now, go back through the video again. Very mind boggling 😓😄
+
+- Video Notes:
+- Server components are meant to be run once on the server, and then they are immutable. You cannot re-run like a 'client component'.
+- 👩‍🚀 Once you define something as a client component, `use client`, **any component OWNED by that component will ALSO need to be a client component.** 🚀
+- Even though that component does not have the 'use client' directive defined.
+
+- Server Component Top Level: One option is to structure it so that all the server components happen at the parent level, and any client side stuff happen at the children level, lower level. Make sure the top level components are server components, like accessing the db, we then push the state as low as you can, so that the leaf components of the tree are client components.
+- The downsides, logic is not groups or encapsulated as neatly.
+
+- Another option:
+- The rule, a server component CANNOT be owned by a client component. Going back to the refresher, parent / child relationships, vs. owner vs. ownee relationships.
+- 🤔 Whichever component owns a given React element, decides what props to pass to it and decides when the element is re-created and any associated components are re-rendered.
+
+- Another way to think about it, it's the component that creates the react element that is responsible for it. As long as a server component is being created by a server component, it will work out.
