@@ -323,3 +323,67 @@ function ArticlePage({ articleSlug }) {
 - 🤔 Whichever component owns a given React element, decides what props to pass to it and decides when the element is re-created and any associated components are re-rendered.
 
 - Another way to think about it, it's the component that creates the react element that is responsible for it. As long as a server component is being created by a server component, it will work out.
+
+- Should be a way to group the server component together.
+- Code example; how is this working?
+
+```JAVASCRIPT
+function Home() {
+  return (
+    <main>
+      <h1>Welcome!</h1>
+      <p>You are visitor number { }
+        <Censored>
+          <HitCounter />
+        </Censored>
+        .
+      </p>
+    </main>
+  );
+}
+
+export default Home;
+```
+
+- Censored is a client component, and everything else is a server component.
+**- The rule is, a server component, CANNOT be OWNED by a client component.**
+
+- Parent / Child relationships
+![parent child](images/image-10.png)
+
+- Owner / Ownee relationships
+![Owner](images/image-11.png)
+
+- I this case, we have a **server** component called `Home`, and it owns the react elements for the `Censored` component and the `HitCounter` component.
+- 🤔 If you have a **client** component, `Censored`, it is not allowed to own any server components. If you look at the code for `Censored`, it doesn't own any component.
+- The only thing this element uses is the `children` prop.
+
+```JAVASCRIPT
+'use client'
+import React from 'react';
+
+// Utility component that allows to Censor generic content
+function Censored({ children }) {
+
+  // create state
+  const [isCensored, setIsCensored] = React.useState(false);  
+
+    return (
+      <button 
+        className={isCensored ? 'censored' : undefined} 
+        onClick={() => { setIsCensored(!isCensored)}}>
+          {children}
+      </button>
+  );
+}
+
+export default Censored;
+
+```
+
+- If `HitCounter` re-renders, shouldn't `Censored` re-render also? Surprisingly is doesn't.
+- Shortcut, way to think about all this; 📣 It's the component that creates the React Element, `react.CreateElement`, that is responsible for it. Since we are creating the server component `HitCounter` within `Home`, there is no problem since they are both server components.
+- AS LONG AS AN ELEMENT FOR A SERVER COMPONENT IS BEING CREATED INSIDE A SERVER COMPONENT, ALL IS GOOD. 😓🦭
+- BUT YOU ARE NOT ALLOWED TO CREATE A **SEVER COMPONENT**, WITHIN A **CLIENT COMPONENT**.
+
+## Exercises, Server components and styled components
