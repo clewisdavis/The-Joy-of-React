@@ -387,3 +387,23 @@ export default Censored;
 - BUT YOU ARE NOT ALLOWED TO CREATE A **SEVER COMPONENT**, WITHIN A **CLIENT COMPONENT**.
 
 ## Exercises, Server components and styled components
+
+Get some practice with Server and Client components! This project uses styled components, where you attach chunks of CSS to a reusable React component.
+
+The problem is that styled components has to run on the client side, it has a runtime. So it has to be a 'client component', which doesn't work with server components.
+
+- The goal of this exercise, is to make sure you can still use 'styled components', so the styled code has to be withing a client component, but all the body of the article has to be a 'server component'.
+
+ACs:
+
+- Teh `Home` component in `page.js` should be a Server Component (no 'use client' directive).
+- The `MainWrapper` styled component should be a Client Component.
+- As little code as possible should be included in Client Components.
+
+Note: It may not be obvious whether or not a component is being used as a Client Component or not. Also, to create any new components, you can do that with the `new-component` package:
+
+```JAVASCRIPT
+npx new-component YourComponentName
+```
+
+- [Forked Repo Github](https://github.com/clewisdavis/next-13-styled-components)
