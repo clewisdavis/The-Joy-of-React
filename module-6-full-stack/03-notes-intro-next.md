@@ -396,7 +396,7 @@ The problem is that styled components has to run on the client side, it has a ru
 
 ACs:
 
-- Teh `Home` component in `page.js` should be a Server Component (no 'use client' directive).
+- The `Home` component in `page.js` should be a Server Component (no 'use client' directive).
 - The `MainWrapper` styled component should be a Client Component.
 - As little code as possible should be included in Client Components.
 
@@ -407,3 +407,78 @@ npx new-component YourComponentName
 ```
 
 - [Forked Repo Github](https://github.com/clewisdavis/next-13-styled-components)
+
+Solution Notes:
+
+- Extract the 'styled component', `MainWrapper` out of the server component and declare it as a `client component`
+- Run the command, `npx new-component MainWrapper` to create a base component inside the components folder.
+
+```JAVASCRIPT
+'use client';
+import React from 'react';
+import styled from 'styled-components';
+
+const MainWrapper = styled.main`
+  width: 100%;
+  max-width: 800px;
+  padding: 16px 24px;
+  margin: 0px auto;
+  border: 1px solid hsl(0deg 0% 50% / 0.3);
+  border-radius: 2px;
+  background: white;
+`;
+
+// NOTE: I thought you had to do this, and return a function. But not needed, you can just export the styled component an use it with open and close tags 
+// <MainWrapper>stuff here</MainWrapper>
+// function MainWrapper({ children }) {
+//   return <Wrapper>{ children }</Wrapper>;
+// }
+
+export default MainWrapper;
+```
+
+- Import into the main server component page, and use it it.
+
+```JAVASCRIPT
+// this is a server component by default
+// remember, server component CAN create client components, but client components CANNOT create server components
+import React from 'react';
+import MainWrapper from '../components/MainWrapper/MainWrapper';
+
+function Home() {
+  return (
+    <MainWrapper>
+       // stuff here
+    </MainWrapper>
+  )
+
+export default Home;
+```
+
+- Why this matters, to see how this is changing the performance, run, `npm run build` and next.js will generate some stats on the build.
+
+![build](images/image-12.png)
+
+- Here the first load, is 92.3 KB, for the optimized version
+
+- Undo all your changes, by `git stash` to go back where we started. So we can compare. Then run the `npm run build` to compare.
+
+- Now the old version, where everything was a 'client component', is 94.5 KB
+
+![client](images/image-13.png)
+
+- So the difference is, we saved, 92.3 - 94.5 = 2.2 KB
+
+- How big a deal is this? Use a file transfer calculator, to see the difference.
+
+- [File Transfer Calculator](https://www.beaming.co.uk/tools/file-transfer/file-transfer-time-calculator.asp)
+
+- File size: 2.2 KB
+- Internet speed: assume average 3G network, 3 Mbps
+
+![results](images/image-14.png)
+
+- So it takes 0.01 milliseconds, 10 milliseconds, this is not a lot of time
+- The amount of time it take to blink, is between 100 and 300 milliseconds, anything less than 100 milliseconds, is considered instantaneous.
+
+-
