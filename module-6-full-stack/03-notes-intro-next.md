@@ -481,4 +481,21 @@ export default Home;
 - So it takes 0.01 milliseconds, 10 milliseconds, this is not a lot of time
 - The amount of time it take to blink, is between 100 and 300 milliseconds, anything less than 100 milliseconds, is considered instantaneous.
 
--
+- The cost of downloading and hydrating the client.
+- In a lot of cases, this doesn't make a difference.
+
+- Do this optimization where makes sense, if you have a large dependency, do it on the server, as a server component.
+
+## Exercise, Revealable Code Snippets with Bright
+
+Trying to get this going and going. In this exercise, you wil create a 'revealable' code snippets, as part of a hypothetical coding tutorial, using the package [Bright](https://bright.codehike.org).
+
+ACs:
+
+- Clicking 'Reveal Content' should show the relevant code snippet.
+- No compile or runtime errors should be present.
+- Feel free to refactor / improve the code however you see fit.
+
+📔 Starting with an error - When you first run this project, you will get an error about useState only working in the Client Components. This is expected. Your mission is to fix the error.
+
+➡️ Forked Repo, [Next 13 + Bright](https://github.com/clewisdavis/next-13-bright)
