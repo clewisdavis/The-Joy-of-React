@@ -499,3 +499,7 @@ ACs:
 📔 Starting with an error - When you first run this project, you will get an error about useState only working in the Client Components. This is expected. Your mission is to fix the error.
 
 ➡️ Forked Repo, [Next 13 + Bright](https://github.com/clewisdavis/next-13-bright)
+
+Solution Notes:
+
+- A pattern here, where our 'client component' is given some sort of react element as 'children' and that react element is the 'server component'.
