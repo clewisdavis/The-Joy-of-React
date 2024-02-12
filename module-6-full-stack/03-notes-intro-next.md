@@ -503,3 +503,84 @@ ACs:
 Solution Notes:
 
 - A pattern here, where our 'client component' is given some sort of react element as 'children' and that react element is the 'server component'.
+
+```JAVASCRIPT
+'use client'
+import React from 'react';
+
+function CodeSnippet({ children }) {
+  
+  const [
+    isRevealed,
+    setIsRevealed,
+  ] = React.useState(false);
+
+  return isRevealed ? (
+        // children slot here, for the react server component
+        children
+      ) : (
+        <div className="reveal">
+          <button
+            onClick={() =>
+              setIsRevealed(true)
+            }
+          >
+            Reveal Content
+          </button>
+        </div>
+      );
+}
+
+export default CodeSnippet;
+```
+
+- And the 'page.js' server component, notice how the client component is wrapping around the server component.
+
+```JAVASCRIPT
+// page.js
+function Home() {
+  return (
+    <main>
+      <h1>Introduction to Python</h1>
+      <h2>Variables and Basic Data Types</h2>
+      <p>
+        Python is a high-level, interpreted
+        programming language. In Python, you don't
+        need to specify the data type of a
+        variable when you declare it. Python
+        automatically determines the data type
+        based on the value you assign.
+      </p>
+
+      <CodeSnippet>
+        <Code
+          className="code-snippet"
+          theme="dracula"
+          lang="py"
+        >
+          {FIRST_SNIPPET}
+        </Code>
+      </CodeSnippet>
+
+      // rest of code
+  )
+}
+```
+
+## Exercise, Drum Machine
+
+Finish wiring up the drum machine, 4 different buttons can be clicked to play a different sample. We can also mute the machine using a separate button.
+
+The drum machine itself has already been implemented, using use-sound NPM package. **Mission is to wire up the mute button.**
+
+ACs:
+
+- Clicking the 🔈 icon shoudl toggle a `soundEnabled` state variable
+- This state variable shoudl control whether or not the 4 drum machine buttons make noise.
+- You are not allowed to move the existing components, eg. you cannot move `<Header>` element to `page.js`.
+
+Note: 😓 this one is a tricky one, but experiment and fail.
+
+- Pass data around with the 'use context'. Feeling a little rusty with the context, review the 'Provider Component' lessons
+
+- Solution: [Github Diff Changes](https://github.com/joy-of-react/next-13-drum-machine/compare/solution)
