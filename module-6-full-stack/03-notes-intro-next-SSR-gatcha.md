@@ -51,3 +51,29 @@ Here is the problem: There is no `window` object on the server.
 2. Hydration mismatches.
 
 Get some practice, with this repo: [next-13-ssr-gatchas](https://github.com/clewisdavis/next-13-ssr-gotchas)
+
+Video Notes:
+
+- **Hydration Mismatch**, one of the most common issues with server side rendering. When a value you have on the server, is different than value on the client.
+
+Recall the React Hydration process:
+
+- Process starts by react building up a sketch of what the DOM should look like.
+
+![DOM Sketch](images/image-15.png)
+
+- Then it fits the two together, it overlays them, for every React element, what is the corresponding DOM node.
+
+![hydration](images/image-16.png)
+
+- React isn't expecting to be any differences between the sketch and the original DOM. IF there are differences, react will try to fix it and do it's best.
+
+![error](images/image-17.png)
+
+- But Hydration was designed to be really quick, some static HTML we got from the server, and we want to make it interactive. It's priority is to fit the sketch that was generated, on top of the DOM we got from the server, react doesn't don't do a full re-render every time, just the elements that change.
+
+- Hydration Mismatch, some sort of difference between the server generated HTML, and the Hydration generated sketch. React will try to fix is, but sometimes it can break things by putting the wrong nodes in the wrong container. So you could end up with some funky layout issues.
+
+- Golden Rule - **The very first render, should produce the 'exact' same markup on the server that it does on the client during Hydration.**
+
+- How to we fix this?
