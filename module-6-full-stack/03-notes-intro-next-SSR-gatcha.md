@@ -76,4 +76,133 @@ Recall the React Hydration process:
 
 - Golden Rule - **The very first render, should produce the 'exact' same markup on the server that it does on the client during Hydration.**
 
-- How to we fix this?
+```JAVASCRIPT
+'use client';
+import React from 'react';
+
+function Counter() {
+  const [count, setCount] = React.useState(() => {
+
+    // are we on the server, with the typeof
+    if (typeof window === 'undefined') {
+      return 0;
+    }
+
+    // if make it here, we must be on the client
+    //this causes a Hydration Mismatch
+    return Number(
+      window.localStorage.getItem('saved-count') || 0
+    );
+  });
+
+  React.useEffect(() => {
+    window.localStorage.setItem('saved-count', count);
+  }, [count]);
+
+  return (
+    <button
+      className="count-btn"
+      onClick={() => setCount(count + 1)}
+    >
+      Count: {count}
+    </button>
+  );
+}
+
+export default Counter;
+
+```
+
+- **How to we fix this?**
+
+- The whole idea of a server side render, is we are only generating that initial UI. Nothing after that point actually happens on the server. `useEffect` for example is 'client' only so it will not try to run them.
+
+- You can use a `useEffect`, so the initial UI is rendered, then it will run the `useEffect` to save the value to local storage.
+
+```JAVASCRIPT
+'use client';
+import React from 'react';
+
+function Counter() {
+  const [count, setCount] = React.useState(0);
+
+  // read from the user's local storage, AFTER the first render
+  React.useEffect(() => {
+    const savedValue = window.localStorage.getItem('saved-count');
+    // will produce value as a string, '4', or it will return null
+    if (savedValue === null) {
+      // bail out early
+      return;
+    }
+
+    // otherwise
+    setCount(Number(savedValue));
+  }, [])
+
+  React.useEffect(() => {
+    window.localStorage.setItem('saved-count', count);
+  }, [count]);
+
+  return (
+    <button
+      className="count-btn"
+      onClick={() => setCount(count + 1)}
+    >
+      Count: {count}
+    </button>
+  );
+}
+
+export default Counter;
+```
+
+- The initial render, is the same as the saved value, but then after Hydration, the `useEffect` runs and updates the state from local storage.
+
+## Exercise, Two pass rendering
+
+- In the count exercise above, we set the default value to '0', this creates a flicker, since the count flips to the saved value after hydration.
+
+- See this al the time, for example, site showing the logged out version before flipping to the logged in state.
+
+- Two-pass strategy, we first to an initial pass of the generic parts, then when we have the specific information for each box, we do a second pass to fill in those details.
+
+- For example, in our counter button, rather than loading something wrong, 0, what if we render a placeholder. For example; a loading spinner.
+
+![two pass](images/image-18.png)
+
+- Here is what that code looks like:
+
+```JAVASCRIPT
+'use client';
+import React from 'react';
+
+import Spinner from '../Spinner';
+
+function Counter() {
+  const [count, setCount] = React.useState(null);
+
+  React.useEffect(() => {
+    const savedValue = window.localStorage.getItem('saved-count');
+
+    setCount(savedValue ? Number(savedValue) : 0)
+  }, []);
+
+  React.useEffect(() => {
+    if (typeof count === 'number') {
+      window.localStorage.setItem('saved-count', count);
+    }
+  }, [count]);
+
+  return (
+    <button
+      className="count-btn"
+      onClick={() => setCount(count + 1)}
+    >
+      Count:{' '}
+      {typeof count === 'number' ? count : <Spinner />}
+    </button>
+  );
+}
+
+export default Counter;
+```
