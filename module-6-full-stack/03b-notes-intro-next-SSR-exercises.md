@@ -94,3 +94,21 @@ export default Clock;
 - The official React documentation, [Suppressing unavoidable hydration mismatch errors](https://react.dev/reference/react-dom/client/hydrateRoot#suppressing-unavoidable-hydration-mismatch-errors).
 
 ## Exercise, Neighborhood Shop
+
+This exercise features a checkout flow or an e-commerce shop:
+
+![checkout](images/image-20.png)
+
+The goal is to persist the user's cart in Local Storage, so that their cart isn't lost when refreshing the page. Your approach should be SSR-compatible, using the techniques we learned in the previous lessons.
+
+You will find the exercise in `/src/app/exercises/02-checkout`
+
+ACs:
+
+- A user's cart should not be lost when refreshing the page.
+- The user should never be lied to about their cart. If they have saved items, they shouldn't see 'Your Cart is Empty', not even for a second.
+  - Instead you can show the loading indicator, you will find a suitable component in `/src/components/Spinner`.
+- There should be no hydration related errors, and not errors inside the server terminal.
+- You will need to tweak the code in multiple files. Don't be afraid to restructure the provided code.
+
+🤔 localStorage gotchas: This relies on localStorage, so you might run into some baffling issues. Refer to the [Local Storage Troubleshooting Guide](https://courses.joshwcomeau.com/support/local-storage-troubleshooting).
