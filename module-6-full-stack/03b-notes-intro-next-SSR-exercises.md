@@ -112,3 +112,10 @@ ACs:
 - You will need to tweak the code in multiple files. Don't be afraid to restructure the provided code.
 
 🤔 localStorage gotchas: This relies on localStorage, so you might run into some baffling issues. Refer to the [Local Storage Troubleshooting Guide](https://courses.joshwcomeau.com/support/local-storage-troubleshooting).
+
+- Walk through solution video:
+
+- See forked solution: [Next 13 SSR exercises](https://github.com/clewisdavis/next-13-ssr-exercises)
+- Need to go back through 'useReducer', not clicking
+
+## Exercises, Artist Interview
