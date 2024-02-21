@@ -119,3 +119,31 @@ ACs:
 - Need to go back through 'useReducer', not clicking
 
 ## Exercises, Artist Interview
+
+Take a look at a responsive layout, the sidebar is intended to be hidden on smaller devices. The current solution is not SSR friendly, we need to fix it.
+
+Files located: `/src/app/exercises/03-interview.`
+
+ACs:
+
+- The initial code has a hydration mismatch on desktop/tablet window sizes (>500px). Your main task is to remove this mismatch.
+- No other errors should be thrown, on the server or the client.
+- The sidebar should not be visible when the window is less than 500px wide.
+
+ℹ️ No package necessary on this one.
+
+Solution Notes:
+
+- You can solve things with just vanilla CSS, don't have to reach for a package everytime, especially with this repsonsive stuff.
+
+```CSS
+aside {
+  display: none;
+}
+
+@media (min-width: 500px) {
+  aside {
+    display: revert;
+  }
+}
+```
