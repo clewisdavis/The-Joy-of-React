@@ -117,4 +117,15 @@ export default AboutPage;
 ```
 
 - 📣 Now, open the DevTools / Network tab again, and watch what happens when you click on the link.
-- Notice how quick that was, only had to download
+- Notice how quick that was, only had to download one file, and it only took 26ms to download, lighting quick.
+
+- What it is doing, is fetching the JS representation of what needs to be swapped in at that route / url. Not the entire page.
+- When it receives this update, it does what React is really good at and updates the DOM based on some new sketch.
+- Another nice benefit, notice what happens when you hover over a link, it already starts to download, although, I am not seeing this in my dev environment.
+
+- Every route that you create supports two different modes,
+  - One, when you visit a page and press enter, you do the standard Server Side Rendering, generating the HTML and sending it to the browser so we can download all the files.
+  - Two, when you visit that exact same page, using the, `Link` component, it doesn't send us an HTML file, it sends us a chunk of JS that represents the content for that page.
+
+- Curious how this work, so used a tool called '[Postman](https://www.postman.com)', tool you can use to submit network request.
+- When you make a GET request to the url for that dev server, you can see what you get back, a chunk of HTML. Looking at the request headers that are being sent in the browser, see one called, 'Rsc', that one send the JS instead of the HTML.
