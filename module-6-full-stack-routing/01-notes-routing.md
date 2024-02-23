@@ -129,3 +129,10 @@ export default AboutPage;
 
 - Curious how this work, so used a tool called '[Postman](https://www.postman.com)', tool you can use to submit network request.
 - When you make a GET request to the url for that dev server, you can see what you get back, a chunk of HTML. Looking at the request headers that are being sent in the browser, see one called, 'Rsc', that one send the JS instead of the HTML.
+
+- 📣 Every route in Next.js has the ability to send either send HTML or JS, it depends on the request header being sent.
+
+- Any downsides?
+- You can use the browser back and forward, using the browser, PushState API, allows to access the native browser history via JS.
+- And the 'Link' component replaces it with a native 'a' tag. And if you turn off JS, it will still work.
+- For accessibility, if you look at the markup, you can see 'next-route-announcer', which addresses screenreaders and announcing the correct link.
