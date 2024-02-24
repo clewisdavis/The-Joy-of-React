@@ -135,4 +135,56 @@ export default AboutPage;
 - Any downsides?
 - You can use the browser back and forward, using the browser, PushState API, allows to access the native browser history via JS.
 - And the 'Link' component replaces it with a native 'a' tag. And if you turn off JS, it will still work.
-- For accessibility, if you look at the markup, you can see 'next-route-announcer', which addresses screenreaders and announcing the correct link.
+- For accessibility, if you look at the markup, you can see 'next-route-announcer', which addresses screen readers and announcing the correct link.
+
+## Programmatic Routing
+
+In most cases, the `<Link>` component is the best way to get folks from one page to another. Users are familiar with hyperlinks.
+
+But we want to be able to bring a user to a page programmatically. For example, maybe they submit a contact form, and we want to take them back to the homepage:
+
+![contact form](images/image-3.png)
+
+For programmatic navigation, we can use the `useRouter` custom hook:
+
+```JAVASCRIPT
+'use client';
+import React from 'react';
+import { useRouter } from 'next/navigation';
+
+function ContactPage() {
+  const router = useRouter();
+
+  function handleSubmit(event) {
+    event.preventDefault();
+
+    // ✂️ Send data to server
+
+    router.push('/');
+  }
+
+  return (
+    <form onSubmit={handleSubmit}>
+      {/* ✂️ Form stuff here */}
+    </form>
+  );
+}
+```
+
+- We call `router.push` with a new URL, in this case, we are taking them back to the homepage.
+- This is equivalent to them clicking a `<Link>` tag and it uses the same optimized transition, no need to download a new HTML file.
+
+- It's called 'push' because it pushes teh new URL onto the history stack; after the transition, the user can use the browser's 'back' button to go back to the contact page.
+
+- For more into the cool stuff you can do, see Next [office docs](https://nextjs.org/docs/app/api-reference/functions/use-router).
+
+- 😕 Not that router, this router, there are two separate routers included in Next:
+
+``` JAVASCRIPT
+// 🛑 Incorrect:
+import { useRouter } from 'next/router';
+// ✅ Correct:
+import { useRouter } from 'next/navigation';
+```
+
+### Dynamic Segments
