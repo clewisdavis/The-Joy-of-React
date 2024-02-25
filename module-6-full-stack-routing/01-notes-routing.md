@@ -188,3 +188,8 @@ import { useRouter } from 'next/navigation';
 ```
 
 ### Dynamic Segments
+
+- Dynamic Segments - inside your directory, add square brackets around the directory name, to signify to Next this is a dynamic segment, `[profileId]`, for example.
+- Think of it as a variable
+
+### Exercises, Screensaver
