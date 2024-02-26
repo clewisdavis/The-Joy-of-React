@@ -193,3 +193,43 @@ import { useRouter } from 'next/navigation';
 - Think of it as a variable
 
 ### Exercises, Screensaver
+
+Remember back in the 90s, it was common to have a bouncy screensaver, DVD animation. In this exercise, we are going to revive it!
+
+Inside the, `/src/app/exercises/01-screensaver`, you will find a `<ScreenSaver>` component, the bounding around logic has already been implemented. Your mission is to allow the user to change the color using routine:
+
+ACs:
+
+- When the user visits a route like `/exercises/01-screensaver/hotpink`, a `<ScreenSaver>` component should be rendered using teh color specified (`hotpink`).
+- The `/exercises/01-screensaver` route should be updated so that it includes a list of links, so that users can choose a color. Feel free to pick your favorite named HTML colors
+- All 147 named colors should be supported (not only the 3-4 colors that are explicitly linked to).
+
+Solution Notes:
+
+- First you need to update the directory, by adding a square brackets for colors, `[colors]`.
+- 📣 This will tell Next that 'colors' is a dynamic segment, a catch all route that will match any string, and capture it in a variable called `colors`.
+
+- And add a `page.js` inside the `[colors]` directory.
+
+![dynamic segment](images/image-4.png)
+
+- Take the 'screensaver' component and move into the new, `[colors]/page.js`
+
+- Inside our component, we add the `params` prop. `params` is an object that collects all dynamic segments!
+
+```JAVASCRIPT
+import React from 'react';
+
+import ScreenSaver from '../../../../components/ScreenSaver';
+
+function ScreenSaverExercise({ params }) {
+  return (
+    <main className="screen-saver-wrapper">
+      <ScreenSaver color={params.color} />
+    </main>
+  );
+}
+
+export default ScreenSaverExercise;
+
+```
