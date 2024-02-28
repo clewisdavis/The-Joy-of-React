@@ -233,3 +233,51 @@ function ScreenSaverExercise({ params }) {
 export default ScreenSaverExercise;
 
 ```
+
+- Update the `01-screensaver` route to be just a list of links. Import and use the `Link` component, the define the `href` with the new route, and at then end, will be the string passed to the `params`, which will update the color.
+
+```JAVASCRIPT
+import React from 'react';
+import Link from 'next/link';
+
+function ScreenSaverIndexPage() {
+  return (
+    <main>
+      <p>Choose your color:</p>
+      <ul>
+        <li><Link href="/exercises/01-screensaver/red">red</Link></li>
+        <li><Link href="/exercises/01-screensaver/purple">purple</Link></li>
+        <li><Link href="/exercises/01-screensaver/yellow">yellow</Link></li>
+        <li><Link href="/exercises/01-screensaver/brown">brown</Link></li>
+      </ul>
+    </main>
+  );
+}
+
+export default ScreenSaverIndexPage;
+
+```
+
+## Exercises, Flash Messages
+
+- Earlier we saw how to programmatically redirect teh user on form submission. But missing an important UX feature, there is no confirmation message! We are not confirming for the user that their message was received.
+
+- A common pattern in a full stack ap, is to use flash messages. A flash message is a notification that shows up on navigation, usually to provide additional context about the route change that just happened.
+
+- For example, we can use a flash message here to confirm that the message was sent:
+
+![flash message](images/image-5.png)
+
+- In this exercise you wil use the `toast` component we build in an earlier project, by creating a new toast as teh user is redirected, it effectively becomes a flash message!
+
+- The relevant pages are `/exercises/02-flash-messages` and `/exercises/02-flash-messages/contact`.
+
+### ACs
+
+- Submitting the contact form should redirect the user to the exercise homepage. `/exercises/02-flash-messages`
+- Upon redirection, a confirmation message should be shown, using the `Toast` component. You should also make use of the `ToastShelf` and `ToastProvider` components from the previous project.
+- You don't have to use localStorage or cookies or anything like that. Rect context alone should be sufficient.
+
+Solution Notes:
+
+See my forked repo here, with the [exercise notes](https://github.com/clewisdavis/next-routing-exercises/tree/main)
