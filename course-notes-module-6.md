@@ -113,3 +113,10 @@ export async function generatedMetadata({ params }) {
     };
 }
 ```
+
+### Creating, Building and Deploying
+
+- [Starting a new project](./module-6-deploying/01-notes-starting-project.md)
+- [Import Aliases](./module-6-deploying/02-notes-import-alias.md)
+- [Building for Production](./module-6-deploying/03-notes-production.md)
+- [Deploying](./module-6-deploying/04-notes-deploying.md)
