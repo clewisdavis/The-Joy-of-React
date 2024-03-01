@@ -116,6 +116,15 @@ export async function generatedMetadata({ params }) {
 
 ### Creating, Building and Deploying
 
+In this section, going to look into everything needed to start a new project, generating files and publishing your app on the internet.
+
+- Bootstrapping new projects with `create-next-app`
+- Using import aliases to get rid of all those `../`'s
+- Generating a production build, and how to run it locally
+- Analyzing our bundles, to understand what they consist of
+- Deploying our apps, to our own custom domain
+- Automatically generating preview build for work-in-progress branches
+
 - [Starting a new project](./module-6-deploying/01-notes-starting-project.md)
 - [Import Aliases](./module-6-deploying/02-notes-import-alias.md)
 - [Building for Production](./module-6-deploying/03-notes-production.md)
