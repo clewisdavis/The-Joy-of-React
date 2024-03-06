@@ -97,3 +97,14 @@ module.exports = withBundleAnalyzer({});
 - See more about this tool, on the NPM package page: [@next/bundle-analyzer](https://www.npmjs.com/package/@next/bundle-analyzer)
 
 ### Assessing NPM packages
+
+- Say you have a few packages and you want to know, how will this impact performance, **how big is the library?** How many kb will it add to our bundles?
+
+- The tool of choice for this is, [Bundle Phobia](https://bundlephobia.com), plug in the name of the package and it will show you how many kb's it will add to your bundle.
+
+- Not 100% accurate but a good place to start:
+  - You might already be using sone sub dependencies.
+  - On the other hand, some packages require peer dependencies that can add to your bundle size.
+  - Some modules support 'tree shaking', which means that you only pay for the specific parts of the library you use.
+
+- If you want to do a caparison, you can run the process described above, 'analyzing our bundles', running a build with and without.
