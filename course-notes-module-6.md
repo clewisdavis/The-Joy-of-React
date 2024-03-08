@@ -129,3 +129,31 @@ In this section, going to look into everything needed to start a new project, ge
 - [Import Aliases](./module-6-deploying/02-notes-import-alias.md)
 - [Building for Production](./module-6-deploying/03-notes-production.md)
 - [Deploying](./module-6-deploying/04-notes-deploying.md)
+
+### Rendering Strategies
+
+Remember in an earlier lesson, talked about several different flavors of SSR, three different strategies:
+
+1. 'On demand', SSR, where the HTML is generated per-request
+2. 'Static Site Generation', where the HTML is generated for every route when the app is built
+3. 'Incremental Static Regeneration', where each route is rendered on-demand for the first request, but the HTML is saved for future requests
+
+- Next will use different strategies depending on the route.
+- In the example from an earlier exercise, 'server timestamp', everything works fine in 'development' because it uses the SSR dynamically, on-demand.
+- But when we deploy it, it uses a 'production' build.
+
+- When we build our app, Next tries to figure out the most optimal strategy for each route.
+- The 'default' behavior is to use a 'static' strategy, since it's the most performant.
+- Next will flip to a 'dynamic' strategy if we are diong something that can't be calculated during the build (trying to read cookies for the request, accessing request headers etc. )
+
+To summarize:
+
+- In development, Next always uses a 'dynamic' on demand SSR strategy
+- In production, Next will try to pick the optimal strategy on a route by route basis
+- The 'default' strategy is 'static', pre-generating al the HTMl during the build process
+- Using certain Next APIs will cause Next to switch to a 'dynamic' strategy for a particular route. For example, if we try and access cookies, Next knows it needs to do teh SSR dynamically, for every request
+- Because our 'Server timestamp' example doesn't use any of these APIs, Next cannot tell that we want it to be done dynamically.
+
+The good news is, we can explicitly tell Next which strategy to use.
+
+#### Switching Rendering Strategies
