@@ -156,4 +156,7 @@ To summarize:
 
 The good news is, we can explicitly tell Next which strategy to use.
 
-#### Switching Rendering Strategies
+- Switching Rendering Strategies
+- Dynamic Segments
+
+- [Rendering Strategies](module-6-rendering-strategies/01-notes-rendering-strategies.md)
