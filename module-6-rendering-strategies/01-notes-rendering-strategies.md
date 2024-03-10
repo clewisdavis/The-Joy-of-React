@@ -56,3 +56,57 @@ The example we used was a social network, URL formatted, `/profile/[profileId]`
 - Think about it, with 'pre-compiled' SSG strategy, we need to create HTML files for every possible URL< and cannot do that if part of the URL is dynamic and could be anything.
 
 ### Exercise, Fixing the Hit Counter
+
+Earlier, we built a hit counter:
+
+![Hit Counter](images/image-1.png)
+
+But thi shit counter has the same problem that our 'Server Timestamp' has, works fine in development but gets frozen intime in production.
+
+You mission 🪖 is to update the code sto hat it works in production:
+
+Exercise code, Fork from Github
+
+- You will need to do this one locally, so that you can run a local build and serve in production.
+
+ACs:
+
+- When running the 'production' build (`npm run build` and then `npm run start`), the hit counter should continue to function correctly, increasing by 1 for every page visit.
+
+- Solution Notes:
+
+```JAVASCRIPT
+// src/app/page.js
+import React from 'react';
+import {
+  readFile,
+  writeFile,
+} from '../helpers/file-helpers';
+
+// tell Next the rendering strategy to be 'dynamic'
+const DATABASE_PATH = '/src/database.json';
+
+export const dynamic = 'force-dynamic';
+
+function Home() {
+  let { hits } = JSON.parse(
+    readFile(DATABASE_PATH)
+  );
+
+  hits += 1;
+
+  writeFile(
+    DATABASE_PATH,
+    JSON.stringify({ hits })
+  );
+
+  return (
+    <main>
+      <h1>Welcome!</h1>
+      <p>You are visitor number {hits}.</p>
+    </main>
+  );
+}
+
+export default Home;
+```
