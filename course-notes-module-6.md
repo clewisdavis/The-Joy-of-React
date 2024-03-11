@@ -160,3 +160,30 @@ The good news is, we can explicitly tell Next which strategy to use.
 - Dynamic Segments
 
 - [Rendering Strategies](module-6-rendering-strategies/01-notes-rendering-strategies.md)
+
+### React Cache
+
+This is like `react.memo` but for functions rather than components. This is what it looks like...
+
+```JAVASCRIPT
+import React from 'react';
+
+export const getProfileInfo = React.cache(
+  async (profileId) => {
+    await delay(Math.random() * 200 + 400);
+    return DATA[profileId];
+  }
+);
+```
+
+- `React.cache` allows us to memoize a function, so that the work won't be repeated when the function is called multiple times with the same parameters.
+
+🟨 This is not an official part of React.
+
+- Video Explanation - [React Cache](https://courses.joshwcomeau.com/joy-of-react/06-full-stack-react/08-react-cache)
+
+### Suspense
+
+- Nice to have knowledge, not sure I need to go here...
+
+### Lazy Loading
