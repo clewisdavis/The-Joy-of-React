@@ -187,3 +187,37 @@ export const getProfileInfo = React.cache(
 - Nice to have knowledge, not sure I need to go here...
 
 ### Lazy Loading
+
+Let's take an example, a library for rendering 'LaTeX', pronounced, 'lay tek', in some regions.
+
+- If you were to use the entire package, you would be adding '72 gzipped kilobytes' to the client!
+
+```JAVASCRIPT
+import 'katex/dist/katex.min.css';
+import Latex from 'react-latex-next';
+
+function App() {
+  return <Latex>{'$\\sqrt{x^2+1}$'}</Latex>;
+}
+
+export default App;
+```
+
+![laytek](images/image-38.png)
+
+#### Understanding lazy loading
+
+- 🤔 The big idea with lazy loading is that we will defer loading the JS code associated with a particular component until it's needed.
+
+- This isn't a new idea, been part of React API for a few years, `React.lazy()` method.
+
+- Next.js has their own wrapper around `React.lazy()`, for now it will be helpful to reiew `React.lazy()`.
+- Looks like:
+
+```JAVASCRIPT
+// Instead of this:
+import Latex from 'react-latex-next';
+
+// ...do this:
+const Latex = React.lazy(() => import('react-latex-next'));
+```
