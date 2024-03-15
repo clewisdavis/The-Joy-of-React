@@ -3,7 +3,7 @@
 
 - [Course Outline Notes](../course-notes.md)
 
-## Understanding lazy loading
+## Understanding Lazy Loading
 
 - 🤔 The big idea with lazy loading is that we will defer loading the JS code associated with a particular component until it's needed.
 

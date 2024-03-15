@@ -72,13 +72,13 @@ Notes from the course, 2023/2024
   - [Client vs Server Rendering](./module-6-full-stack/01-notes-client-server-rendering.md)
   - [React Server Components](./module-6-full-stack/02-notes-server-components.md)
   - [Intro to Next.js](./module-6-full-stack/03-notes-intro-next.md)
-  - Routing
-  - Next's Metadata API
-  - Creating, Building, Deploying
-  - Rendering Strategies
-  - React Cache
+  - [Routing](module-6-full-stack-routing/01-notes-routing.md)
+  - [Next's Metadata API](course-notes-module-6.md)
+  - [Creating, Building, Deploying](module-6-deploying/01-notes-starting-project.md)
+  - [Rendering Strategies](module-6-rendering-strategies/01-notes-rendering-strategies.md)
+  - [React Cache](course-notes-module-6.md)
   - Suspense
-  - Lazy Loading
+  - [Lazy Loading](module-6-lazy-loading/01-notes-understanding.md)
   - Dark Mode
 
 - Bonus - Layout Animations with Framer Motion

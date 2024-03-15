@@ -211,4 +211,7 @@ export default App;
 
 #### Lazy Loading and Server Side Rendering
 
+- [Understanding Lazy Loading](module-6-lazy-loading/01-notes-understanding.md)
 - [Lazy Loading and SSR](module-6-lazy-loading/02-notes-serverside-rendering.md)
+- [Lazy Loading and Streaming SSR](module-6-lazy-loading/03-notes-lazy-loading-streaming-ssr.md)
+- [Lazy Loading in Next](module-6-lazy-loading/04-notes-lazy-loading-next.md)
