@@ -215,3 +215,8 @@ export default App;
 - [Lazy Loading and SSR](module-6-lazy-loading/02-notes-serverside-rendering.md)
 - [Lazy Loading and Streaming SSR](module-6-lazy-loading/03-notes-lazy-loading-streaming-ssr.md)
 - [Lazy Loading in Next](module-6-lazy-loading/04-notes-lazy-loading-next.md)
+- [Baked in Laziness](module-6-lazy-loading/05-notes-baked-in-laziness.md)
+
+#### Dark Mode
+
+- [Dark Mode](module-6-dark-mode/01-notes-dark-mode.md)
