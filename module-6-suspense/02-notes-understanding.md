@@ -113,3 +113,65 @@ function Dashboard() {
 🚀 This is the problem Suspense was originally designed to solve.
 
 ### Introducing the Suspense Component
+
+Start with some code example.
+
+```JAVASCRIPT
+import React from 'react';
+
+function Dashboard() {
+  return (
+    <React.Suspense fallback={<Spinner />}>
+      <TrafficCard />
+      <OfferCard />
+    </React.Suspense>
+  );
+}
+```
+
+`Suspense` is a special React component that can help us orchestrate loading states. In this case, we are saying that `<TrafficCard>` and `<OfferCard>` are part of the same 'group'.
+
+We specify out loading state with the `fallback` prop. React will render this fallback until all of its children have finished loading.
+
+This produces the same user experience as our 'lifting fetch up' approach.
+
+![suspense](images/image-10.png)
+
+How does this work?
+
+- `<React.Suspense>` component is only half of the story. The other half of the Suspense API si that the components have to signal whether they are ready or not; they need to be able to say 'Hey, don't render yet! I am still loading my data'.
+
+- A good analogy is a concert, the rock show cannot start until all the band members are present.
+- The name 'Suspense' comes from, React will suspend rendering until all of the children have finished loading. The curtains will stay closed until every one is ready.
+
+![Alt text](images/image-11.png)
+
+**How do individual components signal their loading state?**
+
+- React has very little insight into what actaully happens inside our components.
+- This Fetch API for example;
+
+```JAVASCRIPT
+function TrafficCard() {
+  const [data, setData] = React.useState(null);
+
+  React.useEffect(() => {
+    fetch('/api/traffic')
+      .then((res) => res.json())
+      .then((data) => {
+        setData(data);
+      });
+  }, []);
+
+  return <Card>{/* Stuff here */}</Card>;
+}
+```
+
+- In this example; the only thing React knows is that we have some sort of side effect.
+- React cannot see into effects, the Fetch API is part of the web platform, not part of React, so React doesn't even know that a network request is happening!
+
+- `<React.Suspense>` has no way of knowing that `TrafficCard` is loading. We need a way to explicitly trigger the 'suspend' during teh first render. And then signal that component is ready once the data has been loaded.
+
+- **This part, suspend, is done by library authors, not app developers.**
+
+### A new kind of boundary
