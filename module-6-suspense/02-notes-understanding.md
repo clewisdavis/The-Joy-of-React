@@ -175,3 +175,37 @@ function TrafficCard() {
 - **This part, suspend, is done by library authors, not app developers.**
 
 ### A new kind of boundary
+
+In previous modules, we learned about Error Boundaries, We wrap an `<Error Boundary>` component around a slice of the React tree, and it will catch any errors thrown by any descendants, to keep the app from blowing up.
+
+![Error Boundary](images/image-12.png)
+
+As a refresher, the code for this setup looks like this:
+
+```JAVASCRIPT
+function App() {
+  return (
+    <>
+      <Header />
+      <ErrorBoundary fallback="Something went wrong…">
+        <RealTimeInfo />
+      </ErrorBoundary>
+      <Stories />
+    </>
+  );
+}
+```
+
+- With this error boundary in position, any of the coloured components, `RealTimeInfo`, `Ticker`, and `Price`, can throw an error, and it will cause the error boundary to swap out the `<RealTimeInto>` element for the provided `fallback`, usually an error message.
+
+- `<React.Suspense>` also creates a boundary, but one that catches loading states instead of errors.
+- We provide a loading fallback instead of an error fallback, and the component automatically swaps between them as-necessary.
+
+![Suspense Boundary](images/image-13.png)
+
+- Like error boundaries, Suspense boundaries will catch loading states in any descendants, not only the direct children.
+- If `SearchForm` signals to the Suspense boundary that it's loading, this entire slice of the tree will be suspended, and we will show the fallback instead.
+
+- The really wild part, descendants communicate their loading state by broadcasting it using the `throw` keyword. But instead of throwing an error, we throw a fetch request itself.
+
+- Really technical done under the hood, will never actually have to `throw` a promise in your work.
