@@ -184,7 +184,11 @@ export const getProfileInfo = React.cache(
 
 ### Suspense
 
-- Nice to have knowledge, not sure I need to go here...
+- [Suspense, New World, Graphing it Out](module-6-suspense/01-notes-suspense.md)
+- [Understanding Suspense](module-6-suspense/02-notes-understanding.md)
+- [Putting It All Together](module-6-suspense/03-notes-putting-together.md)
+- [Using Suspense in Next](module-6-suspense/04-notes-using-next.md)
+- [Suspense Exercises](module-6-suspense/05-notes-suspense-exercises.md)
 
 ### Lazy Loading
 

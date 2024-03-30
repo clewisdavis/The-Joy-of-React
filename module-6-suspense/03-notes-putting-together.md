@@ -56,3 +56,24 @@ And so, the modern system we have been building has a few parts:
 One more part, React Server Components.
 
 ## Selective Hydration
+
+Earlier we learned about 'hydration', the process of booting up the React app on the client so that it can adopt the server-generated HTML, making it interactive.
+
+![hydration](images/image-20.png)
+
+- This is a helpful way to understand hydration, but this is a very 2018 way to look at it. With 'Suspense' and 'Streaming SSR', the process doesn't' happen on one step at a time like this.
+
+- Instead it is much more modular:
+
+![modular](images/image-21.png)
+
+- Each Suspense boundary we create is sent as a separate chunk.
+- Each chunk is hydrated separately, a process which starts as soon as the HTML chunk is received (after React itself has been downloaded)
+
+- **React will even prioritize which chunk to hydrate based on user activity.** If the user clicks a button that hasn't yet been hydrated, React will make that the #1 priority.
+- Once it's been hydrated, React triggers a click event on that element, giving the illusion that it's been interactive all along.
+
+Additional Resources:
+
+- [Deep Dive into Suspense + Streaming SSR architecture](https://github.com/reactwg/react-18/discussions/37)
+- [Suspense API Docs](https://react.dev/reference/react/Suspense)
