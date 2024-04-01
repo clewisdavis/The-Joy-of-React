@@ -3,3 +3,30 @@
 - [Course Outline Notes](../course-notes.md)
 
 ## Suspense Exercises
+
+Get some practice with Suspense, you can use the following:
+
+- [Download/Fork from Github](https://github.com/joy-of-react/next-suspense-exercises)
+
+### Vapor Games
+
+Lets suppose we are building a game manager. As is stands, the user faces a blank white screen until the content has loaded:
+
+![blank](images/image-22.png)
+
+The mission is to update the code so that a placeholder UI is rendered while the data is being loaded:
+
+![loading](images/image-23.png)
+
+- To help you on this journey, given a helper component, `LibraryGameCardSkeleton`. You can use it to create a loading state.
+
+- A `range` function has also been provided in `/src/utils.js`.
+
+ACs:
+
+- WHen the `games` data is loading, 12 `LibraryGageCardSkeleton` elements should be rendered in the place of the current `LibraryGameCard` elements.
+- The '15 games in library' paragraph can be omitted from the loading page.
+
+The route for this exercise is `/src/app/01-vapor`.
+
+😉 Hint: You will want to use the Next.js `loading.js` file for this. We saw an example of this in [Sole&Ankle project](https://courses.joshwcomeau.com/joy-of-react/06-full-stack-react/09.01-exciting-new-world).
