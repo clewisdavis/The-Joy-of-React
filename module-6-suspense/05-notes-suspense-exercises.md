@@ -30,3 +30,44 @@ ACs:
 The route for this exercise is `/src/app/01-vapor`.
 
 😉 Hint: You will want to use the Next.js `loading.js` file for this. We saw an example of this in [Sole&Ankle project](https://courses.joshwcomeau.com/joy-of-react/06-full-stack-react/09.01-exciting-new-world).
+
+Solution Note:
+
+- Create a new `loading.js` file, and copy over the structure of the `page.js`.
+- Replace the elements, with your new `LibraryGameCardSkeleton`
+- Use the `range` utility, to map over the results.
+
+```JAVASCRIPT
+import React from 'react';
+
+import { range } from '@/utils';
+
+import { getGamesInLibrary } from '@/helpers/vapor-helpers';
+import LibraryGameCardSkeleton from '@/components/LibraryGameCardSkeleton';
+
+export const dynamic = 'force-dynamic';
+
+async function VaporLoading() {
+//   const games = await getGamesInLibrary();
+
+  return (
+    <section className="max-width-wrapper">
+      <header className="library-header">
+        <h1>My games</h1>
+      </header>
+      <div className="game-grid">
+        {range(12).map((num) => (
+          <LibraryGameCardSkeleton
+            key={num}
+          />
+        ))}
+      </div>
+    </section>
+  );
+}
+
+export default VaporLoading;
+
+```
+
+### Artist Interview with Comments
