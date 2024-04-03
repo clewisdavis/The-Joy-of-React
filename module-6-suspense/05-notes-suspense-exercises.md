@@ -71,3 +71,62 @@ export default VaporLoading;
 ```
 
 ### Artist Interview with Comments
+
+In this exercise, a comments section has been added to our 'Artist Interview' application:
+
+![Alt text](images/image-24.png)
+
+However, it takes a few seconds to load these comments, and right now, the process is blocking the page from loading. Once again, your mission is to use Suspense to improve the loading experience.
+
+You can use the provided `<Spinner>` component as a loading state:
+
+![loading](images/image-25.png)
+
+ACs:
+
+- The server shouldn't wait for the comments before sending the first chunk of HTML.
+- A spinner should be shown as the fallback for the comments.
+
+The relevant route for this exercise is `/src/app/02-interview`.
+
+HINT: Instead of using Next's `loading.js`, it might make more sense for us to use React Suspense directly. Can we create a Suspense boundary around the comments?
+
+- Solution Notes:
+- Create a new async component, `<Comments>`
+- Wrap that new component in a `<React.Suspense>`
+- Import and add the `<Spinner>` component as a fallback, ``
+
+```JAVASCRIPT
+import React from 'react';
+
+import { getComments } from '@/helpers/interview-helpers';
+import Comment from '@/components/Comment';
+import Spinner from '@/components/Spinner';
+
+function InterviewExercise() {
+  return (
+    <>
+      <article className="main-article">
+        {/* Article content unchanged */}
+      </article>
+
+      <section className="comments-section">
+        <h2>Discussion</h2>
+        <React.Suspense fallback={<Spinner />}>
+          <Comments />
+        </React.Suspense>
+      </section>
+    </>
+  );
+}
+
+async function Comments() {
+  const comments = await getComments();
+
+  return comments.map((comment) => (
+    <Comment key={comment.id} comment={comment} />
+  ));
+}
+
+export default InterviewExercise;
+```
