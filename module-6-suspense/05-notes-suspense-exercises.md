@@ -130,3 +130,24 @@ async function Comments() {
 
 export default InterviewExercise;
 ```
+
+### WebBase CMS Navigation
+
+For this exercise, work on a fictional company landing page, WebBase:
+
+![landing page](images/image-26.png)
+
+Your mission, if you choose it, is to use Suspense to improve teh page-loading experience. The initial HTML should not include any navigation links, in the header or the footer:
+
+The route for this exercise is: `/src/app/03-web-base`.
+
+ACs:
+
+- The initial HTML should be sent immediately, without waiting fo the `getNavLinks` method to complete.
+- In the server terminal, a message is logged twice on eery request, `Requesting navigation links from CMS`. This message should ony be logged once per request.
+
+HINT: The `React.cache()` API can be used to ensure that the `getNavLinks` method only performs the underlying work once, even if it's called from multiple components.
+
+Check out the [React Cache](https://courses.joshwcomeau.com/joy-of-react/06-full-stack-react/08-react-cache) lesson.
+
+Solution Notes:
