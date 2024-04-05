@@ -151,3 +151,155 @@ HINT: The `React.cache()` API can be used to ensure that the `getNavLinks` metho
 Check out the [React Cache](https://courses.joshwcomeau.com/joy-of-react/06-full-stack-react/08-react-cache) lesson.
 
 Solution Notes:
+
+- Create new 'async' functions for the `SiteHeader` and `SiteFooter`
+- Replace the JSX with your new component and wrap in a `<React.Suspense>`
+- In the `getNavLinks` method, Wrap the `getNavLinks` in a `React.cache, so it does the work once and shares it with both the 'SiteHeader', and the 'SiteFooter'
+
+- SiteHeader:
+
+```JAVASCRIPT
+// SiteHeader
+import React from 'react';
+import Link from 'next/link';
+
+import { getNavLinks } from '@/helpers/web-base-helpers';
+
+async function SiteHeader() {
+
+
+  return (
+    <header className="site-header">
+      <Link href="" className="logo">
+        WebBase
+      </Link>
+      <nav>
+        <React.Suspense>
+          <NavLinks />
+        </React.Suspense>
+      </nav>
+    </header>
+  );
+}
+
+// Create a NavLinks Component
+async function NavLinks() {
+  let navLinks = await getNavLinks();
+
+  // Only show the first 4 links in the header.
+  navLinks = navLinks.slice(0, 4);  
+  return (
+        <ol className="header-nav-links">
+          {navLinks.map(
+            ({ slug, label, href, type }) => (
+              <li key={slug}>
+                <Link
+                  href={href}
+                  className={`header-nav-link ${type}`}
+                >
+                  {label}
+                </Link>
+              </li>
+            )
+          )}
+        </ol>    
+  )
+}
+
+export default SiteHeader;
+
+```
+
+- SiteFooter:
+
+```JAVASCRIPT
+import React from 'react';
+import Link from 'next/link';
+
+import { getNavLinks } from '@/helpers/web-base-helpers';
+
+async function SiteFooter() {
+  
+
+  return (
+    <footer className="site-footer">
+      <div className="logo-wrapper">
+        <Link href="" className="logo">
+          Webzip
+        </Link>
+        <p className="disclaimer">
+          Copyright © 2099 Webzip Inc. All Rights
+          Reserved.
+        </p>
+      </div>
+
+      <div className="link-wrapper">
+        <div className="col">
+          <h2>Navigation</h2>
+          <nav>
+            <React.Suspense>
+              <PrimaryNavLinks/>
+            </React.Suspense>
+          </nav>
+        </div>
+        <div className="col">
+          <h2>Legal</h2>
+          <nav>
+            <ol>
+              <li>
+                <Link href="">Terms of Use</Link>
+              </li>
+              <li>
+                <Link href="">
+                  Privacy Policy
+                </Link>
+              </li>
+              <li>
+                <Link href="">Contact</Link>
+              </li>
+            </ol>
+          </nav>
+        </div>
+      </div>
+    </footer>
+  );
+}
+
+async function PrimaryNavLinks() {
+  const navLinks = await getNavLinks();
+  return (
+      <ol>
+        {navLinks.map(
+          ({ slug, label, href }) => (
+            <li key={slug}>
+              <Link href={href}>
+                {label}
+              </Link>
+            </li>
+          )
+        )}
+      </ol>
+  )
+}
+
+export default SiteFooter;
+
+```
+
+- Nav Links Method / Helper:
+
+```JAVASCRIPT
+export const getNavLinks = React.cache(
+  async function getNavLinks() {
+    console.info(
+      'Requesting navigation links from CMS'
+    );
+    // put in some randomness
+    await delay(1800 + Math.random() * 2000);
+
+    return LINKS;
+  }
+);
+```
+
+- [Final Solution on GitHub](https://github.com/joy-of-react/next-suspense-exercises/commit/1a2056c299e674044ede11886e378428eec65f4a)
