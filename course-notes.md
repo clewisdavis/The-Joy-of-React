@@ -77,9 +77,9 @@ Notes from the course, 2023/2024
   - [Creating, Building, Deploying](module-6-deploying/01-notes-starting-project.md)
   - [Rendering Strategies](module-6-rendering-strategies/01-notes-rendering-strategies.md)
   - [React Cache](course-notes-module-6.md)
-  - Suspense
+  - [Suspense](course-notes-module-6.md)
   - [Lazy Loading](module-6-lazy-loading/01-notes-understanding.md)
-  - Dark Mode
+  - [Dark Mode](module-6-dark-mode/01-notes-dark-mode.md)
 
 - Bonus - Layout Animations with Framer Motion
 
